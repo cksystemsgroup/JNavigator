@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>win32</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>junit:junit</exclude>
+				<exclude>at.uni-salzburg.cs.ckgroup.jnavigator.jnavigator-io-native.linux-x86:libJNavigator</exclude>
+			</excludes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory />
+			<unpack>true</unpack>
+			<includes>
+				<include>at.uni-salzburg.cs.ckgroup.javiator:javiator3d</include>
+			</includes>
+			<unpackOptions>
+				<includes>
+					<include>images/*.jpg</include>
+					<include>models/*.3ds</include>
+				</includes>
+			</unpackOptions>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>config.xml</source>
+			<outputDirectory />
+			<lineEnding>dos</lineEnding>
+		</file>
+		<file>
+			<source>src/main/scripts/ControlTerminal.bat</source>
+			<outputDirectory />
+			<lineEnding>dos</lineEnding>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>ControlTerminal.cfg</source>
+			<outputDirectory />
+			<lineEnding>dos</lineEnding>
+		</file>
+	</files>
+</assembly>

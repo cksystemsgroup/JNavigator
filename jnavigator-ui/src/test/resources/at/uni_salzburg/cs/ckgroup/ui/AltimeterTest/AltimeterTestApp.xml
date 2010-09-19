@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document componentFinder="A_COUPLE_OF_CLASS_AND_LABEL_IS_EQUAL" windowFinder="CLASS_IS_EQUAL_STRICTLY"  windowClass="JFrame">
+
+<scenario name="EMPTY_DISPLAY">
+	<Capture fileName="target/altimeter-empty.png" windowName="AltimeterFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.AltimeterFrame"/>
+</scenario>
+
+<scenario name="ALTITUDE_ZERO">
+	<Capture fileName="target/altimeter-zero.png" windowName="AltimeterFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.AltimeterFrame"/>
+</scenario>
+
+<scenario name="ALTITUDE_100">
+	<Capture fileName="target/altimeter-100.png" windowName="AltimeterFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.AltimeterFrame"/>
+</scenario>
+
+<scenario name="ALTITUDE_485">
+	<Capture fileName="target/altimeter-485.png" windowName="AltimeterFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.AltimeterFrame"/>
+</scenario>
+
+</document>

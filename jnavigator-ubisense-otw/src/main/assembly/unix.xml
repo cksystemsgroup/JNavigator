@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>linux</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>src/main/scripts/OnTheWireMain.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+			<filtered>true</filtered>
+		</file>
+	</files>
+<!--
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>classes</outputDirectory>
+			<includes>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+-->
+</assembly>

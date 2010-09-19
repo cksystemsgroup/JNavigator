@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document componentFinder="A_COUPLE_OF_CLASS_AND_LABEL_IS_EQUAL" windowFinder="CLASS_IS_EQUAL_STRICTLY"  windowClass="JFrame">
+
+<scenario name="EMPTY_DISPLAY">
+	<Capture fileName="target/speedometer-empty.png" windowName="SpeedometerFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.SpeedometerFrame"/>
+</scenario>
+
+<scenario name="SPEED_ZERO">
+	<Capture fileName="target/speedometer-zero.png" windowName="SpeedometerFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.SpeedometerFrame"/>
+</scenario>
+
+<scenario name="SPEED_12">
+	<Capture fileName="target/speedometer-12.png" windowName="SpeedometerFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.SpeedometerFrame"/>
+</scenario>
+
+<scenario name="SPEED_89">
+	<Capture fileName="target/speedometer-89.png" windowName="SpeedometerFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.SpeedometerFrame"/>
+</scenario>
+
+</document>

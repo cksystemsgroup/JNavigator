@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>win32</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<excludes>
+				<exclude>junit:junit</exclude>
+			</excludes>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>src/main/scripts/OnTheWireMain.bat</source>
+			<outputDirectory />
+			<lineEnding>dos</lineEnding>
+			<filtered>true</filtered>
+		</file>
+	</files>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>classes</outputDirectory>
+			<includes>
+				<include>**/*.properties</include>
+			</includes>
+			<lineEnding>dos</lineEnding>
+		</fileSet>
+	</fileSets>
+</assembly>

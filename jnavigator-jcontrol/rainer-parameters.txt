@@ -1,0 +1,25 @@
+
+Attitude
+Kp	1
+Ki	0
+Kd	0.5
+Kdd	-0.03
+
+Yaw
+Kp	3
+Ki	0.1
+Kd	2.5
+Kdd	0
+
+Altitude
+Kp	1.5
+Ki	0.15
+Kd	1.5
+Kdd	-0.15
+
+Revving
+Limit	8.3
+Rev+	0.03
+Rev-	0.05
+Ki-	0.0010
+

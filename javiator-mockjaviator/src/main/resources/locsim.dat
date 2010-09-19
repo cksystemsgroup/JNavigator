@@ -1,0 +1,5 @@
+# Location Message Simulation data: Ideal localization system.
+#
+# X [m] ; Y [m] ; Z [m]; precision [m]
+
+0;0;0;0.001

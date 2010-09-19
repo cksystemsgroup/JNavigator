@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<assembly>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>src/main/scripts/MockJAviator.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+		</file>
+	</files>
+        <fileSets>
+                <fileSet>
+                        <directory>src/main/resources</directory>
+                        <outputDirectory>classes</outputDirectory>
+                        <includes>
+                                <include>gpssim*.dat</include>
+                                <include>gpssim*.properties</include>
+				<include>locsim*.dat</include>
+				<include>locsim*.properties</include>
+                        </includes>
+                </fileSet>
+                <fileSet>
+                        <directory>src/main/resources</directory>
+                        <outputDirectory />
+                        <includes>
+                                <include>MockJAviator.properties</include>
+                        </includes>
+                </fileSet>
+        </fileSets>
+</assembly>

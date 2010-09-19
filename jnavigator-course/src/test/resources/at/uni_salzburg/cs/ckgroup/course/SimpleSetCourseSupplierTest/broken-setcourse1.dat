@@ -1,0 +1,5 @@
+# Set Course data
+#
+# latitude [°] ; longitude [°] ; MSL altitude [m]; time to the next position [ms]; vehicle orientation [°]
+#
+48.00000

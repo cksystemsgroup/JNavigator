@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document componentFinder="A_COUPLE_OF_CLASS_AND_LABEL_IS_EQUAL" windowFinder="CLASS_IS_EQUAL_STRICTLY"  windowClass="JFrame">
+
+<scenario name="EMPTY_DISPLAY">
+	<Capture fileName="target/compass-empty.png" windowName="CompassFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.CompassFrame"/>
+</scenario>
+
+<scenario name="ORIENTATION_N">
+	<Capture fileName="target/compass-n.png" windowName="CompassFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.CompassFrame"/>
+</scenario>
+
+<scenario name="ORIENTATION_078">
+	<Capture fileName="target/compass-078.png" windowName="CompassFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.CompassFrame"/>
+</scenario>
+
+<scenario name="ORIENTATION_355">
+	<Capture fileName="target/compass-355.png" windowName="CompassFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.CompassFrame"/>
+</scenario>
+
+</document>

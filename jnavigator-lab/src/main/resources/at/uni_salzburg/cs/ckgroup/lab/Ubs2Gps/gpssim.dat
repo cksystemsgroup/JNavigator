@@ -1,0 +1,5 @@
+# GPS Simulation data: Ideal GPS.
+#
+# latitude [m] ; longitude [m] ; MSL altitude [m]; geoid separation [m]
+
+0;0;0;46.5988

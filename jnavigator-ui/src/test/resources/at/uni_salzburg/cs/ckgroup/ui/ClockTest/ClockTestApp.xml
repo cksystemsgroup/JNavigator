@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<document componentFinder="A_COUPLE_OF_CLASS_AND_LABEL_IS_EQUAL" windowFinder="CLASS_IS_EQUAL_STRICTLY"  windowClass="JFrame">
+
+<scenario name="EMPTY_DISPLAY">
+	<Capture fileName="target/clock-empty.png" windowName="ClockFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.ClockFrame"/>
+</scenario>
+
+<scenario name="CLOCK_19850325011327">
+	<Capture fileName="target/clock-19850325011327.png" windowName="ClockFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.ClockFrame"/>
+</scenario>
+
+<scenario name="CLOCK_20000101000000">
+	<Capture fileName="target/clock-20000101000000.png" windowName="ClockFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.ClockFrame"/>
+</scenario>
+
+<scenario name="CLOCK_20091231235959">
+	<Capture fileName="target/clock-20091231235959.png" windowName="ClockFrame" windowClass="at.uni_salzburg.cs.ckgroup.ui.ClockFrame"/>
+</scenario>
+
+</document>

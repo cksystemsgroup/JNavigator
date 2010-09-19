@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>linux</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>junit:junit</exclude>
+			</excludes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory />
+			<unpack>true</unpack>
+			<includes>
+				<include>at.uni-salzburg.cs.ckgroup.javiator:javiator3d</include>
+			</includes>
+			<unpackOptions>
+				<includes>
+					<include>images/*.jpg</include>
+					<include>models/*.3ds</include>
+				</includes>
+			</unpackOptions>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>config.xml</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>644</fileMode>
+		</file>
+		<file>
+			<source>src/main/scripts/ControlTerminal.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>ControlTerminal.cfg</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>644</fileMode>
+		</file>
+	</files>
+</assembly>

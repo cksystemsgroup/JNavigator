@@ -1,0 +1,33 @@
+SOURCETABLE 200 OK
+Server: Trimble-iGate/1.0
+Date: Wed, 05 Dec 2007 21:02:07 GMT Standard Time
+Content-Type: text/plain
+Content-Length: 2848
+
+CAS;www3.swisstopo.ch;8080;SWIPOS;SWISSTOPO;0;CHE;0.00;0.00;SWIPOS, Wabern, Schweiz
+CAS;sapos-rtk.bayern.de;2101;SAPOS-BY;BLVG;0;DEU;0.00;0.00;SAPOS Bayern, Muenchen, Deutschland
+CAS;czeposr.cuzk.cz;2101;CZEPOS;CUZK;0;CZE;0.00;0.00;CZEPOS, Prag, Tschechische Republik
+CAS;www.skpos.gku.sk;2101;SKPOS;Zememericky urad;0;SVK;0.00;0.00;SKPOS, Bratislava, Slovakei
+CAS;www.gpsnet.hu;80;GPSNET.HU;FOEMI;0;HUN;0.00;0.00;GPSNET.HU, Penc, Ungarn
+CAS;193.2.110.249;8080;SIGNAL;GURS;0;SVN;0.00;0.00;SIGNAL, Ljubljana, Slovenien
+CAS;www.rtcm-ntrip.org;2101;STPOS;Autonome Provinz Bozen;0;ITA;0.00;0.00;Suedtirol, Bozen, Italien
+NET;APOS;BEV;B;Y;http://www.bev.gv.at/;http://217.13.180.215:2101/;kundenservice@bev.gv.at;Austrian Positioning Service
+STR;APOS_VRS;APOS_VRS;RTCM 2.3;1(1),3(10),18(1),19(1);2;GPS;APOS;AUT;0.00;0.00;1;1;RTKNet;none;B;Y;7200;APOS Realtime - Virtual RTK Service (cm acuracy)
+STR;APOS_DGPS;APOS_DGPS;RTCM 2.0;1(1),2(60);0;GPS;APOS;AUT;0.00;0.00;1;1;DGPSNet;none;B;Y;0;APOS Realtime - Virtual DGPS Service (dm accuracy)
+STR;SILL0;Raw_Sillian;RAW;RAW(1);2;GPS;APOS;AUT;46.75;12.42;0;0;Receiver;none;B;Y;4800;
+STR;FLDK0;Raw_Feldkirch;RAW;RAW(1);2;GPS;APOS;AUT;47.23;9.58;0;0;Receiver;none;B;Y;4800;
+STR;LECH0;Raw_Lech;RAW;RAW(1);2;GPS;APOS;AUT;47.22;10.14;0;0;Receiver;none;B;Y;4800;
+STR;KOPS0;Raw_Kops;RAW;RAW(1);2;GPS;APOS;AUT;46.97;10.12;0;0;Receiver;none;B;Y;4800;
+STR;KRBG0;Raw_Krahberg;RAW;RAW(1);2;GPS;APOS;AUT;47.15;10.63;0;0;Receiver;none;B;Y;4800;
+STR;HFLK0;Raw_Hafelekar;RAW;RAW(1);2;GPS;APOS;AUT;47.31;11.39;0;0;Receiver;none;B;Y;4800;
+STR;PATK0;Raw_Patscherkofel;RAW;RAW(1);2;GPS;APOS;AUT;47.21;11.46;0;0;Receiver;none;B;Y;4800;
+STR;MUEN0;Raw_Muenster;RAW;RAW(1);2;GPS;APOS;AUT;47.42;11.83;0;0;Receiver;none;B;Y;4800;
+STR;KTZB0;Raw_Kitzbuehel;RAW;RAW(1);2;GPS;APOS;AUT;47.42;12.36;0;0;Receiver;none;B;Y;4800;
+STR;SBGZ0;Raw_Salzburg;RAW;RAW(1);2;GPS;APOS;AUT;47.80;13.11;0;0;Receiver;none;B;Y;4800;
+STR;GRAZ0;Raw_Graz;RAW;RAW(1);2;GPS;APOS;AUT;47.07;15.49;0;0;Receiver;none;B;Y;4800;
+STR;FLDB0;Raw_Feldbach;RAW;RAW(1);2;GPS;APOS;AUT;46.95;15.88;0;0;Receiver;none;B;Y;4800;
+STR;WIEN0;Raw_Wien;RAW;RAW(1);2;GPS;APOS;AUT;48.22;16.37;0;0;Receiver;none;B;Y;4800;
+STR;ROHR0;Raw_Rohrbach;RAW;RAW(1);2;GPS;APOS;AUT;48.57;14.00;0;0;Receiver;none;B;Y;4800;
+STR;FRST0;Raw_Freistadt;RAW;RAW(1);2;GPS;APOS;AUT;48.51;14.50;0;0;Receiver;none;B;Y;4800;
+CAS;rtcm-ntrip.org;2101;NtripInfoCaster;BKG;0;DEU;50.12;8.69;http://www.rtcm-ntrip.org/home
+STR;APOS_DGPS_BRDC;APOS_DGPS_BRDC;RTCM 2.0;1(1),3(10),18(1),19(1);0;GPS;APOS;AUT;47.22;13.45;0;1;DGPSNet;none;B;Y;1000;DGPS Broadcast 

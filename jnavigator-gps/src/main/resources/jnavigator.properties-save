@@ -1,0 +1,69 @@
+
+# JNavigator navigation configuration
+rtcm.message.provider = apos.gsmBT.dgps
+#gps.receiver = gumstix.bt.LEA-4H
+gps.receiver = AsteRx1.lan
+
+# GPS receiver over bluetooth
+gumstix.bt.LEA-4H.type = bluetooth
+gumstix.bt.LEA-4H.className = at.uni_salzburg.cs.ckgroup.io.BluetoothSocket
+gumstix.bt.LEA-4H.bdaddr = 00:80:37:27:1C:E0
+gumstix.bt.LEA-4H.channel = 2
+
+# GPS receiver over TCP/IP (e.g. WLAN or BNEP)
+gumstix.wlan.LEA-4H.type = tcp
+gumstix.wlan.LEA-4H.className = at.uni_salzburg.cs.ckgroup.io.TcpSocket
+gumstix.wlan.LEA-4H.host = 10.10.12.2
+gumstix.wlan.LEA-4H.port = 3333
+
+# GPS receiver over TCP/IP
+AsteRx1.lan.type = tcp
+AsteRx1.lan.className = at.uni_salzburg.cs.ckgroup.io.TcpSocket
+AsteRx1.lan.host = 10.10.11.105
+AsteRx1.lan.port = 3333
+
+# GPS receiver over serial line
+gumstix.serial.LEA-4H.type = serial
+gumstix.serial.LEA-4H.className = at.uni_salzburg.cs.ckgroup.io.SerialLine
+gumstix.serial.LEA-4H.interface = /dev/ttyS2
+
+# APOS-RTK: RTCM 2.3 Message 18,19 / VRS-Modus / cm-Genauigkeit
+apos.gsm.rtk.type = GSM
+apos.gsm.rtk.className = at.uni_salzburg.cs.ckgroup.apos.AposGsm
+apos.gsm.rtk.phoneNumber = 012345678
+apos.gsm.rtk.connectorClassName = at.uni_salzburg.cs.ckgroup.io.SerialLine
+apos.gsm.rtk.interface = /dev/ttyUSB0
+
+# APOS-DGPS: RTCM 2.3 Message 1 / VRS-Modus / dm-Genauigkeit
+apos.gsm.dgps.type = GSM
+apos.gsm.dgps.className = at.uni_salzburg.cs.ckgroup.apos.AposGsm
+apos.gsm.dgps.phoneNumber = 012345678
+apos.gsm.dgps.connectorClassName = at.uni_salzburg.cs.ckgroup.io.SerialLine
+apos.gsm.dgps.interface = /dev/ttyUSB0
+
+# APOS-DGPS: RTCM 2.3 Message 1 / VRS-Modus / dm-Genauigkeit
+# Connection via Bluetooth to mobile phone
+apos.gsmBT.dgps.type = GSM
+apos.gsmBT.dgps.className = at.uni_salzburg.cs.ckgroup.apos.AposGsm
+apos.gsmBT.dgps.phoneNumber = 012345678
+apos.gsmBT.dgps.connectorClassName = at.uni_salzburg.cs.ckgroup.io.BluetoothSocket
+apos.gsmBT.dgps.bdaddr = 00:60:57:2E:C7:C5
+apos.gsmBT.dgps.channel = 1
+
+# APOS-RTK: RTCM 2.3 Message 18,19 / VRS-Modus / cm-Genauigkeit
+apos.ntrip.rtk.type = NTRIP
+apos.ntrip.rtk.className = at.uni_salzburg.cs.ckgroup.apos.AposNtrip
+apos.ntrip.rtk.caster = 217.13.180.215
+apos.ntrip.rtk.port = 2101
+apos.ntrip.rtk.user = vrs_krainer
+apos.ntrip.rtk.password = USkrai2APos!41
+apos.ntrip.rtk.mountpoint = APOS_VRS
+
+# APOS-DGPS: RTCM 2.3 Message 1 / VRS-Modus / dm-Genauigkeit
+apos.ntrip.dgps.type = NTRIP
+apos.ntrip.dgps.className = at.uni_salzburg.cs.ckgroup.apos.AposNtrip
+apos.ntrip.dgps.caster = 217.13.180.215
+apos.ntrip.dgps.port = 2101
+apos.ntrip.dgps.user = vrs_krainer
+apos.ntrip.dgps.password = USkrai2APos!41
+apos.ntrip.dgps.mountpoint = APOS_DGPS

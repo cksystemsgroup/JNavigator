@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>linux</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>classes</outputDirectory>
+			<unpack>true</unpack>
+			<excludes>
+				<exclude>junit:junit</exclude>
+				<exclude>at.uni-salzburg.cs.ckgroup.jnavigator.jnavigator-io-native.linux-arm:libJNavigator</exclude>
+				<exclude>at.uni-salzburg.cs.ckgroup.jnavigator.jnavigator-io-native.linux-x86:libJNavigator</exclude>
+			</excludes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<includes>
+				<include>at.uni-salzburg.cs.ckgroup.jnavigator.jnavigator-io-native.linux-arm:libJNavigator</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>src/main/scripts/JControlMain.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>src/main/scripts/JControlPosOnlyMain.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+			<filtered>true</filtered>
+		</file>
+	</files>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>classes</outputDirectory>
+			<includes>
+				<include>**/*.properties</include>
+				<include>**/*.dat</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>setcourses</directory>
+			<includes>
+				<!-- include>**/*.dat</include -->
+				<include>sc-1slow.dat</include>
+				<include>sc-2slow.dat</include>
+				<include>sc-3slow.dat</include>
+				<include>sc-4ns.dat</include>
+				<include>sc-5ns.dat</include>
+				<include>sc-6ns.dat</include>
+				<include>setcourse-11.dat</include>
+				<include>setcourse-1.dat</include>
+				<include>setcourse-hover0.5m.dat</include>
+				<include>setcourse-hover1.0m.dat</include>
+				<include>setcourse-hover1.5m.dat</include>
+				<include>setcourse-hover1.dat</include>
+				<include>setcourse-hover2.dat</include>
+				<include>setcourse-hover3.dat</include>
+				<include>setcourse-hover4.dat</include>
+				<include>setcourse-hover5.dat</include>
+				<include>setcourse-hover6.dat</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

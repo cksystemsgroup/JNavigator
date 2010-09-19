@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<assembly>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<excludes>
+				<exclude>at.uni-salzburg.cs.ckgroup.jnavigator.jnavigator-io-native.linux-x86:libJNavigator</exclude>
+			</excludes>
+		</dependencySet>
+	</dependencySets>
+	<files>
+		<file>
+			<source>src/main/scripts/JNavigator-UI.bat</source>
+			<outputDirectory />
+			<lineEnding>dos</lineEnding>
+			<filtered>true</filtered>
+		</file>
+	</files>
+</assembly>

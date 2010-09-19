@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+		<artifactId>jnavigator</artifactId>
+		<version>1.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+	<artifactId>jnavigator-io-native</artifactId>
+	<packaging>pom</packaging>
+
+	<name>IO - Native Module</name>
+	<description>JNavigator IO - Native Code Implementations</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<artifactId>jnavigator-io-java</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
+	<modules>
+<!--
+		<module>linux-arm</module>
+-->
+		<module>linux-x86</module>
+	</modules>
+<!--
+	<profiles>
+		<profile>
+			<id>add-linux-x86-module</id>
+			<activation>
+				<property>
+					<name>platform</name>
+					<value>linux</value>
+				</property>
+			</activation>
+			<modules>
+				<module>linux-x86</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>add-linux-arm-module</id>
+			<activation>
+				<property>
+					<name>platform</name>
+					<value>linux-arm</value>
+				</property>
+			</activation>
+			<modules>
+				<module>linux-arm</module>
+			</modules>
+		</profile>
+-->
+
+		<!-- use this during release:prepare -->
+<!--
+		<profile>
+			<id>all</id>
+			<activation>
+				<property>
+					<name>platform</name>
+					<value>all</value>
+				</property>
+			</activation>
+			<modules>
+				<module>linux-arm</module>
+				<module>linux-x86</module>
+			</modules>
+		</profile>
+	</profiles>
+-->
+
+</project>
+
