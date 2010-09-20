@@ -13,20 +13,27 @@
 				<exclude>junit:junit</exclude>
 			</excludes>
 		</dependencySet>
-		<dependencySet>
-			<outputDirectory />
-			<unpack>true</unpack>
-			<includes>
-				<include>at.uni-salzburg.cs.ckgroup.javiator:javiator3d</include>
-			</includes>
-			<unpackOptions>
-				<includes>
-					<include>images/*.jpg</include>
-					<include>models/*.3ds</include>
-				</includes>
-			</unpackOptions>
-		</dependencySet>
 	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>images</directory>
+			<outputDirectory>images</outputDirectory>
+			<includes>
+				<include>**/*.jpg</include>
+			</includes>
+			<fileMode>644</fileMode>
+			<lineEnding>keep</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>models</directory>
+			<outputDirectory>models</outputDirectory>
+			<includes>
+				<include>**/*.3ds</include>
+			</includes>
+			<fileMode>644</fileMode>
+			<lineEnding>keep</lineEnding>
+		</fileSet>
+	</fileSets>
 	<files>
 		<file>
 			<source>config.xml</source>
