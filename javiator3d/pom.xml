@@ -32,11 +32,6 @@
 		</license>
 	</licenses>
 
-	<scm>
-		<connection>scm:cvs:ext:@cs.edvz.sbg.ac.at:/home/ck/group/software:JAviator3D</connection>
-		<developerConnection>scm:cvs:ext:@cs.edvz.sbg.ac.at:/home/ck/group/software:JAviator3D</developerConnection>
-	</scm>
-
 	<build>
 		<plugins>
 			<plugin>

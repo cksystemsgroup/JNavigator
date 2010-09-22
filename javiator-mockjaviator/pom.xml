@@ -30,12 +30,6 @@
 		</license>
 	</licenses>
 
-	<scm>
-		<connection>scm:cvs:ext:@cs.edvz.sbg.ac.at:/home/ck/group/software:JAviator/JControl</connection>
-		<developerConnection>scm:cvs:ext:@cs.edvz.sbg.ac.at:/home/ck/group/software:JAviator/JControl</developerConnection>
-		<tag>GpsReceiver_branch</tag>
-	</scm>
-
         <properties>
                 <bcel-version>5.1</bcel-version>
                 <commons-codec-version>1.3</commons-codec-version>
