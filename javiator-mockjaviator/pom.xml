@@ -121,6 +121,7 @@
 			<artifactId>bcel</artifactId>
 			<version>${bcel-version}</version>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>com.ibm.tuningfork</groupId>
 			<artifactId>tuningForkTraceGeneration</artifactId>
@@ -131,6 +132,7 @@
 			<artifactId>exotasks</artifactId>
 			<version>${exotasks-version}</version>
 		</dependency>
+-->
 		<dependency>
 			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
 			<artifactId>jnavigator-lab</artifactId>
