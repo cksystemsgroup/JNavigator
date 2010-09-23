@@ -10,7 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+	<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
 	<artifactId>javiator3d</artifactId>
 	<packaging>jar</packaging>
 	<name>JAviator3D - Project</name>

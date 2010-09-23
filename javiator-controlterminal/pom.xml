@@ -115,7 +115,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
 			<artifactId>javiator3d</artifactId>
 			<!-- version>${javiator3d-version}</version -->
 			<version>${project.parent.version}</version>
