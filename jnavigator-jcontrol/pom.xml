@@ -13,8 +13,8 @@
 	<artifactId>jnavigator-jcontrol</artifactId>
 	<packaging>jar</packaging>
 
-	<name>JAviator Control Module</name>
-	<description>JNavigator - JAviator Control Module</description>
+	<name>JNavigator Control Module</name>
+	<description>JNavigator - Control Module</description>
 
 	<dependencies>
 		<dependency>
