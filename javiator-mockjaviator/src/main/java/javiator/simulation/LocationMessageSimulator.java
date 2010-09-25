@@ -36,7 +36,6 @@ import java.util.SimpleTimeZone;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
