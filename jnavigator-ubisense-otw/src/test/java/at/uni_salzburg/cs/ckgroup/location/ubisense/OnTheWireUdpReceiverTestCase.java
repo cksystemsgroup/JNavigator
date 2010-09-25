@@ -40,4 +40,8 @@ public class OnTheWireUdpReceiverTestCase extends TestCase {
 			fail ();
 		}
 	}
+	
+	public void testCase01DummyToSatisfyJUnit () {
+		
+	}
 }
