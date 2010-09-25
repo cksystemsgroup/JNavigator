@@ -86,13 +86,13 @@ public class PilotAdapter implements ISensorDataListener, IPacketListener
 			return;
 		counter = reportRate;
 //		System.out.println ("PilotAdapter#receive: sensorData: " + sensorData.toString());
-		HardWareSensorData hwSensorData = new HardWareSensorData (sensorData.yaw*TO_DEGREES, sensorData.roll*TO_DEGREES, sensorData.pitch*TO_DEGREES, sensorData.z/1000);
+		HardWareSensorData hwSensorData = new HardWareSensorData (sensorData.yaw*TO_DEGREES, sensorData.roll*TO_DEGREES, sensorData.pitch*TO_DEGREES, sensorData.z/1000.0);
 		FlightControlData flightControlData = pilot.processSensorData (hwSensorData);
 		CommandData navigationData = new CommandData ();
 		navigationData.yaw = (short)(flightControlData.yaw*TO_MILLI_RADIANTS);
 		navigationData.pitch = (short)(flightControlData.pitch*TO_MILLI_RADIANTS);
 		navigationData.roll = (short)(flightControlData.roll*TO_MILLI_RADIANTS);
-		navigationData.z = (short)(flightControlData.heightAboveGround*1000);
+		navigationData.z = (short)(flightControlData.heightAboveGround*1000.0);
 //		System.out.println ("PilotAdapter#receive: navigationData: " + navigationData.toString() + ", flying set course: " + pilot.isFlyingSetCourse());
 		commandDataListener.receive (navigationData);
 	}
