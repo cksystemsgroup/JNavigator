@@ -89,11 +89,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -132,11 +131,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData1);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -147,11 +145,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData2);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -163,12 +160,9 @@ public class PilotAdapterTestCase extends TestCase {
 
 		assertNotNull(pilot.currentFlightControlData);
 		assertEquals(0.0, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll,
-				1E-3);
-		assertEquals(-0.11459155902616464,
-				pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround,
-				1E-7);
+		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(-0.11459155902616464, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(0.0, listener.currentCommandData.yaw, 1E-9);
@@ -180,12 +174,9 @@ public class PilotAdapterTestCase extends TestCase {
 
 		assertNotNull(pilot.currentFlightControlData);
 		assertEquals(0.0, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll,
-				1E-3);
-		assertEquals(-0.11459155902616464,
-				pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround,
-				1E-7);
+		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(-0.11459155902616464, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(0.0, listener.currentCommandData.yaw, 1E-9);
@@ -196,11 +187,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData1);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -239,11 +229,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData1);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -254,11 +243,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData2);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -269,11 +257,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData2);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
@@ -285,12 +272,9 @@ public class PilotAdapterTestCase extends TestCase {
 
 		assertNotNull(pilot.currentFlightControlData);
 		assertEquals(0.0, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll,
-				1E-3);
-		assertEquals(-0.11459155902616464,
-				pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround,
-				1E-7);
+		assertEquals(-0.05729577951308232, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(-0.11459155902616464, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(-0.003, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(0.0, listener.currentCommandData.yaw, 1E-9);
@@ -335,11 +319,10 @@ public class PilotAdapterTestCase extends TestCase {
 		pilotAdapter.receive(sensorData1);
 
 		assertNotNull(pilot.currentFlightControlData);
-		assertEquals(90, pilot.currentFlightControlData.yaw, 1E-7);
-		assertEquals(45, pilot.currentFlightControlData.roll, 1E-3);
-		assertEquals(22.5, pilot.currentFlightControlData.pitch, 1E-3);
-		assertEquals(0.1963495409,
-				pilot.currentFlightControlData.heightAboveGround, 1E-7);
+		assertEquals(89.95437383553924, pilot.currentFlightControlData.yaw, 1E-7);
+		assertEquals(44.97718691776962, pilot.currentFlightControlData.roll, 1E-3);
+		assertEquals(22.45994556912827, pilot.currentFlightControlData.pitch, 1E-3);
+		assertEquals(0.196, pilot.currentFlightControlData.heightAboveGround, 1E-7);
 
 		assertNotNull(listener.currentCommandData);
 		assertEquals(1570, listener.currentCommandData.yaw, 1E-9);
