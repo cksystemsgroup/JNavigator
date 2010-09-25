@@ -139,7 +139,7 @@ public class PropertyUtilsTestCase extends TestCase
 			assertNull (props);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			assertEquals ("name", e.getMessage());
+			assertNull (e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail ();
