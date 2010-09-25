@@ -78,12 +78,12 @@ public class CommandDataTestCase extends TestCase {
 		CommandData navigationData = new CommandData (12,34,54,29);
 		String navString = navigationData.toString();
 		System.out.println ("Expected: " + navString);
-		assertEquals ("NavigationData: roll=11,9748, pitch=33,9764, yaw=53,9726, height above ground=29", navString);
+		assertEquals ("CommandData: roll=11,9748, pitch=33,9764, yaw=53,9726, height above ground=29", navString);
 
 		navigationData = new CommandData (360,-359,180,-27);
 		navString = navigationData.toString();
 		System.out.println ("Expected: " + navString);
-		assertEquals ("NavigationData: roll=359,9894, pitch=-358,9581, yaw=179,966, height above ground=-27", navString);
+		assertEquals ("CommandData: roll=359,9894, pitch=-358,9581, yaw=179,966, height above ground=-27", navString);
 	}
 	
 	/**
