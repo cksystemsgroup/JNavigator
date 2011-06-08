@@ -288,12 +288,12 @@
 		<repository>
 			<id>${site.id}</id>
 			<name>Inhouse Repository</name>
-			<url>dav:http://${site.host}/maven2/inhouse/</url>
+			<url>http://${site.host}/archiva/repository/inhouse/</url>
 		</repository>
 		<snapshotRepository>
 			<id>${site.id}</id>
 			<name>Inhouse Snapshot Repository</name>
-			<url>dav:http://${site.host}/maven2/inhouse_snapshot/</url>
+			<url>http://${site.host}/archiva/repository/inhouse_snapshot/</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
