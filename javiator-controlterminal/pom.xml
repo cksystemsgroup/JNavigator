@@ -197,28 +197,28 @@
                 <dependency>
                         <groupId>com.sun.java3d</groupId>
                         <artifactId>j3dcore</artifactId>
-                        <version>1_6_0-pre1</version>
+                        <version>1.6.0-pre1-1011070159</version>
                 </dependency>
                 <dependency>
                         <groupId>com.sun.java3d</groupId>
                         <artifactId>j3dutils</artifactId>
-                        <version>1_6_0-pre1</version>
+                        <version>1.6.0-pre1-1011070159</version>
                 </dependency>
                 <dependency>
                         <groupId>com.sun.java3d</groupId>
                         <artifactId>vecmath</artifactId>
-                        <version>1_6_0-pre1</version>
+                        <version>1.6.0-pre1-1011070159</version>
                 </dependency>
                 <dependency>
                         <groupId>com.sun.java3d</groupId>
                         <artifactId>libj3dcore-ogl</artifactId>
-                        <version>1_6_0-pre1</version>
+                        <version>1.6.0-pre1-1011070159</version>
                         <type>so</type>
                 </dependency>
                 <dependency>
                         <groupId>com.sun.java3d</groupId>
                         <artifactId>libj3dcore-ogl-cg</artifactId>
-                        <version>1_6_0-pre1</version>
+                        <version>1.6.0-pre1-1011070159</version>
                         <type>so</type>
                 </dependency>
                 <dependency>
