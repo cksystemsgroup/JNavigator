@@ -1,15 +1,58 @@
 #!/bin/sh -x
 
-mvn clean install -Dmaven.test.skip
+VERSION=1.2-SNAPSHOT
+REMOTE=false;
+[ "$1" = "-r" ] && REMOTE=true;
 
-SCP=scp; SSH=ssh; HOST="ckrainer@ckgroup-2";
-if [ "$(hostname)" = "ckgroup-2" ]; then SCP=cp; SSH="sh -e"; HOST=""; fi
+die () { echo "ERROR: $*" >&2; exit 1; }
 
-scp	javiator-controlterminal/target/javiator-controlterminal-1.1-SNAPSHOT-linux.tar.gz	\
-	javiator-mockjaviator/target/javiator-mockjaviator-1.1-SNAPSHOT.tar.gz	\
-	jnavigator-jcontrol/target/jnavigator-jcontrol-1.1-SNAPSHOT-linux.tar.gz	\
-	jnavigator-lab/target/jnavigator-lab-1.1-SNAPSHOT.tar.gz \
-	jnavigator-ui/target/jnavigator-ui-1.1-SNAPSHOT.tar.gz	\
-	ckrainer@ckgroup-2:~/dist-new
+DIST_DIR=~/dist-new
+F_CT=javiator-controlterminal/target/javiator-controlterminal-${VERSION}-linux.tar.gz
+F_MJ=javiator-mockjaviator/target/javiator-mockjaviator-${VERSION}.tar.gz
+F_JC=jnavigator-jcontrol/target/jnavigator-jcontrol-${VERSION}-linux.tar.gz
+F_NL=jnavigator-lab/target/jnavigator-lab-${VERSION}.tar.gz
+F_UI=jnavigator-ui/target/jnavigator-ui-${VERSION}.tar.gz
+FILES="$F_CT $F_MJ $F_JC $F_NL $F_UI";
 
-$SSH $HOST "cd ~/dist-new && ./inst.sh"
+#mvn clean install -Dmaven.test.skip
+
+[ -d $DIST_DIR ] || mkdir $DIST_DIR
+[ -d $DIST_DIR ] || die "Can not create folder $DIST_DIR";
+
+cp $F_CT $F_MJ $F_JC $F_NL $F_UI $DIST_DIR
+
+(
+   cd $DIST_DIR || die "Can not chdir() to folder $DIST_DIR";
+
+   rm -rf controlterminal jnavigator-ui jnavigator-jcontrol javiator-mockjaviator
+
+   mkdir controlterminal jnavigator-ui jnavigator-jcontrol javiator-mockjaviator
+
+   (cd controlterminal     && tar -xzf ../$(basename $F_CT))
+   (cd javiator-mockjaviator && tar -xzf ../$(basename $F_MJ))
+   (cd jnavigator-jcontrol && tar -xzf ../$(basename $F_JC))
+   (cd jnavigator-ui       && tar -xzf ../$(basename $F_UI))
+   (cd java3D              && cp * ../controlterminal/lib)
+)
+
+
+$REMOTE || exit 0;
+
+SCP=scp; SSH=ssh; HOST="ckgroup-2";
+scp $F_CT $F_MJ $F_JC $F_NL $F_UI $HOST:$DIST_DIR
+#$SSH $HOST "cd ~/dist-new && ./inst.sh"
+
+echo "Remote: ";
+echo "
+set -x
+cd $DIST_DIR
+rm -rf controlterminal jnavigator-ui jnavigator-jcontrol javiator-mockjaviator
+mkdir controlterminal jnavigator-ui jnavigator-jcontrol javiator-mockjaviator
+(cd controlterminal     && tar -xzf ../$(basename $F_CT))
+(cd javiator-mockjaviator && tar -xzf ../$(basename $F_MJ))
+(cd jnavigator-jcontrol && tar -xzf ../$(basename $F_JC))
+(cd jnavigator-ui       && tar -xzf ../$(basename $F_UI))
+(cd java3D              && cp * ../controlterminal/lib)
+" | $SSH $HOST
+
+
