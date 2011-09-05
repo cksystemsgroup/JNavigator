@@ -1,0 +1,11 @@
+ ----
+ JNavigator
+ ----
+
+ JNavigator is an autopilot software, suitable for the needs of the JAviator
+helicopter. At start of autonomous flights, JNavigator divides set course
+trajectories, which are paths of waypoints, in segments of constant velocity or
+constant acceleration. In consideration of flight time, JNavigator determines
+the JAviator's nominal position and tries to stir the helicopter towards it by
+regarding its current position, which is provided by a GPS receiver.
+

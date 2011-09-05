@@ -1,0 +1,17 @@
+ ----
+ Control Terminal
+ ----
+
+ The Control Terminal displays the sensor data received from the FCS
+graphically and provides a means for piloting the connected Plant, either the
+real JAviator or the MockJAviator. The main functionality lies in monitoring
+and modifying the Plant's attitude and altitude. This is accomplished with four
+meters that indicate the "current" and "desired" roll, pitch, yaw, and altitude
+values through red and green needles, respectively. In case of the altitude
+meter, it is also possible to display and set the thrust directly without
+involving an altitude controller. Except for the yaw meter, each meter contains
+a safety option that allows to set a limit for the green needle. Accordingly,
+the user controls the connected Plant by changing the green needles, either by
+using the keyboard or, preferably, via a 4-axis joystick. Because the red
+needles refer to the Plant, they cannot be influenced by the user.
+

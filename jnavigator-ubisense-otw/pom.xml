@@ -13,7 +13,7 @@
 	<artifactId>jnavigator-ubisense-otw</artifactId>
 	<packaging>jar</packaging>
 
-	<name>JNavigator Ubisense OTW Location Module</name>
+	<name>Ubisense OTW Location</name>
 	<description>JNavigator Ubisense On The Wire Location Module</description>
 
 	<dependencies>

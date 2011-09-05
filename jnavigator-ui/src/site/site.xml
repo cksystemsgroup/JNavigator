@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="${project.name}">
-
-<!--
-	<bannerLeft>
-		<name>${project.name}</name>
-		<src>http://maven.apache.org/images/apache-maven-project.png</src>
-		<href>http://maven.apache.org/</href>
-	</bannerLeft>
-
-	<bannerRight>
-		<src>http://maven.apache.org/images/maven-small.gif</src>
-	</bannerRight>
-
-	<skin>
-		<groupId>com.rectang.maventrac</groupId>
-		<artifactId>maventrac-skin</artifactId>
-		<version>1.0</version>
-	</skin>
--->
-
 	<publishDate format="dd MMM yyyy" />
 
 	<bannerLeft>

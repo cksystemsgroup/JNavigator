@@ -1,0 +1,17 @@
+
+ ----
+ MockJAviator
+ ----
+
+ The Simulated Plant, also called the MockJAviator, is a simulation of the real
+JAviator. It receives the motor signals from the FCS and, in response, computes
+new sensor values according to an estimation of the real JAviator's behavior.
+To ensure compatibility with the FCS, the device-independent aspects of the
+Controller-Plant Interface implemented in the MockJAviator are the same as in
+the Physical Plant. However, instead of an RS232 serial line, the MockJAviator
+uses a TCP/IP connection to communicate with the FCS. Therefore, the FCS
+implements the device-dependent aspects of the Controller-Plant Interface not
+only on RS232 but also on Ethernet. An advantage of this design is that the
+MockJAviator can run either locally on the same machine as the FCS or remotely
+on some other machine.
+
