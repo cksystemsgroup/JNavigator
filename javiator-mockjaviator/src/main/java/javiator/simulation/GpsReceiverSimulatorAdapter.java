@@ -31,8 +31,11 @@ import java.net.SocketException;
 import java.util.Properties;
 import java.util.Timer;
 
-import javiator.util.ISensorDataListener;
-import javiator.util.SensorData;
+import org.apache.log4j.Logger;
+
+import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
+import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
+import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
@@ -71,8 +74,10 @@ import at.uni_salzburg.cs.ckgroup.simulation.GpsReceiverSimulator;
  * 
  * @author Clemens Krainer
  */
-public class GpsReceiverSimulatorAdapter implements ISensorDataListener, IPositionProvider, Runnable
+public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener, IPositionProvider, Runnable
 {	
+	private static final Logger LOG = Logger.getLogger(GpsReceiverSimulatorAdapter.class.getName());
+	
 	/**
 	 * Name for the property that contains the file name for the GPS receiver
 	 * simulator properties. If not set, the file name configured in
@@ -144,7 +149,7 @@ public class GpsReceiverSimulatorAdapter implements ISensorDataListener, IPositi
 	/**
 	 * This is the <code>OutputStream</code> for logging.
 	 */
-	private PrintStream log = null;
+//	private PrintStream log = null;
 	
 	/**
 	 * Construct a <code>GpsReceiverSimulatorAdapter</code>.
@@ -188,29 +193,23 @@ public class GpsReceiverSimulatorAdapter implements ISensorDataListener, IPositi
         socketServer = new SocketServerThread (port);
 	}
 	
-	/**
-	 * Set the <code>OutputStream</code> for logging.
-	 * 
-	 * @param log the new <code>OutputStream</code>
-	 */
-	public void setLogOutputStream (OutputStream log) {
-		this.log = log == null ? null : new PrintStream (log);
-	}
-	
 	/* (non-Javadoc)
-	 * @see javiator.simulation.SensorDataListener#receive(javiator.util.SensorData)
+	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#receive(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)
 	 */
-	public void receive (SensorData sensorData) {
-		this.sensorData = sensorData;
-		
-		double dX = sensorData.ddroll / 1000.0;
-		double dY = sensorData.ddpitch / 1000.0;
-		
-		speedOverGround = Math.sqrt(dX*dX + dY*dY);
-		
-		courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
-		if (courseOverGround < 0)
-			courseOverGround += 360;
+	public void receive(IDataTransferObject dto) throws IOException {
+		if (dto instanceof SensorData) {
+			sensorData =  (SensorData) dto;
+			double dX = sensorData.getDdRoll();
+			double dY = sensorData.getDdPitch();
+			
+			speedOverGround = Math.sqrt(dX*dX + dY*dY);
+			
+			courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
+			if (courseOverGround < 0)
+				courseOverGround += 360;
+		}
+		else
+			LOG.warn("Can not handle dto: " + dto);
 	}
 
 	/* (non-Javadoc)
@@ -220,14 +219,14 @@ public class GpsReceiverSimulatorAdapter implements ISensorDataListener, IPositi
 		SensorData s = sensorData;
 		
 		if (s == null) {
-			if (log != null)
-				log.println ("getCurrentPosition: SensorData: none available yet.");
+			if (LOG.isDebugEnabled())
+				LOG.debug ("getCurrentPosition: SensorData: none available yet.");
 			return null;
 		}
 		
-		PolarCoordinate r = geodeticSystem.walk (referencePosition, s.x/1000.0, -s.y/1000.0, s.z/1000.0);
-		if (log != null)
-			log.println ("getCurrentPosition: Position " + r.toString() + " SensorData " + s.toString());
+		PolarCoordinate r = geodeticSystem.walk (referencePosition, s.getX(), -s.getY(), s.getZ());
+		if (LOG.isDebugEnabled())
+			LOG.debug ("getCurrentPosition: Position " + r.toString() + " SensorData " + s.toString());
 
 		return r;
 	}
@@ -381,5 +380,6 @@ public class GpsReceiverSimulatorAdapter implements ISensorDataListener, IPositi
         }
     	
     }
+
 	
 }

@@ -24,21 +24,24 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.SocketException;
 import java.util.Properties;
 import java.util.Timer;
 
-import javiator.util.ISensorDataListener;
-import javiator.util.SensorData;
+import org.apache.log4j.Logger;
+
+import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
+import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
+import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 import at.uni_salzburg.cs.ckgroup.io.IConnection;
 import at.uni_salzburg.cs.ckgroup.io.TcpSocketServer;
 
-public class LocationMessageSimulatorAdapter implements ISensorDataListener, IPositionProvider, Runnable
+public class LocationMessageSimulatorAdapter implements IDataTransferObjectListener, IPositionProvider, Runnable
 {
+	private static final Logger LOG = Logger.getLogger(LocationMessageSimulatorAdapter.class.getName());
 	
 	/**
 	 * Name for the property that contains the file name for the GPS receiver
@@ -114,11 +117,6 @@ public class LocationMessageSimulatorAdapter implements ISensorDataListener, IPo
 	 */
 	private double referenceOrientation;
 	
-	/**
-	 * This is the <code>OutputStream</code> for logging.
-	 */
-	private PrintStream log = null;
-	
 
 	/**
 	 * Construct a <code>LocationMessageSimulatorAdapter</code>.
@@ -160,29 +158,23 @@ public class LocationMessageSimulatorAdapter implements ISensorDataListener, IPo
         socketServer = new SocketServerThread (props);
 	}
 	
-	/**
-	 * Set the <code>OutputStream</code> for logging.
-	 * 
-	 * @param log the new <code>OutputStream</code>
-	 */
-	public void setLogOutputStream (OutputStream log) {
-		this.log = log == null ? null : new PrintStream (log);
-	}
-
 	/* (non-Javadoc)
-	 * @see javiator.simulation.SensorDataListener#receive(javiator.util.SensorData)
+	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#receive(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)
 	 */
-	public void receive (SensorData sensorData) {
-		this.sensorData = sensorData;
-		
-		double dX = sensorData.ddroll / 1000.0;
-		double dY = sensorData.ddpitch / 1000.0;
-		
-		speedOverGround = Math.sqrt(dX*dX + dY*dY);
-		
-		courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
-		if (courseOverGround < 0)
-			courseOverGround += 360;
+	public void receive(IDataTransferObject dto) throws IOException {
+		if (dto instanceof SensorData) {
+			sensorData =  (SensorData) dto;
+			double dX = sensorData.getDdRoll();
+			double dY = sensorData.getDdPitch();
+			
+			speedOverGround = Math.sqrt(dX*dX + dY*dY);
+			
+			courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
+			if (courseOverGround < 0)
+				courseOverGround += 360;
+		}
+		else
+			LOG.warn("Can not handle dto: " + dto);
 	}
 
 	public Double getCourseOverGround() {
@@ -193,14 +185,14 @@ public class LocationMessageSimulatorAdapter implements ISensorDataListener, IPo
 		SensorData s = sensorData;
 		
 		if (s == null) {
-//			if (log != null)
-//				log.println ("getCurrentPosition: SensorData: none available yet.");
+			if (LOG.isDebugEnabled())
+				LOG.debug ("getCurrentPosition: SensorData: none available yet.");
 			return null;
 		}
 		
-		CartesianCoordinate r = referencePosition.add(new CartesianCoordinate(-s.x/1000.0, s.y/1000.0, s.z/1000.0));
-//		if (log != null)
-//			log.println ("getCurrentPosition: Position " + r.toString() + " SensorData " + s.toString());
+		CartesianCoordinate r = referencePosition.add(new CartesianCoordinate(-s.getX(), s.getY(), s.getZ()));
+		if (LOG.isDebugEnabled())
+			LOG.debug ("getCurrentPosition: Position " + r.toString() + " SensorData " + s.toString());
 
 		return new PolarCoordinate (r.x, r.y, r.z);
 	}
@@ -281,4 +273,5 @@ public class LocationMessageSimulatorAdapter implements ISensorDataListener, IPo
         }
     	
     }
+
 }

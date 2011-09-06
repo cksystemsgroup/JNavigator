@@ -1,10 +1,10 @@
-/*--------------------------------------------------------------------------
+/** --------------------------------------------------------------------------
  *
  * The code is part of JAviator project (http://javiator.cs.uni-salzburg.at)
  *
- *--------------------------------------------------------------------------
+ * --------------------------------------------------------------------------
  * Date: 22-Apr-2006
- *--------------------------------------------------------------------------
+ * --------------------------------------------------------------------------
  *
  * Copyright (c) 2006 The University of Salzburg.
  * All rights reserved. Permission is hereby granted, without written 
@@ -26,20 +26,22 @@
  * SALZBURG HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES,
  * ENHANCEMENTS, OR MODIFICATIONS.
  *
- *--------------------------------------------------------------------------
- *Created by Daniel Iercan (daniel.iercan@aut.upt.ro)
- *--------------------------------------------------------------------------
- *Modified by V. T. Rajan, IBM T.J. Watson Research Center
+ * --------------------------------------------------------------------------
+ * Created by Daniel Iercan (daniel.iercan@aut.upt.ro)
+ * --------------------------------------------------------------------------
+ * Modified by V. T. Rajan, IBM T.J. Watson Research Center
  * October 13, 2006
+ * --------------------------------------------------------------------------
  */
 
 package javiator.simulation;
 
-import javiator.util.CommandData;
-import javiator.util.JProperties;
-import javiator.util.JProperty;
-import javiator.util.MotorSignals;
-import javiator.util.SensorData;
+import java.util.Properties;
+
+import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
+import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+
 /**
  * @author Daniel Iercan (daniel.iercan@aut.upt.ro)
  * and V. T. Rajan (vtrajan@us.ibm.com)
@@ -47,6 +49,9 @@ import javiator.util.SensorData;
  */
 public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
 {
+	public static final String PROP_CONTROLLER_PERIOD = "controller.period";
+	public static final String PROP_SILENT = "silent";
+	
     // plant constants
     public static final double g                   = 0.0;//9.8;    // meters per second^2
     public static final double m                   = 1.720;  // kg
@@ -60,10 +65,10 @@ public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
     private Tensor3D           Ibodyinv;
 
     // commands
-    private double             T1;                           //Newton
-    private double             T2;                           //Newton
-    private double             T3;                           //Newton
-    private double             T4;                           //Newton
+    private double             T1;                           // Newton
+    private double             T2;                           // Newton
+    private double             T3;                           // Newton
+    private double             T4;                           // Newton
 
     // State variables
     private Vector3D           x;
@@ -112,10 +117,17 @@ public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
     // controller period
     double controllerPeriod;
 
-    public ThrustJAviatorPlant( JProperties properties )
+    
+    public ThrustJAviatorPlant (Properties properties)
     {
-        silent = Boolean.valueOf(System.getProperty("SILENT")).booleanValue();
-        controllerPeriod = properties.getDouble(JProperty.controllerPeriod);
+    	silent = Boolean.parseBoolean (properties.getProperty (PROP_SILENT, "true"));
+        
+        String controllerPeriodString = properties.getProperty(PROP_CONTROLLER_PERIOD);
+        if (controllerPeriodString == null)
+        	throw new IllegalStateException ("Property " + PROP_CONTROLLER_PERIOD + " has not been set.");
+        
+        controllerPeriod = Double.parseDouble (controllerPeriodString);
+        Te = 1.05 * controllerPeriod;
         reset ();
     }
     
@@ -138,26 +150,26 @@ public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
 
         epsilon = 0.001; //Values below this would give (int) 1000*z=0
 
-        Ibodyinv = new Tensor3D( 1.0 / Ixx, 1.0 / Iyy, 1.0 / Izz );
-        x = new Vector3D( );
-        deltax = new Vector3D( );
-        xnew = new Vector3D( );
-        q = new Quaternion( 1.0 );
-        deltaq = new Quaternion( 0.0 );
-        qnew = new Quaternion( 1.0 );
-        P = new Vector3D( );
-        deltaP = new Vector3D( );
-        Pnew = new Vector3D( );
-        L = new Vector3D( );
-        deltaL = new Vector3D( );
-        Lnew = new Vector3D( );
-        R = q.quaternionToRotationTensor3D( );
-        Iinv = ( R.multiply( Ibodyinv.multiply( R.transpose( ) ) ) );
-        v = P.multiply( 1.0 / m );
-        omega = Iinv.multiply( L );
+		Ibodyinv = new Tensor3D(1.0 / Ixx, 1.0 / Iyy, 1.0 / Izz);
+		x = new Vector3D();
+		deltax = new Vector3D();
+		xnew = new Vector3D();
+		q = new Quaternion(1.0);
+		deltaq = new Quaternion(0.0);
+		qnew = new Quaternion(1.0);
+		P = new Vector3D();
+		deltaP = new Vector3D();
+		Pnew = new Vector3D();
+		L = new Vector3D();
+		deltaL = new Vector3D();
+		Lnew = new Vector3D();
+		R = q.quaternionToRotationTensor3D();
+		Iinv = (R.multiply(Ibodyinv.multiply(R.transpose())));
+		v = P.multiply(1.0 / m);
+		omega = Iinv.multiply(L);
     }
 
-    public void simulate( )
+    public void simulate ()
     {
         // Thrust Force in the body coordinates
         Vector3D Thrustb = new Vector3D( 0.0, 0.0, T1 + T2 + T3 + T4 );
@@ -171,7 +183,6 @@ public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
 
         while( t < Te )
         {
-
             R = q.quaternionToRotationTensor3D( );
             Iinv = ( R.multiply( Ibodyinv.multiply( R.transpose( ) ) ) );
             omega = Iinv.multiply( L );
@@ -240,105 +251,43 @@ public final class ThrustJAviatorPlant implements JAviatorPhysicalModel
           System.out.println( "roll = " + roll + "  pitch = " + pitch + "  yaw = " + yaw );//+ "  z = " + z + "  dz = " + dz );
         }
     }
-
-    public SensorData getSensorData( )
-    {
-        SensorData data = new SensorData( );
-        data.roll       = (short) getRoll( );
-        data.pitch      = (short) getPitch( );
-        data.yaw        = (short) getYaw( );
-        data.droll      = (short) getDRoll( );
-        data.dpitch     = (short) getDPitch( );
-        data.dyaw       = (short) getDYaw( );
-        data.z          = (short) getZ( );
-        data.dz         = (short) getDZ( );
-
-        return( data );
+    
+    public SensorData getSensorData () {
+    	SensorData s = new SensorData();
+    	s.setRoll(roll);
+    	s.setPitch(pitch);
+    	s.setYaw(yaw);
+    	s.setZ(z);
+    	s.setdRoll(droll);
+    	s.setdPitch(dpitch);
+    	s.setdYaw(dyaw);
+    	s.setDz(dz);    	
+    	return s;
     }
 
-    private int percent_to_thrust( int percent )
+    private int percent_to_thrust( double percent )
     {
-        int thrust = (int)( (float) percent * 7.0 );
-
+    	// TODO what does 7.0 here ?
+        int thrust = (int)( (double) percent * 7.0 );
         return( thrust > 0 ? thrust : 0 );
     }
 
-    public void setMotorSignals( MotorSignals actuator )
+    public void setMotorSignals (MotorSignals actuator)
     {
-        setT1( percent_to_thrust( actuator.front ) );
-        setT2( percent_to_thrust( actuator.left ) );
-        setT3( percent_to_thrust( actuator.rear ) );
-        setT4( percent_to_thrust( actuator.right ) );
-    }
-
-    public void setT1( int pT1 )
-    {
-        T1 = pT1 / 1000.0;
-    }
-
-    public void setT2( int pT2 )
-    {
-        T2 = pT2 / 1000.0;
-    }
-
-    public void setT3( int pT3 )
-    {
-        T3 = pT3 / 1000.0;
-    }
-
-    public void setT4( int pT4 )
-    {
-        T4 = pT4 / 1000.0;
-    }
-
-    public int getRoll( )
-    {
-        return (int) ( roll * 1000 );
-    }
-
-    public int getDRoll( )
-    {
-        return (int) ( droll * 1000 );
-    }
-
-    public int getPitch( )
-    {
-        return (int) ( pitch * 1000 );
-    }
-
-    public int getDPitch( )
-    {
-        return (int) ( dpitch * 1000 );
-    }
-
-    public int getYaw( )
-    {
-        return (int) ( yaw * 1000 );
-    }
-
-    public int getDYaw( )
-    {
-        return (int) ( dyaw * 1000 );
-    }
-
-    public int getZ( )
-    {
-        return (int) ( z * 1000 );
-    }
-
-    public int getDZ( )
-    {
-        return (int) ( dz * 1000 );
+        T1 = percent_to_thrust (actuator.getFront());
+        T2 = percent_to_thrust (actuator.getLeft ());
+        T3 = percent_to_thrust (actuator.getRear ());
+        T4 = percent_to_thrust (actuator.getRight());
     }
 
     // @see javiator.simulation.JAviatorPhysicalModel#initialize(java.lang.Object)
-    public void initialize( Object parameters )
+    public void initialize (Object parameters)
     {
-        Te = ( (Double) parameters ).doubleValue( );
+//        Te = ( (Double) parameters ).doubleValue( );
     }
 
     // @see javiator.simulation.JAviatorPhysicalModel#setNavigation(javiator.util.Navigation)
-    public void setCommandData ( CommandData navigation )
+    public void setCommandData (CommandData navigation)
     {
         // As this is a real simulation and not a fake one, we ignore this data
 	}    

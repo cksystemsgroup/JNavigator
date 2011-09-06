@@ -93,5 +93,17 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.13</version>
 		</dependency>
+                <dependency>
+                        <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+                        <artifactId>jnavigator-util</artifactId>
+                        <version>${project.parent.version}</version>
+                        <type>jar</type>
+                        <scope>compile</scope>
+                </dependency>
+                <dependency>
+                        <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+                        <artifactId>jnavigator-communication</artifactId>
+                        <version>${project.parent.version}</version>
+                </dependency>
 	</dependencies>
 </project>
