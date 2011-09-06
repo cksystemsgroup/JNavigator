@@ -25,7 +25,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 
 		<testSourceDirectory>../src/test/java</testSourceDirectory>
 
@@ -43,111 +43,32 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-alpha-5</version>
 				<extensions>true</extensions>
 				<configuration>
+					<javahOS>linux</javahOS>
+					<javahVerbose>true</javahVerbose>
+					<javahClassNames>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.PlainSerialLineImpl</javahClassName>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.SerialLineInputStream</javahClassName>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.SerialLineOutputStream</javahClassName>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.PlainBluetoothSocketImpl</javahClassName>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketInputStream</javahClassName>
+						<javahClassName>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketOutputStream</javahClassName>
+					</javahClassNames>
+					<sources>
+						<source>
+							<directory>../src/main/native</directory>
+						</source>
+					</sources>
 					<compilerProvider>generic</compilerProvider>
 					<compilerStartOptions>
 						<compilerStartOption>-fPIC -O</compilerStartOption>
 					</compilerStartOptions>
-
-					<javahOS>linux</javahOS>
-
-					<sources>
-						<source>
-							<directory>../src/main/native</directory>
-							<fileNames>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_PlainSerialLineImpl.c</fileName>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_SerialLineInputStream.c</fileName>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_SerialLineOutputStream.c</fileName>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_PlainBluetoothSocketImpl.c</fileName>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_BluetoothSocketInputStream.c</fileName>
-								<fileName>at_uni_salzburg_cs_ckgroup_io_BluetoothSocketOutputStream.c</fileName>
-							</fileNames>
-						</source>
-					</sources>
-
 					<linkerStartOptions>
 						<linkerStartOption>-shared -lc -ldl -lbluetooth</linkerStartOption>
 					</linkerStartOptions>
 				</configuration>
-
-                                <executions>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.PlainSerialLineImpl</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.PlainSerialLineImpl</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_PlainSerialLineImpl.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.SerialLineInputStream</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.SerialLineInputStream</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_SerialLineInputStream.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.SerialLineOutputStream</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.SerialLineOutputStream</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_SerialLineOutputStream.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.PlainBluetoothSocketImpl</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.PlainBluetoothSocketImpl</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_PlainBluetoothSocketImpl.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketInputStream</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketInputStream</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_BluetoothSocketInputStream.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                        <execution>
-                                                <id>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketOutputStream</id>
-                                                <phase>generate-sources</phase>
-                                                <goals><goal>javah</goal></goals>
-                                                <configuration>
-                                                        <classNames><className>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketOutputStream</className></classNames>
-                                                        <outputFileName>at_uni_salzburg_cs_ckgroup_io_BluetoothSocketOutputStream.h</outputFileName>
-                                                </configuration>
-                                        </execution>
-                                </executions>
-<!-- 
-				<executions>
-					<execution>
-						<id>javah</id>
-						<phase>generate-sources</phase>
-						<configuration>
-							<classNames>
-								<className>at.uni_salzburg.cs.ckgroup.io.PlainSerialLineImpl</className>
-								<className>at.uni_salzburg.cs.ckgroup.io.SerialLineInputStream</className>
-								<className>at.uni_salzburg.cs.ckgroup.io.SerialLineOutputStream</className>
-								<className>at.uni_salzburg.cs.ckgroup.io.PlainBluetoothSocketImpl</className>
-								<className>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketInputStream</className>
-								<className>at.uni_salzburg.cs.ckgroup.io.BluetoothSocketOutputStream</className>
-							</classNames>
-						</configuration>
-						<goals>
-							<goal>javah</goal>
-						</goals>
-					</execution>
-				</executions>
--->
 			</plugin>
 
 			<plugin>
