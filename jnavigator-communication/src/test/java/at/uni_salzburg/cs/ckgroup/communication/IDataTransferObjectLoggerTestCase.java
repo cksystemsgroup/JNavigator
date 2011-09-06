@@ -71,7 +71,7 @@ public class IDataTransferObjectLoggerTestCase extends TestCase {
 		DataTransferObjectLogger log = new DataTransferObjectLogger ();
 		try { Thread.sleep(200); } catch (Exception e) {;}
 		log.receive (one);
-		try { Thread.sleep(200); } catch (Exception e) {;}
+		try { Thread.sleep(500); } catch (Exception e) {;}
 		Thread.yield();
 		assertEquals ("Message one", one.toString(), appender.message);
 		log.receive (two);

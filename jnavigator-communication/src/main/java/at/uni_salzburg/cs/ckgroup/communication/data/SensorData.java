@@ -38,107 +38,116 @@ public class SensorData implements IDataTransferObject {
 	public static final double VELOCITY_FACTOR = 0.01;
 	public static final double ACCEL_FACTOR = (double)9810 / 4681;
 	public static final double BATTERY_FACTOR = 0.001;
+	
+	public static final double ANGLE_FACTOR_NEW = 0.001;
 
 	/**
 	 * The current roll value.
 	 */
-	private short roll;
+	private short roll = 0;
 
 	/**
 	 * The current pitch value.
 	 */
-	private short pitch;
+	private short pitch = 0;
 
 	/**
 	 * The current yaw value.
 	 */
-	private short yaw;
+	private short yaw = 0;
 
 	/**
 	 * The first derivative of the current roll value.
 	 */
-	private short dRoll;
+	private short dRoll = 0;
 
 	/**
 	 * The first derivative of the current pitch value.
 	 */
-	private short dPitch;
+	private short dPitch = 0;
 
 	/**
 	 * The first derivative of the current yaw value.
 	 */
-	private short dYaw;
+	private short dYaw = 0;
 
 	/**
 	 * The second derivative of the current roll value.
 	 */
-	private short ddRoll;
+	private short ddRoll = 0;
 
 	/**
 	 * The second derivative of the current pitch value.
 	 */
-	private short ddPitch;
+	private short ddPitch = 0;
 
 	/**
 	 * The second derivative of the current yaw value.
 	 */
-	private short ddYaw;
+	private short ddYaw = 0;
 
 	/**
 	 * The current X value.
 	 */
-	private short x;
+	private short x = 0;
 
 	/**
 	 * The current Y value.
 	 */
-	private short y;
+	private short y = 0;
 
 	/**
 	 * The current Z value.
 	 */
-	private short z;
+	private short z = 0;
 
 	/**
 	 * The first derivative of the current X value.
 	 */
-	private short dx;
+	private short dx = 0;
 
 	/**
 	 * The first derivative of the current Y value.
 	 */
-	private short dy;
+	private short dy = 0;
 
 	/**
 	 * The first derivative of the current Z value.
 	 */
-	private short dz;
+	private short dz = 0;
 
 	/**
 	 * The second derivative of the current X value.
 	 */
-	private short ddx;
+	private short ddx = 0;
 
 	/**
 	 * The second derivative of the current Y value.
 	 */
-	private short ddy;
+	private short ddy = 0;
 
 	/**
 	 * The second derivative of the current Z value.
 	 */
-	private short ddz;
+	private short ddz = 0;
 
 	/**
 	 * The accumulator battery voltage in mV.
 	 */
-	private short battery;
+	private short battery = 0;
 
 	/**
 	 * The length of this data transfer object in bytes when converted to a byte array.
 	 */
 	private static final int payloadLength = 38;
-
+	
+	/**
+	 * Construct an empty <code>SensorData</code> data transfer object.
+	 */
+	public SensorData () {
+		// Intentionally empty
+	}
+	
 	/**
 	 * Construct a <code>SensorData</code> data transfer object from a byte array.
 	 * 
@@ -360,5 +369,117 @@ public class SensorData implements IDataTransferObject {
 		buf.append(", ddz=").append(ddz);
 		buf.append(", battery=").append(battery);
 		return buf.toString();
+	}
+
+	public double getdRoll() {
+		return dRoll * ANGLE_FACTOR_NEW;
+	}
+
+	public void setdRoll(double dRoll) {
+		this.dRoll = (short) (dRoll / ANGLE_FACTOR_NEW);
+	}
+
+	public double getdPitch() {
+		return dPitch * ANGLE_FACTOR_NEW;
+	}
+
+	public void setdPitch(double dPitch) {
+		this.dPitch = (short) (dPitch / ANGLE_FACTOR_NEW);
+	}
+
+	public double getdYaw() {
+		return dYaw * ANGLE_FACTOR_NEW;
+	}
+
+	public void setdYaw(double dYaw) {
+		this.dYaw = (short) (dYaw / ANGLE_FACTOR_NEW);
+	}
+
+	public double getDdRoll() {
+		return ddRoll * ANGLE_FACTOR_NEW;
+	}
+
+	public void setDdRoll(double ddRoll) {
+		this.ddRoll = (short) (ddRoll / ANGLE_FACTOR_NEW);
+	}
+
+	public double getDdPitch() {
+		return ddPitch * ANGLE_FACTOR_NEW;
+	}
+
+	public void setDdPitch(double ddPitch) {
+		this.ddPitch = (short) (ddPitch / ANGLE_FACTOR_NEW);
+	}
+
+	public double getDdYaw() {
+		return ddYaw * ANGLE_FACTOR_NEW;
+	}
+
+	public void setDdYaw(double ddYaw) {
+		this.ddYaw = (short) (ddYaw / ANGLE_FACTOR_NEW);
+	}
+
+	public double getDdx() {
+		return ddx * LENGTH_FACTOR;
+	}
+
+	public void setDdx(double ddx) {
+		this.ddx = (short) (ddx / LENGTH_FACTOR);
+	}
+
+	public double getDdy() {
+		return ddy * LENGTH_FACTOR;
+	}
+
+	public void setDdy(double ddy) {
+		this.ddy = (short) (ddy / LENGTH_FACTOR);
+	}
+
+	public double getDdz() {
+		return ddz * LENGTH_FACTOR;
+	}
+
+	public void setDdz(double ddz) {
+		this.ddz = (short) (ddz / LENGTH_FACTOR);
+	}
+
+	public void setRoll(double roll) {
+		this.roll = (short) (roll / ANGLE_FACTOR_NEW);
+	}
+
+	public void setPitch(double pitch) {
+		this.pitch = (short) (pitch / ANGLE_FACTOR_NEW);
+	}
+
+	public void setYaw(double yaw) {
+		this.yaw = (short) (yaw / ANGLE_FACTOR_NEW);
+	}
+
+	public void setX(double x) {
+		this.x = (short) (x / LENGTH_FACTOR);
+	}
+
+	public void setY(double y) {
+		this.y = (short) (y / LENGTH_FACTOR);
+	}
+
+	public void setZ(double z) {
+		this.z = (short) (z / LENGTH_FACTOR);
+	}
+
+	public void setDx(double dx) {
+		this.dx = (short) (dx / LENGTH_FACTOR);
+	}
+
+	public void setDy(double dy) {
+		this.dy = (short) (dy / LENGTH_FACTOR);
+	}
+
+	public void setDz(double dz) {
+		this.dz = (short) (dz / LENGTH_FACTOR);
+	}
+
+	public void setBattery(short battery) {
+		this.battery = battery;
 	}
 }

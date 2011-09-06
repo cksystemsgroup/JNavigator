@@ -20,7 +20,6 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import junit.framework.TestCase;
@@ -96,6 +95,8 @@ public class TcpServerTestCase extends TestCase {
 			assertEquals (1, listenerOne.counter);
 			arrayCompare (packetOne.getPayload(), listenerOne.dto.toByteArray());
 			
+			client.getConnection().close();
+			try { Thread.sleep(500); } catch (InterruptedException e) {;}
 			server.terminate();
 			
 		} catch (Exception e) {
@@ -126,6 +127,9 @@ public class TcpServerTestCase extends TestCase {
 			try { Thread.sleep(500); } catch (InterruptedException e) {;}
 			
 			assertEquals (0, listenerOne.counter);
+			
+			client.getConnection().close();
+			try { Thread.sleep(500); } catch (InterruptedException e) {;}
 			server.terminate();
 			
 		} catch (Exception e) {

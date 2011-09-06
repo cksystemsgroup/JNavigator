@@ -302,7 +302,8 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 	            Object arglist[] = new Object[1];
 	            arglist[0] = packet.getPayload();
 	            IDataTransferObject dto = (IDataTransferObject) ctor.newInstance (arglist);
-				dtoProvider.dispatch(this, dto);
+	            if (dtoProvider != null)
+	            	dtoProvider.dispatch(this, dto);
 			} catch (CommunicationException e) {
 				e.printStackTrace();
 				Thread.yield();
@@ -316,7 +317,8 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 				Thread.yield();
 			}
 		}
-		dtoProvider.removeIDataTransferObjectListener (this);
+		if (dtoProvider != null)
+			dtoProvider.removeIDataTransferObjectListener (this);
 	}
 	
 	/**

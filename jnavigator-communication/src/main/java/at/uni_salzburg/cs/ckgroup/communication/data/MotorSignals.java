@@ -34,6 +34,8 @@ public class MotorSignals implements IDataTransferObject {
 	 * The scaling factor of the actuator values.
 	 */
 	public static final double MOTOR_SIGNAL_FACTOR = 1.0;
+	
+	public static final double MOTOR_SIGNAL_FACTOR_NEW = 0.001;
 
     /**
      * The front motor speed in RPM
@@ -64,6 +66,13 @@ public class MotorSignals implements IDataTransferObject {
      * The length of the payload in bytes.
      */
     private static final int payloadLength = 10;
+    
+    /**
+     * Construct an <code>MotorSignals</code> object, having all parameters set to zero.
+     */
+    public MotorSignals () {
+    	front = right = rear  = left  = id = 0;
+    }
     
     /**
 	 * Construct an <code>MotorSignals</code> object.
@@ -127,5 +136,45 @@ public class MotorSignals implements IDataTransferObject {
 			.append(", left=").append(left)
 			.append(", id=").append(id);
 		return buf.toString();
+	}
+
+	public double getFront() {
+		return front * MOTOR_SIGNAL_FACTOR_NEW;
+	}
+
+	public void setFront(double front) {
+		this.front = (short)(front / MOTOR_SIGNAL_FACTOR_NEW);
+	}
+
+	public double getRight() {
+		return right * MOTOR_SIGNAL_FACTOR_NEW;
+	}
+
+	public void setRight(double right) {
+		this.right = (short)(right / MOTOR_SIGNAL_FACTOR_NEW);
+	}
+
+	public double getRear() {
+		return rear * MOTOR_SIGNAL_FACTOR_NEW;
+	}
+
+	public void setRear(double rear) {
+		this.rear = (short)(rear / MOTOR_SIGNAL_FACTOR_NEW);
+	}
+
+	public double getLeft() {
+		return left * MOTOR_SIGNAL_FACTOR_NEW;
+	}
+
+	public void setLeft(double left) {
+		this.left = (short)(left / MOTOR_SIGNAL_FACTOR_NEW);
+	}
+
+	public short getId() {
+		return id;
+	}
+
+	public void setId(short id) {
+		this.id = id;
 	}
 }

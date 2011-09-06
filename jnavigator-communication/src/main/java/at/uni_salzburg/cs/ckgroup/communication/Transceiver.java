@@ -30,14 +30,16 @@ import at.uni_salzburg.cs.ckgroup.io.IConnection;
 import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 
 /**
- * This class implements a transceiver. A transceiver abstracts either a
- * connection or packet oriented link to a resource. It allows sending and
- * receiving <code>Packet</code> objects without bothering about the low level
- * details of the accessed resource.
+ * This class implements a transceiver. A transceiver abstracts a streaming
+ * connection oriented link to a resource. It allows sending and receiving
+ * <code>Packet</code> objects without bothering about the low level details of
+ * the accessed resource.
  * 
  * @author Clemens Krainer
  */
 public class Transceiver implements ITransceiver {
+	
+	// TODO refactor for STREAM ONLY usage as <code>StreamTransceiver</code>
 	
 	/**
 	 * When reconnecting this variable is used for synchronizing. 
