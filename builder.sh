@@ -1,6 +1,6 @@
 #!/bin/sh -x
 
-VERSION=1.2-SNAPSHOT
+VERSION=1.3-SNAPSHOT
 REMOTE=false;
 [ "$1" = "-r" ] && REMOTE=true;
 
