@@ -1,0 +1,17 @@
+<div id="content">
+	<div class="post">
+		<h2 class="title"><a href="#">Course Upload</a></h2>
+		<div style="clear: both;">&nbsp;</div>
+		<div class="entry">
+			<form action="admin/courseUpload" method="post" enctype="multipart/form-data">
+				<p>
+				Please select a course file on your machine<br>
+				<input type="file" name="course" size="50" maxlength="100000" accept="text/*"><br>
+				<input type="submit" name="courseUpload" value="Upload" />
+				</p>
+			</form>
+		</div>
+	</div>
+	<div style="clear: both;">&nbsp;</div>
+</div>
+<!-- end #content -->

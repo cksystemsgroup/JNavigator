@@ -1,0 +1,15 @@
+	<div id="header" class="container">
+		<div id="logo">
+			<h1><a href="index.tpl">Pilot</a></h1>
+			<p><a href="http://cs.uni-salzburg.at/~ck/group/">JNavigator Project</a></p>
+		</div>
+		<div id="menu">
+			<ul>
+				<li class="current_page_item"><a href="#">Homepage</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Links</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- end #header -->

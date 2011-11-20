@@ -1,0 +1,35 @@
+#parse( "html/prologue.vm" )
+
+<div id="wrapper">
+#include( "html/header.vm" )
+
+	<div id="page" class="container">
+
+
+#set( $a = "Velocity" )
+#set( $x = $properties.getProperty("test.property") )
+
+
+<div id="content">
+	<div class="post">
+		<h2 class="title"><a href="#">Directory $contextPath$servicePath</a></h2>
+		<div class="entry">
+			<ul>
+			#foreach( $file in $directoryListing )
+			    <li><a href="$contextPath$servicePath/$file">$file</a></li>
+			#end
+			</ul>
+
+		</div>
+	</div>
+	<div style="clear: both;">&nbsp;</div>
+</div>
+<!-- end #content -->
+
+
+#parse( "html/sidebar.vm" )
+	</div>
+	<!-- end #page -->
+</div>
+
+#include( "html/epilogue.vm" )
