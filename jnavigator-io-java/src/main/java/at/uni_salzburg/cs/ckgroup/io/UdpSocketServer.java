@@ -73,7 +73,7 @@ public class UdpSocketServer {
 	/**
 	 * The <code>Map</code> containing all active clients of this UDP/IP server.
 	 */
-	private Map clients = new HashMap ();
+	private Map<SocketAddress,Long> clients = new HashMap<SocketAddress,Long>();
 	
 	/**
 	 * Construct a <code>UdpSocketServer</code>
@@ -115,6 +115,8 @@ public class UdpSocketServer {
 		DatagramPacket datagram = new DatagramPacket(buffer, buffer.length);
 		serverSocket.receive(datagram);
 		SocketAddress address = datagram.getSocketAddress();
+		if (!clients.containsKey(address))
+			System.out.println("UdpSocketServer.receiveDatagram() new Client " + address);
 		clients.put (address, new Long (System.currentTimeMillis()));	// TODO use the IClock interface!
 		return Arrays.copyOf (buffer, datagram.getLength());
 	}
@@ -131,18 +133,20 @@ public class UdpSocketServer {
 		DatagramPacket packet = new DatagramPacket(buffer, length);
 		long now = System.currentTimeMillis();	// TODO use the IClock interface!
 		
-		Set clientSet = clients.entrySet();
-		Iterator iterator = clientSet.iterator();
+		Set<Entry<SocketAddress,Long>> clientSet = clients.entrySet();
+		Iterator<Entry<SocketAddress,Long>> iterator = clientSet.iterator();
 		
 		while (iterator.hasNext()) {
-			Entry e = (Entry) iterator.next();
-			SocketAddress address = (SocketAddress) e.getKey();
-			Long lastAccess = (Long) e.getValue();
+			Entry<SocketAddress,Long> e = iterator.next();
+			SocketAddress address = e.getKey();
+			Long lastAccess = e.getValue();
 			if (now - lastAccess.longValue() > timeout) {
+				System.out.println("UdpSocketServer.sendDatagram () inactive client removed " + address);
 				iterator.remove();
 			} else {
 				packet.setSocketAddress(address);
 				serverSocket.send(packet);
+//				System.out.println("UdpSocketServer.sendDatagram () sending to " + address);
 			}
 		}
 	}
