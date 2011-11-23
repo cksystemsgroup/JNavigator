@@ -1,5 +1,5 @@
 /*
- * @(#) IConfiguration.java
+ * @(#) CommandTakeOff.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,19 +18,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot;
+package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import java.util.Properties;
+public class CommandTakeOff implements ICommand {
 
-public interface IConfiguration {
+	private double altitude;
 	
-	public Properties getProperties ();
+	private long time;
 	
-//	public String getProperty (String key);
-//	
-//	public String getProperty (String key, String deault);
+	public CommandTakeOff (double altitude, long time) {
+		this.altitude = altitude;
+		this.time = time;
+	}
 	
-	public IAviator getAviator();
+	public double getAltitude() {
+		return altitude;
+	}
 	
-	public IVehicleBuilder getVehicleBuilder();
+	public long getTime() {
+		return time;
+	}
+
 }

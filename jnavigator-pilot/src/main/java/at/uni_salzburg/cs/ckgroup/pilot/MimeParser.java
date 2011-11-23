@@ -32,6 +32,9 @@ public class MimeParser {
 	String terminator;
 	
 	public MimeParser(String contentType) {
+		if (contentType == null)
+			throw new NullPointerException("Content type is null.");
+			
 		String[] x = contentType.split(";\\s*boundary=");
 		
 		if (x.length == 0 || !"multipart/form-data".equals(x[0]))
@@ -51,12 +54,12 @@ public class MimeParser {
 		String line;
 		while ( (line = reader.readLine()) != null) {
 			if (line.equals(terminator)) {
-				System.out.println("The end: " + line);
+//				System.out.println("The end: " + line);
 				break;
 			}
 			
 			if (line.equals(separator)) {
-				System.out.println("Delimiter: " + line);
+//				System.out.println("Delimiter: " + line);
 				head = true;
 				currentEntry = new MimeEntry();
 				list.add(currentEntry);

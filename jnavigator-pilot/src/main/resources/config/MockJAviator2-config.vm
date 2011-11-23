@@ -1,0 +1,44 @@
+##
+## @(#) MockJAviator.properties - 
+##
+
+controllerPeriod = 0.014
+mockJAviatorReportRate = 100
+simulate.gps = true
+simulate.ubisense = false
+
+plant.className = javiator.simulation.JAviatorPlant
+plant.report.rate = 0
+plant.effective_x_length = 0.0320
+plant.effective_y_length = 0.0320
+plant.effective_z_length = 0.906
+plant.noise_flag = false
+plant.noise_factor = 1000.0
+plant.z_correction_flag = false
+plant.z_offset = 0.09
+plant.sonar_position = 0.13
+plant.controllerPeriod = 0.014
+plant.gravity = 32000.0
+plant.gravitationalAcceleration = 9.81
+
+connector.className = at.uni_salzburg.cs.ckgroup.communication.UdpServer
+connector.server.port = 9879
+connector.server.timeout = 10000
+
+connector.mapping.list = javiator, motor-signals, switch-state, shutdown
+	
+connector.mapping.javiator.type = 2
+connector.mapping.javiator.className = at.uni_salzburg.cs.ckgroup.communication.data.JaviatorData
+connector.mapping.javiator.register = true
+
+connector.mapping.motor-signals.type = 5
+connector.mapping.motor-signals.className = at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals
+connector.mapping.motor-signals.register = true
+
+connector.mapping.switch-state.type = 17
+connector.mapping.switch-state.className = at.uni_salzburg.cs.ckgroup.communication.data.SwitchState
+connector.mapping.switch-state.register = true
+
+connector.mapping.shutdown.type = 21
+connector.mapping.shutdown.className = at.uni_salzburg.cs.ckgroup.communication.data.ShutdownEvent
+connector.mapping.shutdown.register = true

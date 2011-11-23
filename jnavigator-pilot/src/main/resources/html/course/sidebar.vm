@@ -1,0 +1,43 @@
+		<div id="sidebar">
+			<ul>
+				<li>
+					<h2>Course Upload</h2>
+					<form action="admin/html/courseUpload" method="post" enctype="multipart/form-data">
+						<p>
+						Please select a course file on your machine and press the Upload button below.<br>
+						<input type="file" name="course" size="20" maxlength="100000" accept="text/*"><br>
+						<input type="submit" name="courseUpload" value="Upload" />
+						</p>
+					</form>
+				</li>
+#if( $servletConfig.getServletContext().getAttribute("aviator").isScriptOK() )
+				<li>
+					<h2>Course Control</h2>
+#if( $servletConfig.getServletContext().getAttribute("aviator").isVclExecuted() )
+					<form action="admin/html/courseStop" method="post" enctype="multipart/form-data">
+						<p>
+							To stop the currently running VCL script press the Stop Course button below.
+						</p>
+						<p>						
+							<strong>Note:</strong> The vehicle will be landed at the current position.
+						</p>
+						<p>
+							<input type="submit" name="courseStart" value="Stop Course" />
+						</p>
+					</form>
+#else
+					<form action="admin/html/courseStart" method="post" enctype="multipart/form-data">
+						<p>
+							To start the currently loaded VCL script press the Start Course button below.
+						</p>
+						<p>
+							<input type="submit" name="courseStart" value="Start Course" />
+						</p>
+					</form>
+#end
+				</li>
+#end
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>

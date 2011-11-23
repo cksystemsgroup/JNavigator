@@ -5,10 +5,11 @@
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="current_page_item"><a href="#">Homepage</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Links</a></li>
-				<li><a href="#">Contact</a></li>
+				<li class="current_page_item"><a href="$contextPath/status.tpl">Status</a></li>
+				<li><a href="$contextPath/sensor.tpl">Sensors</a></li>
+				<li><a href="$contextPath/config.tpl">Configuration</a></li>
+				<li><a href="$contextPath/course.tpl">Course</a></li>
+				<li><a href="snoop">Snoop</a></li>
 			</ul>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 /*
- * @(#) IConfiguration.java
+ * @(#) IVehicleBuilder.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -20,17 +20,13 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
-import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
 
-public interface IConfiguration {
+public interface IVehicleBuilder {
 	
-	public Properties getProperties ();
+	public void loadConfig (InputStream inStream) throws IOException;
 	
-//	public String getProperty (String key);
-//	
-//	public String getProperty (String key, String deault);
+	public void destroy();
 	
-	public IAviator getAviator();
-	
-	public IVehicleBuilder getVehicleBuilder();
 }

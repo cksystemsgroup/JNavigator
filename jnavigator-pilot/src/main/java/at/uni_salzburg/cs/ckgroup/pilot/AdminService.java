@@ -21,6 +21,7 @@
 package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -31,18 +32,28 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 
 public class AdminService extends DefaultService {
 	
+	Logger LOG = Logger.getLogger(AdminService.class);
+	
 	public final static String CONTEXT_TEMP_DIR = "javax.servlet.context.tempdir";
 	
-	public final static String ACTION_CONFIG_UPLOAD = "/admin/configUpload";
-	public final static String ACTION_COURSE_UPLOAD = "/admin/courseUpload";
+	public final static String ACTION_CONFIG_UPLOAD = "configUpload";
+	public final static String ACTION_COURSE_UPLOAD = "courseUpload";
+	public final static String ACTION_START_COURSE = "courseStart";
+	public final static String ACTION_STOP_COURSE = "courseStop";
+	
+	public final static String PROP_CONFIG_FILE = "admin.config.file";
+	public final static String PROP_COURSE_FILE = "admin.course.file";
 	
 	public AdminService (IConfiguration configuraton) {
 		super (configuraton);
 	}
 
+	@Override
 	public void service(ServletConfig config, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
@@ -52,29 +63,18 @@ public class AdminService extends DefaultService {
 		if (request.getRequestURI().startsWith(request.getContextPath()))
 			servicePath = request.getRequestURI().substring(request.getContextPath().length());
 		
-//		System.out.println("Headers in this request:");
-//        Enumeration<?> enumeration = request.getHeaderNames();
-//        while (enumeration.hasMoreElements())
-//        {
-//                final String key = (String) enumeration.nextElement();
-//                final String value = request.getHeader(key);
-//                System.out.println("\t" + key + ": " + value);
-//        }
+		String[] cmd = servicePath.trim().split("/+");
+		boolean textMode = "text".equals(cmd[2]);
+		String action = cmd[3];
 		
 		MimeParser parser = new MimeParser(request.getContentType());
 		List<MimeEntry> list = parser.parse(request.getReader());
-		MimeEntry course = null;
+		MimeEntry uploadedFile = null;
 		String name = null;
 		String fileName = null;
 		
-		for (MimeEntry e : list) {
-//			System.out.println("headers: " + e.getHeaders());
-//			System.out.println();
-//			System.out.println("-- body:");
-//			System.out.print(e.getBody());
-//			System.out.println("-- end body.");
-			
-			Map<String, String> headerMap = e.getHeaders();
+		for (MimeEntry entry : list) {
+			Map<String, String> headerMap = entry.getHeaders();
 			String contentDisposition = headerMap.get(MimeEntry.CONTENT_DISPOSITION);
 			
 			if (contentDisposition.matches(".*\\sname=\"(\\S*)\".*"))
@@ -83,30 +83,59 @@ public class AdminService extends DefaultService {
 			if (contentDisposition.matches(".*\\sfilename=\"(\\S*)\".*"))
 				fileName = contentDisposition.replaceFirst(".*\\sfilename=\"(\\S*)\".*", "$1");
 			
-			System.out.println("cdName=" + name + ", fileName=" + fileName);
+//			System.out.println("cdName=" + name + ", fileName=" + fileName);
+			LOG.info("cdName=" + name + ", fileName=" + fileName);
 			
-			if (name != null && fileName != null) {
-				course = e;
+			if (name != null && fileName != null && !"".equals(fileName)) {
+				uploadedFile = entry;
 				break;
 			}
 		}
 		
-//		Content-Type: text/html
-//		Content-Type=text/plain
+		String nextPage;
 
-		if (ACTION_CONFIG_UPLOAD.equals(servicePath)) {
-			System.out.println("OK " + servicePath);
-			saveFile (course, new File (contexTempDir, "config.dat"));
-		} else if (ACTION_COURSE_UPLOAD.equals(servicePath)) {
-			System.out.println("OK " + servicePath);
-			saveFile (course, new File (contexTempDir, "course.dat"));
-		} else {
-			System.out.println("Can not handle: " + servicePath);
+		if (ACTION_CONFIG_UPLOAD.equals(action)) {
+			File confFile = new File (contexTempDir, configuration.getProperties().getProperty(PROP_CONFIG_FILE));
+			if (uploadedFile != null) {
+				saveFile (uploadedFile, confFile);
+				nextPage = request.getContextPath() + "/config.tpl";
+				configuration.getVehicleBuilder().loadConfig(new FileInputStream(confFile));
+				LOG.info("Configuration uploaded.");
+			} else {
+				emit422(request, response);
+				return;
+			}
+		} else if (ACTION_COURSE_UPLOAD.equals(action)) {
+			File courseFile = new File (contexTempDir, configuration.getProperties().getProperty(PROP_COURSE_FILE));
+			if (uploadedFile != null) {
+				saveFile (uploadedFile, courseFile);
+				nextPage = request.getContextPath() + "/course.tpl";
+				configuration.getAviator().loadVclScript(new FileInputStream(courseFile));
+				LOG.info("Course uploaded.");
+			} else {
+				emit422(request, response);
+				return;
+			}
+		} else if (ACTION_START_COURSE.equals(action)) {
+			configuration.getAviator().start();
+			nextPage = request.getContextPath() + "/course.tpl";
+			LOG.info("Course started.");
+		} else if (ACTION_STOP_COURSE.equals(action)) {
+			configuration.getAviator().stop();
+			nextPage = request.getContextPath() + "/course.tpl";
+			LOG.info("Course stopped.");
+		} else{
+			LOG.error("Can not handle: " + servicePath);
 			emit404(request, response);
+			return;
 		}
 		
-//		emit200 (request, response);
-		emit301 (request, response, request.getContextPath() + "/index.tpl");
+		if (textMode) {
+			emit200 (request, response);
+		} else {
+			emit301 (request, response, nextPage);	
+		}
+
 	}
 
 	private void saveFile(MimeEntry course, File file) throws IOException {
@@ -116,7 +145,7 @@ public class AdminService extends DefaultService {
 		FileWriter w = new FileWriter(file);
 		w.write(course.getBody());
 		w.close();
-		System.out.println("Written: " + file);
+		LOG.info("Written: " + file);
 	}
 
 

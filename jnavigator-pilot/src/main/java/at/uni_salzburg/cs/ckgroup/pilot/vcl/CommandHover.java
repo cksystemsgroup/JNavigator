@@ -1,5 +1,5 @@
 /*
- * @(#) IConfiguration.java
+ * @(#) CommandHover.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,19 +18,18 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot;
+package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import java.util.Properties;
+public class CommandHover implements ICommand {
+	
+	private long time;
+	
+	public CommandHover (long time) {
+		this.time = time;
+	}
 
-public interface IConfiguration {
-	
-	public Properties getProperties ();
-	
-//	public String getProperty (String key);
-//	
-//	public String getProperty (String key, String deault);
-	
-	public IAviator getAviator();
-	
-	public IVehicleBuilder getVehicleBuilder();
+	public long getTime() {
+		return time;
+	}
+
 }

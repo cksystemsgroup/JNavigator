@@ -1,0 +1,15 @@
+fly to(48.000000,13.000000,0.3)abs precision 3.1m 0.5mps
+fly to (48.000000,13.000134,0.3)abs precision 4m 0.5mps
+fly to(48.000090 ,13.000134,0.3)abs precision 5m 0.5mps
+fly to(48.000090, 12.999866,0.3)abs precision 6m 0.5mps
+fly to(47.999910,12.999866 ,0.3)abs precision 3.9m 0.5mps
+fly to(47.999910,13.000134, 0.3)abs precision 3m 0.5mps
+fly to(48.000000,13.000000,0.3 )abs precision 3m 0.5mps
+fly to(48.000000,13.000000,0.3) abs precision 3m 0.5mps
+fly to(48.000000,13.000000,0.3)abs  precision 3m 0.5mps
+fly to(48.000000,13.000000, 3 ) abs precision 3m 1mps
+fly to(48.000000,13.000000,0.3)abs precision  3m 0.5 mps
+fly to(48.000000,13.000000,0.3)abs precision 3 m 0.5 mps
+fly to(48.000000,13.000000,0.3)abs precision 3m  0.5 mps
+fly to(48.000000,13.000000,0.3)abs precision 3m 0.5  mps
+fly to(48.000000,13.000000, 3 ) abs precision 3m 1 mps

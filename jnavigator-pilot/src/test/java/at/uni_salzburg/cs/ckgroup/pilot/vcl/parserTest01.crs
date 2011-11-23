@@ -1,0 +1,17 @@
+#
+# Set Course data
+#
+
+go auto
+waitfor go
+takeoff 0.3 for 5s
+fly to(48.000000,13.000000,0.3)abs precision 1m 0.5mps
+fly to(48.000000,13.000134,0.3)abs precision 0.1m 0.5mps
+fly to(48.000090,13.000134,0.3)abs precision 0m 0.5mps
+fly to(48.000090,12.999866,0.3)abs precision 10m 0.5mps
+fly to(47.999910,12.999866,0.3)abs precision 100m 0.5mps
+fly to(47.999910,13.000134,0.3)abs precision 0.1m 0.5mps
+fly to(48.000000,13.000000,0.3)abs precision 1.9m 0.5mps
+hover for 20.0s
+land
+go manual

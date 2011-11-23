@@ -1,11 +1,11 @@
 #parse( "html/prologue.vm" )
 
 <div id="wrapper">
-#include( "html/header.vm" )
+#parse( "html/header.vm" )
 
 	<div id="page" class="container">
 #parse( "html/course/course.vm" )
-#parse( "html/sidebar.vm" )
+#parse( "html/course/sidebar.vm" )
 	</div>
 	<!-- end #page -->
 </div>

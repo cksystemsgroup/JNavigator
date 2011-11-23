@@ -1,17 +1,11 @@
 <div id="content">
 	<div class="post">
-		<h2 class="title"><a href="#">Configuration Upload</a></h2>
-		<div style="clear: both;">&nbsp;</div>
-		<div class="entry">
-			<form action="admin/configUpload" method="post" enctype="multipart/form-data">
-				<p>
-				Please select a configuration file on your machine<br>
-				<input type="file" name="configuration" size="50" maxlength="100000" accept="text/*"><br>
-				<input type="submit" name="configUpload" value="Upload" />
-				</p>
-			</form>
-		</div>
+		<h2 class="title"><a href="#">Current Configuration</a></h2>
+<pre style="font-size: 90%; line-height: 90%">
+#foreach( $line in $servletConfig.getServletContext().getAttribute("vehicleBuilder").getConfiguration() )
+$line
+#end
+</pre>
 	</div>
-	<div style="clear: both;">&nbsp;</div>
 </div>
 <!-- end #content -->

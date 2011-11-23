@@ -1,5 +1,5 @@
 /*
- * @(#) ScrutinyAgent.java
+ * @(#) PilotServlet.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -20,6 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -30,18 +32,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 
 @SuppressWarnings("serial")
 public class PilotServlet extends HttpServlet implements IConfiguration {
 	
+	Logger LOG = Logger.getLogger(PilotServlet.class);
+	
 	private static final String PROP_PATH_NAME = "jnavigator-pilot.properties";
-//	private static final String PROP_CYCLE_TIME = "agent.cycletime";
 
 	private ServletConfig config;
-//	private BackGroundTimerTask backGroundTimerTask;
-//	private Timer backGroundTimer;
 	private Properties props = new Properties ();
-
+	private Aviator aviator = new Aviator();
+	private VehicleBuilder vehicleBuilder = new VehicleBuilder();
+	
 	private ServiceEntry[] services = {
 			new ServiceEntry("/snoop.*", new SnoopService(this)),
 			new ServiceEntry("/admin/.*", new AdminService(this)),
@@ -64,10 +69,29 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
 		
 		try {
 			props.load(propStream);
+					
+			config.getServletContext().setAttribute("aviator", aviator);
+			config.getServletContext().setAttribute("vehicleBuilder", vehicleBuilder);
+			
+			File contexTempDir = (File)config.getServletContext().getAttribute(AdminService.CONTEXT_TEMP_DIR);
+			File confFile = new File (contexTempDir, props.getProperty(AdminService.PROP_CONFIG_FILE));
+			if (confFile.exists()) {
+				vehicleBuilder.loadConfig(new FileInputStream(confFile));
+				LOG.info("Loading existing configuration from " + confFile);
+			}
+		
+			File courseFile = new File (contexTempDir, props.getProperty(AdminService.PROP_COURSE_FILE));
+			if (courseFile.exists()) {
+				aviator.loadVclScript(new FileInputStream(courseFile));
+				LOG.info("Loading existing course from " + courseFile);
+			}
+		
 		} catch (IOException e) {
 			throw new ServletException (e);
 		}
 
+		
+		
 //		String catalinaBase = System.getProperty(BackGroundTimerTask.PROP_CATALINA_BASE);
 //		if (catalinaBase == null)
 //			throw new ServletException ("Property " + BackGroundTimerTask.PROP_CATALINA_BASE + " is not set!");
@@ -105,17 +129,33 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
     public void destroy () {
 //    	backGroundTimer.cancel();
 //    	backGroundTimerTask.finish();
+    	aviator.destroy();
     }
 
 	public Properties getProperties() {
 		return props;
 	}
 
-	public String getProperty(String key) {
-		return props.getProperty(key);
+	public void loadConfig(InputStream inStream) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public String getProperty(String key, String deault) {
-		return props.getProperty(key, deault);
+	public IAviator getAviator() {
+		return aviator;
 	}
+
+	public IVehicleBuilder getVehicleBuilder() {
+		return vehicleBuilder;
+	}
+
+//	public String getProperty(String key) {
+//		return props.getProperty(key);
+//	}
+//
+//	public String getProperty(String key, String deault) {
+//		return props.getProperty(key, deault);
+//	}
+	
+	
 }

@@ -1,5 +1,5 @@
 /*
- * @(#) IConfiguration.java
+ * @(#) CommandFlyToAbs.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,19 +18,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot;
+package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import java.util.Properties;
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
-public interface IConfiguration {
+public class CommandFlyToAbs implements ICommand {
+
+	private PolarCoordinate coordinate;
+	private double velocity;
+	private double precision;
+
+	public CommandFlyToAbs (double latitude, double longitude, double altitude, double velocity, double precision) {
+		coordinate = new PolarCoordinate(latitude, longitude, altitude);
+		this.velocity = velocity;
+		this.precision = precision;
+	}
 	
-	public Properties getProperties ();
+	public PolarCoordinate getCoordinate() {
+		return coordinate;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public double getPrecision() {
+		return precision;
+	}
 	
-//	public String getProperty (String key);
-//	
-//	public String getProperty (String key, String deault);
-	
-	public IAviator getAviator();
-	
-	public IVehicleBuilder getVehicleBuilder();
 }

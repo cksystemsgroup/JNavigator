@@ -1,5 +1,5 @@
 /*
- * @(#) IConfiguration.java
+ * @(#) CommandWAitForGo.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,19 +18,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot;
+package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import java.util.Properties;
+public class CommandWaitForGo implements ICommand {
 
-public interface IConfiguration {
-	
-	public Properties getProperties ();
-	
-//	public String getProperty (String key);
-//	
-//	public String getProperty (String key, String deault);
-	
-	public IAviator getAviator();
-	
-	public IVehicleBuilder getVehicleBuilder();
 }

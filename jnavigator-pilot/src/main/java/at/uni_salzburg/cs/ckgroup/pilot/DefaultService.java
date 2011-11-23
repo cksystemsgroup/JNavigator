@@ -47,7 +47,7 @@ public class DefaultService implements IService
 	
 	private String[] welcomePages = { "index.html", "index.tpl" };
 	
-	private IConfiguration configuration;
+	protected IConfiguration configuration;
 	
 	public DefaultService (IConfiguration configuraton) {
 		this.configuration = configuraton;
@@ -198,7 +198,6 @@ public class DefaultService implements IService
 		response.setStatus(301);
 		response.setHeader("Location", location);
 		response.setContentType("text/html");
-		
 	}
 	
 	protected void emit404 (HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -210,5 +209,12 @@ public class DefaultService implements IService
 		);
 	}
 	
-	
+	protected void emit422 (HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setStatus(422);
+		response.setContentType("text/html");
+		response.getWriter().print(
+			"<html><head><title>File not found - " + request.getRequestURI() + "</title></head>" +
+			"<body><h1>HTTP Status 422 - " + request.getRequestURI() + "</h1></body></html>"
+		);
+	}
 }

@@ -1,7 +1,7 @@
 #parse( "html/prologue.vm" )
 
 <div id="wrapper">
-#include( "html/header.vm" )
+#parse( "html/header.vm" )
 
 	<div id="page" class="container">
 #parse( "html/status/status.vm" )
