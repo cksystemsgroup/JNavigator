@@ -114,6 +114,9 @@ public class Nmea0183MessageForwarder implements Nmea0183MessageListener
 		
 		else if (parts[0].equals ("$GPZDA"))
 			parseNmea0183MessageGPZDA (parts);
+		
+		else 
+			System.err.println ("Unknown message. Input String was: '" + message + "'");
 	}
 
 	

@@ -107,7 +107,8 @@ public class NavigationMain
 				GpsDaemon daemon = builder.getGpsDaemon ();
 				daemon.addNmea0183MessageListener (forwarder);
 				retries = MAX_RETRIES;
-				daemon.run ();
+//				daemon.run ();
+				Thread.currentThread().join();
 			}
 			catch (InstantiationException e)
 			{
@@ -134,6 +135,9 @@ public class NavigationMain
 			}
 			catch (IOException e)
 			{
+				e.printStackTrace();
+				break;
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 				break;
 			}
