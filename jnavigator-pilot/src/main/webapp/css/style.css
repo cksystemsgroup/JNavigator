@@ -482,3 +482,25 @@ a:hover {
 	font-size: 30px;
 	color: #FFFFFF;
 }
+
+/* Below this line are the addons by ckrainer */
+
+table.sensors tr:nth-child(odd) td {
+        background-color: #e6e6e6;
+        /* background-color: #FCF6CF; */
+        padding: 1px 3px;
+}
+table.sensors tr:nth-child(even) td {
+        background-color: #e5decb;
+        /* background-color: #FEFEF2; */
+        padding: 1px 3px;
+}
+/*
+table.sensors thead {
+        border-top: 0px solid #000066;
+}
+*/
+table.sensors thead tr {
+    background-color: #e5decb;
+}
+

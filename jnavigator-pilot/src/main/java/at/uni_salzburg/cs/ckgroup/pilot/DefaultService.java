@@ -47,10 +47,10 @@ public class DefaultService implements IService
 	
 	private String[] welcomePages = { "index.html", "index.tpl" };
 	
-	protected IConfiguration configuration;
+	protected IServletConfig servletConfig;
 	
-	public DefaultService (IConfiguration configuraton) {
-		this.configuration = configuraton;
+	public DefaultService (IServletConfig servletConfig) {
+		this.servletConfig = servletConfig;
 	}
 	
 	public void service (ServletConfig config, HttpServletRequest request,
@@ -128,7 +128,7 @@ public class DefaultService implements IService
         context.put("contextPath", contextPath);
         context.put("servicePath", servicePath);
         context.put("servletConfig", config);
-        context.put("properties", configuration.getProperties());
+        context.put("properties", servletConfig.getProperties());
         Arrays.sort(list);
         context.put("directoryListing", list);
         
@@ -147,7 +147,7 @@ public class DefaultService implements IService
         context.put("contextPath", contextPath);
         context.put("servicePath", servicePath);
         context.put("servletConfig", config);
-        context.put("properties", configuration.getProperties());
+        context.put("properties", servletConfig.getProperties());
         
 		ve.evaluate(context, out, "lala", reader);
 	}
@@ -216,5 +216,18 @@ public class DefaultService implements IService
 			"<html><head><title>File not found - " + request.getRequestURI() + "</title></head>" +
 			"<body><h1>HTTP Status 422 - " + request.getRequestURI() + "</h1></body></html>"
 		);
+	}
+	
+	protected void emitPlainText (HttpServletResponse response, String text) throws IOException {
+		response.setStatus(200);
+		response.setContentType("text/plain");
+		if (text != null)
+			response.getWriter().print(text);
+	}
+	
+	protected void emitByteArray (HttpServletResponse response, String contentType, byte[] bytes) throws IOException {
+		response.setStatus(200);
+		response.setContentType(contentType);
+		response.getOutputStream().write(bytes);
 	}
 }

@@ -1,19 +1,21 @@
 <div id="content">
 	<div class="post">
 		<h2 class="title"><a href="#">Current Course</a></h2>
-<!--
-<pre style="font-size: 90%; line-height: 120%">
--->
-<div style="font-size: 90%; line-height: 120%">
+		<div style="font-size: 90%; line-height: 130%">
 #set( $n = $servletConfig.getServletContext().getAttribute("aviator").getCurrentVclCommandLine() )
 #set( $err = $servletConfig.getServletContext().getAttribute("aviator").getScriptErrors() )
 #set( $scr = $servletConfig.getServletContext().getAttribute("aviator").getScript() )
 #set( $x = 0 )
 #foreach( $line in $scr )
-#if( $err.get($x) )
-#set( $bg = "color: red;" )
+#set( $col = "" )
+#if( $line.matches(" *#.*") )
+#set( $style = "font-style: italic;" )
+#set( $col = "color: #CCCCC4;" )
 #else
-#set( $bg = "" )
+#set( $style = "" )
+#end
+#if( $err.get($x) )
+#set( $col = "color: red;" )
 #end
 #set( $x = $x +1 )
 #if( $n == $x)
@@ -21,13 +23,9 @@
 #else
 #set( $fw = "font-weight: normal;" )
 #end
-<span style="$fw$bg">$line</span><br/>
+<span style="$fw$col$style">$line</span><br/>
 #end
-
-</div>
-<!--
-</pre>
--->
+		</div>
 	</div>
 </div>
 <!-- end #content -->

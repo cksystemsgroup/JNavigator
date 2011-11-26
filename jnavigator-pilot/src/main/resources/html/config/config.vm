@@ -1,11 +1,30 @@
 <div id="content">
 	<div class="post">
 		<h2 class="title"><a href="#">Current Configuration</a></h2>
-<pre style="font-size: 90%; line-height: 90%">
-#foreach( $line in $servletConfig.getServletContext().getAttribute("vehicleBuilder").getConfiguration() )
-$line
+		<div style="font-size: 90%; line-height: 130%">
+#set( $cfg = $servletConfig.getServletContext().getAttribute("configuration") )
+#set( $keys = $cfg.getParameterNames() )
+#set( $errMap = $cfg.getConfigErrors() )
+#set( $cfgMap = $cfg.getConfig() )
+<table>
+#foreach( $param in $keys )
+#set( $e = false )
+#set( $e = $errMap.get($param) )
+#if( $e )
+#set( $col = "color: red;" )
+#else
+#set( $col = "" )
 #end
-</pre>
+#set( $x = $x +1 )
+#if( $cfgMap.get($param) )
+#set( $value = $cfgMap.get($param) )
+#else
+#set( $value = "" )
+#end
+<tr><td><span style="$col">$param = $value</span><br/></td><td>#if($e)<span style="$col">$e</span>#{end}</td></tr>
+#end
+</table>
+		</div>
 	</div>
 </div>
 <!-- end #content -->

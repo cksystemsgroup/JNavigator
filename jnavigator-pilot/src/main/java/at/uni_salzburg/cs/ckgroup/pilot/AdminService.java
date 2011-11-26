@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
+
 
 public class AdminService extends DefaultService {
 	
@@ -49,8 +51,8 @@ public class AdminService extends DefaultService {
 	public final static String PROP_CONFIG_FILE = "admin.config.file";
 	public final static String PROP_COURSE_FILE = "admin.course.file";
 	
-	public AdminService (IConfiguration configuraton) {
-		super (configuraton);
+	public AdminService (IServletConfig servletConfig) {
+		super (servletConfig);
 	}
 
 	@Override
@@ -95,33 +97,35 @@ public class AdminService extends DefaultService {
 		String nextPage;
 
 		if (ACTION_CONFIG_UPLOAD.equals(action)) {
-			File confFile = new File (contexTempDir, configuration.getProperties().getProperty(PROP_CONFIG_FILE));
+			File confFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_CONFIG_FILE));
 			if (uploadedFile != null) {
 				saveFile (uploadedFile, confFile);
 				nextPage = request.getContextPath() + "/config.tpl";
-				configuration.getVehicleBuilder().loadConfig(new FileInputStream(confFile));
+				Configuration cfg = servletConfig.getConfiguration();
+				cfg.loadConfig(new FileInputStream(confFile));
+				servletConfig.getVehicleBuilder().setConfig(cfg);
 				LOG.info("Configuration uploaded.");
 			} else {
 				emit422(request, response);
 				return;
 			}
 		} else if (ACTION_COURSE_UPLOAD.equals(action)) {
-			File courseFile = new File (contexTempDir, configuration.getProperties().getProperty(PROP_COURSE_FILE));
+			File courseFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_COURSE_FILE));
 			if (uploadedFile != null) {
 				saveFile (uploadedFile, courseFile);
 				nextPage = request.getContextPath() + "/course.tpl";
-				configuration.getAviator().loadVclScript(new FileInputStream(courseFile));
+				servletConfig.getAviator().loadVclScript(new FileInputStream(courseFile));
 				LOG.info("Course uploaded.");
 			} else {
 				emit422(request, response);
 				return;
 			}
 		} else if (ACTION_START_COURSE.equals(action)) {
-			configuration.getAviator().start();
+			servletConfig.getAviator().start();
 			nextPage = request.getContextPath() + "/course.tpl";
 			LOG.info("Course started.");
 		} else if (ACTION_STOP_COURSE.equals(action)) {
-			configuration.getAviator().stop();
+			servletConfig.getAviator().stop();
 			nextPage = request.getContextPath() + "/course.tpl";
 			LOG.info("Course stopped.");
 		} else{

@@ -5,7 +5,7 @@
 
 	<div id="page" class="container">
 #parse( "html/sensor/sensor.vm" )
-#parse( "html/sidebar.vm" )
+#parse( "html/sensor/sidebar.vm" )
 	</div>
 	<!-- end #page -->
 </div>

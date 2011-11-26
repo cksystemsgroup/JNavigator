@@ -34,28 +34,31 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
+
 
 @SuppressWarnings("serial")
-public class PilotServlet extends HttpServlet implements IConfiguration {
+public class PilotServlet extends HttpServlet implements IServletConfig {
 	
 	Logger LOG = Logger.getLogger(PilotServlet.class);
 	
 	private static final String PROP_PATH_NAME = "jnavigator-pilot.properties";
 
-	private ServletConfig config;
+	private ServletConfig servletConfig;
 	private Properties props = new Properties ();
 	private Aviator aviator = new Aviator();
 	private VehicleBuilder vehicleBuilder = new VehicleBuilder();
+	private Configuration configuration = new Configuration();
 	
 	private ServiceEntry[] services = {
-			new ServiceEntry("/snoop.*", new SnoopService(this)),
-			new ServiceEntry("/admin/.*", new AdminService(this)),
-			new ServiceEntry("/sensor/.*", new SensorService(this)),
-			new ServiceEntry(".*", new DefaultService(this))
+		new ServiceEntry("/snoop.*", new SnoopService(this)),
+		new ServiceEntry("/admin/.*", new AdminService(this)),
+		new ServiceEntry("/sensor/.*", new SensorService(this)),
+		new ServiceEntry(".*", new DefaultService(this))
 	};
 
-	public void init (ServletConfig config) throws ServletException {
-		this.config = config;
+	public void init (ServletConfig servletConfig) throws ServletException {
+		this.servletConfig = servletConfig;
 		super.init();
 		myInit();
 	}
@@ -70,15 +73,18 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
 		try {
 			props.load(propStream);
 					
-			config.getServletContext().setAttribute("aviator", aviator);
-			config.getServletContext().setAttribute("vehicleBuilder", vehicleBuilder);
+			servletConfig.getServletContext().setAttribute("aviator", aviator);
+			servletConfig.getServletContext().setAttribute("vehicleBuilder", vehicleBuilder);
+			servletConfig.getServletContext().setAttribute("configuration", configuration);
 			
-			File contexTempDir = (File)config.getServletContext().getAttribute(AdminService.CONTEXT_TEMP_DIR);
+			File contexTempDir = (File)servletConfig.getServletContext().getAttribute(AdminService.CONTEXT_TEMP_DIR);
 			File confFile = new File (contexTempDir, props.getProperty(AdminService.PROP_CONFIG_FILE));
 			if (confFile.exists()) {
-				vehicleBuilder.loadConfig(new FileInputStream(confFile));
+				configuration.setWorkDir (contexTempDir);
+				configuration.loadConfig(new FileInputStream(confFile));
 				LOG.info("Loading existing configuration from " + confFile);
 			}
+			vehicleBuilder.setConfig(configuration);
 		
 			File courseFile = new File (contexTempDir, props.getProperty(AdminService.PROP_COURSE_FILE));
 			if (courseFile.exists()) {
@@ -118,7 +124,7 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
 
 		for (int k = 0; k < services.length; k++) {
 			if (servicePath.matches(services[k].pattern)) {
-				services[k].service.service(config, request, response);
+				services[k].service.service(servletConfig, request, response);
 				return;
 			}
 		}
@@ -136,10 +142,10 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
 		return props;
 	}
 
-	public void loadConfig(InputStream inStream) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+//	public void loadConfig(InputStream inStream) throws IOException {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	public IAviator getAviator() {
 		return aviator;
@@ -149,6 +155,11 @@ public class PilotServlet extends HttpServlet implements IConfiguration {
 		return vehicleBuilder;
 	}
 
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	
 //	public String getProperty(String key) {
 //		return props.getProperty(key);
 //	}

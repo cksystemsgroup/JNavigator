@@ -1,5 +1,5 @@
 /*
- * @(#) IVehicleBuilder.java
+ * @(#) IServletConfig.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -20,14 +20,21 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
-import java.io.IOException;
+import java.util.Properties;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 
-public interface IVehicleBuilder {
+public interface IServletConfig {
 	
-	public void setConfig (Configuration configuration) throws IOException;
+	public Properties getProperties ();
 	
-	public void destroy();
+//	public String getProperty (String key);
+//	
+//	public String getProperty (String key, String deault);
 	
+	public IAviator getAviator();
+	
+	public IVehicleBuilder getVehicleBuilder();
+	
+	public Configuration getConfiguration();
 }

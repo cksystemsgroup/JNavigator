@@ -1,0 +1,14 @@
+		<div id="sidebar">
+<!--
+			<h2>Configuration Upload</h2>
+			<form action="admin/html/configUpload" method="post" enctype="multipart/form-data">
+				<p>
+				Please select a configuration file on your machine and press the Upload button.<br>
+				<input type="file" name="configuration" size="20" maxlength="100000" accept="text/*"><br>
+				<input type="submit" name="configUpload" value="Upload" />
+				</p>
+			</form>
+-->
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>

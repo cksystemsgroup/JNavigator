@@ -21,22 +21,21 @@
 package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
+
+import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 
 public class VehicleBuilder implements IVehicleBuilder {
 	
 	Logger LOG = Logger.getLogger(VehicleBuilder.class);
 	
 	/**
-	 * The current configuration.
+	 * The current vehicle configuration.
 	 */
-	private Properties conf = null;
+	private Configuration conf = null;
 	
 	/**
 	 * Load a vehicle configuration from an <code>InputStream</code> and build it.
@@ -44,21 +43,12 @@ public class VehicleBuilder implements IVehicleBuilder {
 	 * @param inStream the configuration's <code>InputStream</code>
 	 * @throws IOException thrown in case of errors.
 	 */
-	public void loadConfig (InputStream inStream) throws IOException {
+	public void setConfig (Configuration configuration) throws IOException {
 		destroy();
-		conf = new Properties();
-		conf.load(inStream);
-		verifyConfiguration();
-		buildVehicle();
-	}
-	
-	/**
-	 * Verify whether the configuration is complete and valid.
-	 * @throws IOException
-	 */
-	private void verifyConfiguration() throws IOException {
-		// TODO Auto-generated method stub
-		LOG.error("Configuration verification not yet implemented.");
+		this.conf = configuration;
+		
+		if (configuration.isConfigOk())
+			buildVehicle();
 	}
 
 	/**
@@ -79,10 +69,10 @@ public class VehicleBuilder implements IVehicleBuilder {
 	
 	public List<String> getConfiguration() {
 		List<String> list = new ArrayList<String>();
-		String[] keys = conf.keySet().toArray(new String[0]);
-		Arrays.sort(keys);
-		for (String k : keys)
-			list.add(k + " = " + conf.getProperty(k) + "\n");
+//		String[] keys = conf.keySet().toArray(new String[0]);
+//		Arrays.sort(keys);
+//		for (String k : keys)
+//			list.add(k + " = " + conf.getProperty(k) + "\n");
 		return list;
 	}
 }

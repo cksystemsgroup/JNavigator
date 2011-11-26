@@ -1,5 +1,5 @@
 /*
- * @(#) IVehicleBuilder.java
+ * @(#) X11FrameGrabber.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,16 +18,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot;
+package at.uni_salzburg.cs.ckgroup.pilot.sensor;
 
-import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Properties;
 
-import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
+import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
-public interface IVehicleBuilder {
-	
-	public void setConfig (Configuration configuration) throws IOException;
-	
-	public void destroy();
-	
+public class X11FrameGrabber extends AbstractSensor {
+
+	public X11FrameGrabber(Properties props) throws URISyntaxException, ConfigurationException {
+		super(props);
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -20,8 +20,6 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
-import static org.junit.Assert.*;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 

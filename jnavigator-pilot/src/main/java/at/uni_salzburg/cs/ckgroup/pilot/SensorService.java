@@ -1,5 +1,5 @@
 /*
- * @(#) MonitorService.java
+ * @(#) SensorService.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -20,91 +20,47 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
+import at.uni_salzburg.cs.ckgroup.pilot.sensor.AbstractSensor;
+
 
 public class SensorService extends DefaultService {
 	
+	Logger LOG = Logger.getLogger(SensorService.class);
 	
-	
-	public SensorService (IConfiguration configuraton) {
-		super (configuraton);
+
+	public SensorService (IServletConfig servletConfig) {
+		super (servletConfig);
 	}
 
 	public void service(ServletConfig config, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		
-	
-		
-		
-		
-		
 		
 		String servicePath = request.getRequestURI();
 		
 		if (request.getRequestURI().startsWith(request.getContextPath()))
 			servicePath = request.getRequestURI().substring(request.getContextPath().length());
 		
-		if (servicePath.matches ("/.*-INF.*")) {
-			response.setContentType("text/plain");
-			PrintWriter out = response.getWriter();
-			out.println ("Your are not at all wellcome!\nNow bugger off!");
-			return;
-		}
-		
-//		Map<String,Object> i = request.getParameterMap();
-//		int contentLength = request.getContentLength();
-//		String contentType = request.getContentType();
-//		String characterEncoding = request.getCharacterEncoding();
-		BufferedReader reader = request.getReader();
-		String line;
-		while ( (line = reader.readLine()) != null) {
-			System.out.println(line);
-		}
-		
-		
 		String[] p = servicePath.split("/");
+		AbstractSensor s = servletConfig.getConfiguration().getSensorBuilder().getSensors().get(p[2]);
 		
-//		File catalinaBaseDir = (File)config.getServletContext().getAttribute(BackGroundTimerTask.PROP_CATALINA_BASE);
-//		File workDir = new File (catalinaBaseDir, BackGroundTimerTask.WORK_DIR);
-//		File logsDir = new File (workDir, BackGroundTimerTask.LOGS_DIR);
-
-		switch (p.length) {
-//		case 2:
-//			response.setContentType("text/html");
-//			String prefix = request.getContextPath() + "/" + p[1];
-//			emitDirectoryListing (response.getWriter(), prefix, logsDir);
-//			break;
-			
-//		case 3:
-//			File logFile = new File (logsDir, p[2]);
-//			
-//			if (!p[2].startsWith(BackGroundTimerTask.LOGS_PREFIX) || !logFile.canRead()) {
-//				emit404 (response, response.getWriter(), servicePath);
-//				break;
+		if (s != null) {
+//			if ("text/plain".equals(s.getMimeType())) {
+//				emitPlainText(response, s.getValue());
+//			} else {
+				emitByteArray(response, s.getMimeType(), s.getByteArray());
 //			}
-//				
-//			response.setContentType(getContentType(logFile.getName()));
-//			emitFile (response.getOutputStream(), new FileInputStream(logFile));
-//			break;
-			
-		default:
+		} else {
 			emit404 (request, response);
-			break;
 		}
 	}
-	
-	
-
-	
-
 
 }

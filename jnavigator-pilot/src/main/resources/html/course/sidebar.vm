@@ -10,7 +10,7 @@
 						</p>
 					</form>
 				</li>
-#if( $servletConfig.getServletContext().getAttribute("aviator").isScriptOK() )
+#if( $servletConfig.getServletContext().getAttribute("aviator").isScriptOk() )
 				<li>
 					<h2>Course Control</h2>
 #if( $servletConfig.getServletContext().getAttribute("aviator").isVclExecuted() )

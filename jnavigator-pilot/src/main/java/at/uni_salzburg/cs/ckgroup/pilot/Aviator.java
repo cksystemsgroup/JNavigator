@@ -36,27 +36,27 @@ public class Aviator implements IAviator {
 	Logger LOG = Logger.getLogger(Aviator.class);
 	
 	/**
-	 * The current VCL course script.
+	 * The current VCL parser.
 	 */
-//	private List<String> courseScript = null;
 	private Parser parser = new Parser();
+	
+	/**
+	 * This variable is true if the currently loaded VCL script is executed. 
+	 */
 	private boolean vclExecutionActive = false;
 	
+	/**
+	 * This variable contains the currently executed VCL script line. 
+	 */
 	private int currentCommandLine = -1;
 	
 	/**
-	 * Load a VCL script from an <code>InputStream</code> and build it.
+	 * Load a VCL script from an <code>InputStream</code> and parse it.
 	 * 
 	 * @param inStream the configuration's <code>InputStream</code>
 	 * @throws IOException thrown in case of errors.
 	 */
 	public void loadVclScript (InputStream inStream) throws IOException {
-//		BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
-//		courseScript = new ArrayList<String>();
-//		String line;
-//		while ( (line = reader.readLine()) != null) 
-//			courseScript.add(line);
-		
 		parser.parse(inStream);
 	}
 
@@ -98,7 +98,7 @@ public class Aviator implements IAviator {
 		vclExecutionActive = true;
 		
 		// TODO implement
-		currentCommandLine = 20;
+		currentCommandLine = 6;
 	}
 
 	/* (non-Javadoc)

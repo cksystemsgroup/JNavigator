@@ -20,14 +20,18 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 public class Parser {
+	
+	Logger LOG = Logger.getLogger(Parser.class);
 	
 	private List<Boolean> errors = new ArrayList<Boolean>();
 	private List<String> source = new ArrayList<String>();
@@ -57,7 +61,7 @@ public class Parser {
 		script.clear();
 		scriptOk = true;
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+		LineNumberReader reader = new LineNumberReader(new InputStreamReader(inStream));
 		
 		String line;
 		while ( (line = reader.readLine()) != null) {
@@ -80,8 +84,10 @@ public class Parser {
 			source.add(line);
 			errors.add(command == null);
 			script.add(command);
-			if (command == null)
+			if (command == null) {
+				LOG.info("Script error in line " + reader.getLineNumber() + ": " + line);
 				scriptOk = false;
+			}
 		}
 		reader.close();
 	}

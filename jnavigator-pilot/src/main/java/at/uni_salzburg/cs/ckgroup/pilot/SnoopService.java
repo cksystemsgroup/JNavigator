@@ -18,7 +18,7 @@ public class SnoopService extends DefaultService {
     private static final String SPACER = "   ";
     private static final String _EQ_ = " = ";
 
-	public SnoopService (IConfiguration configuraton) {
+	public SnoopService (IServletConfig configuraton) {
 		super (configuraton);
 	}
 
