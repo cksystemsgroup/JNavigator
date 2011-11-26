@@ -35,6 +35,8 @@ public class ParserTestCase {
 		final String course = "at/uni_salzburg/cs/ckgroup/pilot/vcl/parserTest01.crs";
 		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(course);
 		
+		assertNotNull (inStream);
+		
 		Parser parser = new Parser();
 		parser.parse(inStream);
 		
@@ -60,6 +62,8 @@ public class ParserTestCase {
 	public void testCase02 () throws IOException {
 		final String course = "at/uni_salzburg/cs/ckgroup/pilot/vcl/parserTest02.crs";
 		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(course);
+		
+		assertNotNull (inStream);
 		
 		Parser parser = new Parser();
 		parser.parse(inStream);
@@ -87,6 +91,8 @@ public class ParserTestCase {
 		final String course = "at/uni_salzburg/cs/ckgroup/pilot/vcl/parserTest03.crs";
 		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(course);
 		
+		assertNotNull (inStream);
+		
 		Parser parser = new Parser();
 		parser.parse(inStream);
 		
@@ -112,6 +118,8 @@ public class ParserTestCase {
 	public void testCase04 () throws IOException {
 		final String course = "at/uni_salzburg/cs/ckgroup/pilot/vcl/parserTest04.crs";
 		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(course);
+		
+		assertNotNull (inStream);
 		
 		Parser parser = new Parser();
 		parser.parse(inStream);
