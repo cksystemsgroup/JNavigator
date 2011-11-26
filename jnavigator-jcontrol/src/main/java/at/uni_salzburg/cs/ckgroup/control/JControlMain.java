@@ -27,7 +27,7 @@ import java.util.Properties;
 import java.util.Timer;
 
 import at.uni_salzburg.cs.ckgroup.communication.Dispatcher;
-import at.uni_salzburg.cs.ckgroup.communication.TcpServer;
+import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectForwarder;
 import at.uni_salzburg.cs.ckgroup.communication.TransceiverAdapter;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
@@ -56,7 +56,7 @@ public class JControlMain {
 	
 	private ISetCourseSupplier setCourseSupplier;
 	
-	private TcpServer tcpServer;
+	private IDataTransferObjectForwarder tcpServer;
 	
 	private long cycleTime;
 	
@@ -89,9 +89,9 @@ public class JControlMain {
 //		logger = new IDataTransferObjectLogger ();
 //		dispatcher.addIDataTransferObjectListener(logger, IDataTransferObject.class);
 		
-		tcpServer = (TcpServer) ObjectFactory.getInstance ().instantiateObject (PROP_TCP_SERVER_PREFIX, TcpServer.class, props);
+		tcpServer = (IDataTransferObjectForwarder) ObjectFactory.getInstance ().instantiateObject (PROP_TCP_SERVER_PREFIX, IDataTransferObjectForwarder.class, props);
 		tcpServer.setDtoProvider (dispatcher);
-		tcpServer.start();
+//		tcpServer.start();
 	}
 	
 	/**
@@ -111,6 +111,7 @@ public class JControlMain {
 		Timer timer = new Timer ();
 		timer.schedule(jcontrol, 1000, cycleTime);
 //		tcpServer.join ();
+		tcpServer.run();
 	}
 
 	/**
