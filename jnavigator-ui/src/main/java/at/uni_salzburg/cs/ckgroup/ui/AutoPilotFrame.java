@@ -30,8 +30,12 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 
+import org.apache.log4j.Logger;
+
 public class AutoPilotFrame extends Frame implements ISetCourseList
 {
+	Logger LOG = Logger.getLogger(AutoPilotFrame.class);
+	
 	private static final long serialVersionUID = -4688973371884329398L;
 
 	private Button startButton = new Button ("Start");
@@ -87,11 +91,11 @@ public class AutoPilotFrame extends Frame implements ISetCourseList
 	
 	public void emptySetCourseList () {
 		setCourseChoice.removeAll();
-		System.out.println ("AutoPilotFrame.emptySetCourseList");
+		LOG.info ("AutoPilotFrame.emptySetCourseList");
 	}
 	
 	public void addSetCourseFileName (String fileName) {
 		setCourseChoice.add(fileName);
-		System.out.println ("AutoPilotFrame.addSetCourseFileName: " + fileName);
+		LOG.info ("AutoPilotFrame.addSetCourseFileName: " + fileName);
 	}
 }
