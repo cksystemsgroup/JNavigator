@@ -20,14 +20,17 @@
  */
 package at.uni_salzburg.cs.ckgroup.control;
 
+import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.WGS84;
 
 public class DummyPositionProvider implements IPositionProvider {
 	
 	public Double courseOverGround = new Double (0);
 	public PolarCoordinate currentPosition = new PolarCoordinate (0,0,0);
 	public Double speedOverGround = new Double (0);
+	public IGeodeticSystem geodeticSystem = new WGS84();
 
 	public Double getCourseOverGround() {
 		return courseOverGround;
@@ -39,6 +42,10 @@ public class DummyPositionProvider implements IPositionProvider {
 
 	public Double getSpeedOverGround() {
 		return speedOverGround;
+	}
+
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
 	}
 
 }

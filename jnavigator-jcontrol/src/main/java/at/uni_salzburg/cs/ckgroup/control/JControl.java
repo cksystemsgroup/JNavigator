@@ -31,17 +31,26 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
+
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
-import at.uni_salzburg.cs.ckgroup.communication.CommunicationException;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectProvider;
 import at.uni_salzburg.cs.ckgroup.communication.ISender;
-import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.FlyingMode;
+import at.uni_salzburg.cs.ckgroup.communication.data.FlyingState;
+import at.uni_salzburg.cs.ckgroup.communication.data.GroundReport;
+import at.uni_salzburg.cs.ckgroup.communication.data.JaviatorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.KeepAlive;
+import at.uni_salzburg.cs.ckgroup.communication.data.MotorOffsets;
+import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.PilotData;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.ShutdownEvent;
+import at.uni_salzburg.cs.ckgroup.communication.data.SwitchMode;
+import at.uni_salzburg.cs.ckgroup.communication.data.SwitchState;
 import at.uni_salzburg.cs.ckgroup.communication.data.TrimValues;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
@@ -55,7 +64,13 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  * 
  * @author Clemens Krainer
  */
+/**
+ * @author clem
+ *
+ */
 public class JControl extends TimerTask implements ISender, IDataTransferObjectListener {
+	
+	Logger LOG = Logger.getLogger(JControl.class);
 	
 	public static final String PROP_ALGORITHM_PREFIX = "algorithm.";
 	
@@ -63,7 +78,13 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 	
 	public static final String PROP_SET_COURSE_FOLDER = "set.course.folder";
 	
-	private MotorSignals actuatorData = new MotorSignals (0,0,0,0,0);
+	private MotorSignals actuatorData = new MotorSignals ((short)0,(short)0,(short)0,(short)0,(short)0);
+	
+	private MotorOffsets motorOffsets = new MotorOffsets((short)0,(short)0,(short)0,(short)0);
+	
+	private double oldX = 0;
+	private double oldY = 0;
+	private double oldZ = 0;
 	
 	/**
 	 * The associated <code>Dispatcher</code>
@@ -92,48 +113,24 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 	private ISetCourseSupplier setCourseSupplier;
 	
 	/**
-	 * This constant indicates that the helicopter is in gound mode, i.e. it
-	 * does not fly.
+	 * This variable indicates the flying mode of the helicopter.
 	 * 
-	 * @see mode
-	 * @see MODE_SHUTDOWN
-	 * @see MODE_FLYING
+	 * @see FlyingMode
 	 */
-	protected static final int MODE_GROUND = 1;
-	
-	/**
-	 * This constant indicates that the helicopter is in shutdown mode, i.e. it
-	 * shuts of the motors and stops to fly.
-	 * 
-	 * @see mode
-	 * @see MODE_GROUND
-	 * @see MODE_FLYING
-	 */
-	protected static final int MODE_SHUTDOWN = 2;
-	
-	/**
-	 * This constant indicates that the helicopter flies.
-	 * 
-	 * @see mode
-	 * @see MODE_GROUND
-	 * @see MODE_SHUTDOWN
-	 */
-	protected static final int MODE_FLYING = 3;
+	private FlyingMode mode = FlyingMode.HELI_MODE_POS_CTRL;
 	
 	/**
 	 * This variable indicates the flying mode of the helicopter.
 	 * 
-	 * @see MODE_GROUND
-	 * @see MODE_SHUTDOWN
-	 * @see MODE_FLYING
+	 * @see FlyingState
 	 */
-//	private int mode = MODE_GROUND;
+	private FlyingState state = FlyingState.HELI_STATE_SHUTDOWN;
 	
 	/**
 	 * The current <code>NavigationData</code> from the ground station.
 	 */
 	private CommandData navigationData;
-	
+		
 	/**
 	 * This variable is true for an autopilot flight and false for manual flight.
 	 */
@@ -159,6 +156,16 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 	 */
 	private File setCourseFolder;
 	
+//	/**
+//	 * True if the sensor data, set-course data, etc. should be logged. 
+//	 */
+//	private boolean logTheData = false;
+//	
+//	/**
+//	 * The file where the data schould be logged into.
+//	 */
+//	private PrintWriter logWriter = null;
+	
 	/**
 	 * Construct a <code>JControl</code> object.
 	 * @param props the <code>Properties</code> to be used for construction.
@@ -171,6 +178,13 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 		setCourseFolder = new File (props.getProperty(PROP_SET_COURSE_FOLDER,"classes"));
 		if (!setCourseFolder.isDirectory())
 			throw new ConfigurationException("Can not chdir() set course folder " + setCourseFolder.getName());
+//		if (logTheData) {
+//			try {
+//				logWriter = new PrintWriter("jcontrol.out");
+//			} catch (FileNotFoundException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
 	/**
@@ -183,10 +197,13 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 	public void setDtoProvider (IDataTransferObjectProvider dtoProvider) {
 		this.dtoProvider = dtoProvider;
 		dtoProvider.addDataTransferObjectListener(this, SensorData.class);
+//		dtoProvider.addDataTransferObjectListener(this, JaviatorData.class);
 		dtoProvider.addDataTransferObjectListener(this, CommandData.class);
 		dtoProvider.addDataTransferObjectListener(this, ShutdownEvent.class);
 		dtoProvider.addDataTransferObjectListener(this, PilotData.class);
 		dtoProvider.addDataTransferObjectListener(this, TrimValues.class);
+		dtoProvider.addDataTransferObjectListener(this, SwitchState.class);
+		dtoProvider.addDataTransferObjectListener(this, SwitchMode.class);
 	}
 	
 	/**
@@ -206,37 +223,153 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#receive(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)
 	 */
 	public void receive (IDataTransferObject dto) throws IOException {
+		
+//		if (dto instanceof GroundReport) {
+//			GroundReport gr = (GroundReport) dto;
+//			handleDto (gr.getSensorData());
+//		} else {
+			handleDto (dto);
+//		}
+	}
+	
+	private void handleDto (IDataTransferObject dto) throws IOException {
 
 		if (dto instanceof SensorData) {
-			if (dtoProvider == null || positionProvider == null)
+			if (state != FlyingState.HELI_STATE_FLYING) {
+				actuatorData = new MotorSignals ((short)0,(short)0,(short)0,(short)0,(short)0);
 				return;
-			SensorData sensorData = (SensorData) dto;
+			}
 			
-			if (autoPilotFlight) {
+			SensorData sensorData = (SensorData) dto;
+
+			if (dtoProvider != null && positionProvider != null && autoPilotFlight) {
 				PolarCoordinate position = positionProvider.getCurrentPosition();
 				Double courseOverGround = positionProvider.getCourseOverGround();
 				Double speedOverGround = positionProvider.getSpeedOverGround();
-				long flyingTime = clock.currentTimeMillis() - autoPilotStartTime;
+				long now = clock.currentTimeMillis();
+				long flyingTime = now - autoPilotStartTime;
 				VehicleStatus vehicleStatus = setCourseSupplier.getSetCoursePosition (flyingTime);
 				actuatorData = algorithm.apply (sensorData, vehicleStatus, position, courseOverGround, speedOverGround);
+//				trace (now, flyingTime, sensorData, vehicleStatus, position, courseOverGround, speedOverGround);
 			} else {
 				actuatorData = algorithm.apply (sensorData, navigationData);
 			}
+			
+			GroundReport gr = new GroundReport();
+			gr.setSensorData(sensorData);
+			gr.setMotorOffsets(motorOffsets);
+			gr.setMotorSignals(actuatorData);
+			gr.setMode(mode);
+			gr.setState(state);
+			dtoProvider.dispatch (this, gr);
+			
+			
+		} else if (dto instanceof JaviatorData) {
+			if (state != FlyingState.HELI_STATE_FLYING) {
+				actuatorData = new MotorSignals ((short)0,(short)0,(short)0,(short)0,(short)0);
+				return;
+			}
+			
+			JaviatorData jd = (JaviatorData)dto;
+			SensorData sensorData = new SensorData(jd);
+			sensorData.setDx(sensorData.getX() - oldX);
+			oldX = sensorData.getX();
+			sensorData.setDy(sensorData.getY() - oldY);
+			oldY = sensorData.getY();
+			sensorData.setDz(sensorData.getZ() - oldZ);
+			oldZ = sensorData.getZ();
+			actuatorData = algorithm.apply (sensorData, navigationData);
+			GroundReport gr = new GroundReport();
+			gr.setSensorData(sensorData);
+			gr.setMotorOffsets(motorOffsets);
+			gr.setMotorSignals(actuatorData);
+			gr.setMode(mode);
+			gr.setState(state);
+			dtoProvider.dispatch (this, gr);
+			
+			
 		} else if (dto instanceof CommandData) {
 			navigationData = (CommandData) dto;
+			
 		} else if (dto instanceof ShutdownEvent) {
+			LOG.info("ShutdownEvent received.");
+			state = FlyingState.HELI_STATE_SHUTDOWN;
+			actuatorData = new MotorSignals ((short)0,(short)0,(short)0,(short)0,(short)0);
 			// TODO handle DTO ShutdownEvent
-			throw new CommunicationException ("Can not handle ShutdownEvent yet.");
+//			throw new CommunicationException ("Can not handle ShutdownEvent yet.");
+			
+		} else if (dto instanceof SwitchState) {
+			LOG.info("SwitchState received.");
+			switch (state) {
+			case HELI_STATE_GROUND:
+				state = FlyingState.HELI_STATE_FLYING;
+				break;
+			case HELI_STATE_FLYING:
+				state = FlyingState.HELI_STATE_GROUND;
+				break;
+			case HELI_STATE_SHUTDOWN:
+				state = FlyingState.HELI_STATE_GROUND;
+				break;
+			default:
+				state = FlyingState.HELI_STATE_SHUTDOWN;
+			}
+			dtoProvider.dispatch (this, dto);
+			
+		} else if (dto instanceof SwitchMode) {
+			LOG.info("SwitchMode received.");
+			switch (mode) {
+			case HELI_MODE_MAN_CTRL:
+				mode = FlyingMode.HELI_MODE_POS_CTRL;
+				break;
+			case HELI_MODE_POS_CTRL:
+				mode = FlyingMode.HELI_MODE_MAN_CTRL;
+				break;
+			default:
+				mode = FlyingMode.HELI_MODE_MAN_CTRL;
+			}
+			dtoProvider.dispatch (this, dto);
+			
 		} else if (dto instanceof PilotData) {
+			LOG.info("PilotData received.");
 			handlePilotData ((PilotData)dto);
+			
 		} else if (dto instanceof TrimValues) {
 			TrimValues trimValues = (TrimValues) dto;
-			System.out.println ("JControl.receive: new trim values roll=" + trimValues.getRoll() +
+			LOG.info ("JControl.receive: new trim values roll=" + trimValues.getRoll() +
 					", pitch=" + trimValues.getPitch() + ", yaw=" + trimValues.getYaw());
 			algorithm.setTrimValues(trimValues);
+		
+		} else if (dto instanceof KeepAlive) {
+			System.out.print(".");
+			
 		} else
 			throw new IOException ("Can not handle IDataTransferObject object of class " + dto.getClass().getName()); 
 	}
+
+//	private void trace(long now, long flyingTime, SensorData sensorData, VehicleStatus vehicleStatus,
+//			PolarCoordinate position, Double courseOverGround,
+//			Double speedOverGround) {
+//		
+//		if (!logTheData)
+//			return;
+//		
+//		CartesianCoordinate whereCartesian = positionProvider.getGeodeticSystem().polarToRectangularCoordinates(position);
+//		CartesianCoordinate destinationCartesian = positionProvider.getGeodeticSystem().polarToRectangularCoordinates(vehicleStatus.position);
+//		CartesianCoordinate motionVector = destinationCartesian.subtract (whereCartesian);
+//		double distance = motionVector.norm();
+//		
+//		logWriter.println (
+//			now + "\t" + flyingTime + "\t" +
+//			distance + "\t" +
+//			vehicleStatus.position.getLongitude() + "\t" +
+//			vehicleStatus.position.getLatitude() + "\t" +
+//			vehicleStatus.position.getAltitude() + "\t" +
+//			position.getLongitude() + "\t" +
+//			position.getLatitude() + "\t" +
+//			position.getAltitude()
+//		);
+//		
+//	}
 
 	private long gcCounter = 0;
 	/* (non-Javadoc)
@@ -250,7 +383,7 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 		}
 		if (forcedGcCycle > 0 && ++gcCounter > forcedGcCycle) {
 			gcCounter = 0;
-			System.err.println ("Call GC: " + System.currentTimeMillis());
+			LOG.debug ("Call GC: " + System.currentTimeMillis());
 			System.gc();
 		}
 	}
@@ -272,7 +405,7 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 			boolean apf = setCourseSupplier != null;
 			String parameters = dto.getParameters ();
 			if (apf) {
-				System.out.println ("JControl.receive: loading set course '" + parameters + "'");
+				LOG.info ("JControl.receive: loading set course '" + parameters + "'");
 				StringBuffer msg = new StringBuffer ();
 				msg.append(PilotData.CMD_RESPONSE);
 				try {
@@ -292,7 +425,7 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 					e.printStackTrace(new PrintWriter (w));
 					msg.append("ERROR LOADING ").append(parameters).append("\r\n").append(w.toString());
 				}
-				System.out.println ("handlePilotData: " + msg.toString());
+				LOG.info ("handlePilotData: " + msg.toString());
 				String msgString = msg.toString();
 				String responseString = msgString.length() > 126 ? msgString.substring(0, 126) : msgString;
 				PilotData response = new PilotData (responseString.getBytes());
@@ -374,7 +507,7 @@ public class JControl extends TimerTask implements ISender, IDataTransferObjectL
 					StringBuffer msg = new StringBuffer ();
 					msg.append(PilotData.CMD_STRING_FILE_NAME).append(' ').append(i==0?'r':'k').append(' ').append(fileNames[i]);
 					PilotData response = new PilotData (msg.toString().getBytes());
-					System.out.println ("SetCourseFileSender: " + msg.toString());
+					LOG.info ("SetCourseFileSender: " + msg.toString());
 					dtoProvider.dispatch (this, response);
 					try { Thread.sleep(200); } catch (InterruptedException e) {;}
 				}

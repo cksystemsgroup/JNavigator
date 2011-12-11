@@ -36,7 +36,7 @@ import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
 import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
-public class JControlMain {
+public class JControlMain extends Thread {
 	
 	public static final String PROP_JAVIATOR_TRANSCEIVER_ADAPTER_PREFIX = "javiator.adapter.";
 	public static final String PROP_JCONTROL_CYCLE_TIME = "jcontrol.cycle.time";
@@ -60,11 +60,13 @@ public class JControlMain {
 	
 	private long cycleTime;
 	
+	private Timer timer;
+	
 //	private DataTransferObjectLogger logger;
 	
 	private IClock clock;
 	
-	private JControlMain (Properties props) throws InstantiationException, IOException {
+	public JControlMain (Properties props) throws InstantiationException, IOException {
 		
 		cycleTime = Long.parseLong (props.getProperty(PROP_JCONTROL_CYCLE_TIME, "20"));
 		
@@ -94,10 +96,10 @@ public class JControlMain {
 //		tcpServer.start();
 	}
 	
-	/**
-	 * @throws InterruptedException
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
 	 */
-	private void run () throws InterruptedException {
+	public void run () {
 		
 		try {
 			Thread.currentThread().checkAccess();
@@ -108,10 +110,17 @@ public class JControlMain {
 			e.printStackTrace();
 		}
 		
-		Timer timer = new Timer ();
+		timer = new Timer ();
 		timer.schedule(jcontrol, 1000, cycleTime);
-//		tcpServer.join ();
 		tcpServer.run();
+	}
+	
+	/**
+	 * Terminate all threads and sub-threads.
+	 */
+	public void terminate () {
+		timer.cancel();
+		tcpServer.terminate();
 	}
 
 	/**
@@ -126,7 +135,7 @@ public class JControlMain {
 				props = new Properties ();
 				props.load(inStream);
 			} else {
-				props = PropertyUtils.loadProperties ("at/uni_salzburg/cs/ckgroup/control/jcontrol.properties");
+				props = PropertyUtils.loadProperties ("jcontrol.properties");
 			}
 			JControlMain me = new JControlMain (props);
 			me.run();

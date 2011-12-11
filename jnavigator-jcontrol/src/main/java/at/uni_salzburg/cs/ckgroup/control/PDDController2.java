@@ -31,7 +31,7 @@ import at.uni_salzburg.cs.ckgroup.ConfigurationException;
  * 
  * @author Clemens Krainer
  */
-public class PDDController implements IController {
+public class PDDController2 implements IController {
 	
 	/**
 	 * The property key for the proportional coefficient of the
@@ -184,7 +184,7 @@ public class PDDController implements IController {
 	 * @param props the properties to be used for construction.
 	 * @throws ConfigurationException thrown in case of configuration errrors.
 	 */
-	public PDDController (Properties props) throws ConfigurationException {
+	public PDDController2 (Properties props) throws ConfigurationException {
 		Kp = Double.parseDouble (props.getProperty (PROP_CONTROLLER_KP, "1"));
 		KpEpsilon = Double.parseDouble (props.getProperty (PROP_CONTROLLER_KP_EPSILON, "1"));
 		if (KpEpsilon == 0)
@@ -204,10 +204,10 @@ public class PDDController implements IController {
 	public double apply (double error, double dX, double ddX) {
 		
 		double xSaturated = error / KpEpsilon;
-		if (xSaturated > 1) xSaturated = 1; else if (xSaturated < -1) xSaturated = -1;
+//		if (xSaturated > 1) xSaturated = 1; else if (xSaturated < -1) xSaturated = -1;
 		
 		double dXsaturated = dX / KdEpsilon;
-		if (dXsaturated > 1) dXsaturated = 1; else if (dXsaturated < -1) dXsaturated = -1;
+//		if (dXsaturated > 1) dXsaturated = 1; else if (dXsaturated < -1) dXsaturated = -1;
 		
 		if (Double.isNaN(oldDY))
 			oldDY = 0;

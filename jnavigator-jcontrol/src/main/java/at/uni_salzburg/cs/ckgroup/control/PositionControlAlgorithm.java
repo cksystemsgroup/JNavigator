@@ -22,6 +22,8 @@ package at.uni_salzburg.cs.ckgroup.control;
 
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
@@ -38,6 +40,8 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  * @author Clemens Krainer
  */
 public class PositionControlAlgorithm implements IControlAlgorithm {
+	
+	Logger LOG = Logger.getLogger(PositionControlAlgorithm.class);
 	
 	/**
 	 * The property key prefix for the debug mode.
@@ -149,10 +153,13 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 	 */
 	private double yawTrimValue = 0;
 	
+	/**
+	 * The JAviator's identification.
+	 */
 	private int id = 0;
 	
 	/**
-	 * Construct a <code>SimpleControlAlgorithm</code> object.
+	 * Construct a <code>PositionControlAlgorithm</code> object.
 	 * 
 	 * @param props the properties to be used for construction.
 	 * @throws InstantiationException thrown in case of problems when creating the controller objects.
@@ -167,6 +174,7 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 		yController = (IController) ObjectFactory.getInstance().instantiateObject(PROP_POSITION_CONTROLLER_PREFIX, IController.class, props);
 		motorLiftOffRpm = Double.parseDouble (props.getProperty (PROP_MOTOR_LIFT_OFF_RPM, "0"));
 		id = Integer.parseInt(props.getProperty(PROP_JAVIATOR_IDENTIFICATION,"0"));
+		LOG.info("altitudeController " + altitudeController);
 	}
 
 	/* (non-Javadoc)
@@ -175,7 +183,7 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 	public MotorSignals apply(SensorData sensorData, CommandData navigationData)
 	{
 		if (navigationData == null)
-			return new MotorSignals (0,0,0,0,id);
+			return new MotorSignals ((short)0,(short)0,(short)0,(short)0,id);
 		
 		double rollCtrl = navigationData.getRoll();
 		double pitchCtrl = navigationData.getPitch();
@@ -206,7 +214,7 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 //				);
 		first = true;
 		
-		return new MotorSignals (m+b+p, m-b-r, m+b-p, m-b+r,id);
+		return new MotorSignals ((short)(m+b+p), (short)(m-b-r), (short)(m+b-p), (short)(m-b+r),id);
 	}
 	
 	private long counter = 0;
@@ -219,7 +227,7 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 			PolarCoordinate currentPosition, Double courseOverGround, Double speedOverGround)
 	{
 		if (setCourseData == null || currentPosition == null || courseOverGround == null || speedOverGround == null)
-			return new MotorSignals (0,0,0,0,id);
+			return new MotorSignals ((short)0,(short)0,(short)0,(short)0,id);
 		
 		double desiredX = -earthRadius*(setCourseData.position.latitude * PI180TH);
 		double currentX = -earthRadius*(currentPosition.latitude * PI180TH);
@@ -372,7 +380,7 @@ public class PositionControlAlgorithm implements IControlAlgorithm {
 //
 //		m += motorLiftOffRpm;
 		
-		return new MotorSignals (m+b+p, m-b-r, m+b-p, m-b+r, id);
+		return new MotorSignals ((short)(m+b+p), (short)(m-b-r), (short)(m+b-p), (short)(m-b+r), id);
 	}
 
 	/* (non-Javadoc)

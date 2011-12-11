@@ -28,8 +28,8 @@ import junit.framework.TestCase;
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.communication.CommunicationException;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
-import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.PilotData;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.ShutdownEvent;
@@ -181,7 +181,7 @@ public class JControlTestCase extends TestCase {
 			SensorData dto = null;
 			
 			try {
-				MotorSignals ad = new MotorSignals(1, 2, 3, 4, 5);
+				MotorSignals ad = new MotorSignals((short)1, (short)2, (short)3, (short)4, (short)5);
 				control.receive(ad);
 				fail ();
 			} catch (IOException e) {

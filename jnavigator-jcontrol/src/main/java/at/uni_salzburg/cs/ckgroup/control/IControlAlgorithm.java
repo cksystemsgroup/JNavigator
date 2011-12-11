@@ -55,7 +55,7 @@ public interface IControlAlgorithm {
 	 * @param setCourseData the position and orientation from the set course.
 	 * @param currentPosition the current position as a WGS84 coordinate
 	 * @param courseOverGround the course over ground in degrees: 0° North, 
-	 * @param speedOverGround
+	 * @param speedOverGround the current speed over ground
 	 * @return the new <code>MotorSignals</code>.
 	 */
 	public MotorSignals apply (SensorData sensorData, VehicleStatus setCourseData, PolarCoordinate currentPosition, Double courseOverGround, Double speedOverGround);
