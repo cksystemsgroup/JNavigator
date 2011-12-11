@@ -301,7 +301,12 @@ public class SimplePilotTestCase extends TestCase
 		 * The current index of the next position to deliver.
 		 */
 		private int index = 0;
-
+		
+		/**
+		 * The currently used geodetic system. 
+		 */
+		private IGeodeticSystem geodeticSystem = new WGS84();
+		
 		/* (non-Javadoc)
 		 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getCurrentPosition()
 		 */
@@ -338,6 +343,10 @@ public class SimplePilotTestCase extends TestCase
 		 */
 		public Double getSpeedOverGround() {
 			return null;
+		}
+
+		public IGeodeticSystem getGeodeticSystem() {
+			return geodeticSystem;
 		}
 
 	}
