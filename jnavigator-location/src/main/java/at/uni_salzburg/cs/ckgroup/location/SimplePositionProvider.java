@@ -226,4 +226,11 @@ public class SimplePositionProvider implements IPositionProvider, ILocationMessa
 		return currentSpeedOverGround;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getGeodeticSystem()
+	 */
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
+	}
+
 }

@@ -324,6 +324,13 @@ public class PositionProvider implements IPositionProvider, ILocationMessageList
 		throw new NotImplementedException ();
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getGeodeticSystem()
+	 */
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
+	}
+
 	/**
 	 * Calculate the current position in rectangular coordinates of the location system.
 	 * 
