@@ -1,0 +1,27 @@
+#Fri Dec 09 00:42:46 CET 2011
+control.parameter.rollpitch.Kp=1.700
+control.parameter.yaw.Kd=1.700
+relay.port=7000
+control.parameter.rollpitch.Ki=0.000
+control.parameter.idle.limit=8000
+relay.host=127.0.0.1
+roll.meter.maximum=20
+control.parameter.rollpitch.Kdd=-0.070
+control.parameter.rollpitch.Kd=0.700
+control.parameter.position.Kdd=0.000
+control.parameter.altitude.Kdd=0.000
+pitch.meter.maximum=20
+control.parameter.altitude.Kp=1.500
+control.service.port=7001
+show.3d.window=true
+control.parameter.position.Kp=0.000
+external.autopilot=false
+yaw.meter.maximum=0
+control.parameter.altitude.Ki=0.000
+control.parameter.yaw.Kdd=0.000
+control.parameter.yaw.Kp=1.700
+control.parameter.position.Ki=0.000
+control.parameter.altitude.Kd=-1.300
+altitude.meter.maximum=2
+control.parameter.position.Kd=0.000
+control.parameter.yaw.Ki=0.000

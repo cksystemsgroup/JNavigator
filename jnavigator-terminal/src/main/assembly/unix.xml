@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<assembly>
+	<id>linux</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}
+			</outputFileNameMapping>
+			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>junit:junit</exclude>
+				<exclude>com.sun.java3d:j3dcore</exclude>
+				<exclude>com.sun.java3d:j3dutils</exclude>
+				<exclude>com.sun.java3d:vecmath</exclude>
+				<exclude>com.sun.java3d:libj3dcore-ogl</exclude>
+				<exclude>com.sun.java3d:libj3dcore-ogl-cg</exclude>
+			</excludes>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>images</directory>
+			<outputDirectory>images</outputDirectory>
+			<includes>
+				<include>**/*.jpg</include>
+			</includes>
+			<fileMode>644</fileMode>
+			<lineEnding>keep</lineEnding>
+		</fileSet>
+<!--
+		<fileSet>
+			<directory>models</directory>
+			<outputDirectory>models</outputDirectory>
+			<includes>
+				<include>**/*.3ds</include>
+			</includes>
+			<fileMode>644</fileMode>
+			<lineEnding>keep</lineEnding>
+		</fileSet>
+-->
+	</fileSets>
+	<files>
+		<file>
+			<source>config.xml</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>644</fileMode>
+		</file>
+		<file>
+			<source>src/main/scripts/ControlTerminal.sh</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>755</fileMode>
+			<filtered>true</filtered>
+		</file>
+		<file>
+			<source>ControlTerminal.cfg</source>
+			<outputDirectory />
+			<lineEnding>unix</lineEnding>
+			<fileMode>644</fileMode>
+		</file>
+	</files>
+</assembly>

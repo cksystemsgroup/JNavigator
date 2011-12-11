@@ -54,6 +54,7 @@
 		<module>jnavigator-ui</module>
 		<module>jnavigator-util</module>
 		<module>jnavigator-pilot</module>
+		<module>jnavigator-terminal</module>
 	</modules>
 
 	<scm>
@@ -66,7 +67,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>3.8.1</version>
+				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -368,9 +369,14 @@
 			<url>http://${site.id}/archiva/repository/inhouse/</url>
 		</repository>
 		<snapshotRepository>
+<!--
 			<id>${site.id}</id>
 			<name>Inhouse Snapshot Repository</name>
 			<url>http://${site.id}/archiva/repository/inhouse_snapshot/</url>
+-->
+			<id>cs.uni-salzburg.at</id>
+			<name>JNavigator Snapshot Repository</name>
+			<url>scp://cs.edvz.sbg.ac.at/home/ckrainer/public_html/maven2</url>
 		</snapshotRepository>
 	</distributionManagement>
 <!--
