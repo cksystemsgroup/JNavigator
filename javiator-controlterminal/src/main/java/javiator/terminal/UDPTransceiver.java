@@ -18,7 +18,7 @@ public class UDPTransceiver extends Transceiver
 {
 	private static final boolean DEBUG = false;
 	private DatagramSocket sendSocket, recvSocket;
-	private int listenPort;
+//	private int listenPort;
 	private InetSocketAddress socketAddress;
 	private boolean haveTraffic;
 	
@@ -32,7 +32,7 @@ public class UDPTransceiver extends Transceiver
 	public UDPTransceiver(ControlTerminal parent, String sendHost, int sendPort)
 	{
 		super(parent);
-		this.listenPort = sendPort;
+//		this.listenPort = sendPort;
 		socketAddress = new InetSocketAddress(sendHost, sendPort);
 	}
 
