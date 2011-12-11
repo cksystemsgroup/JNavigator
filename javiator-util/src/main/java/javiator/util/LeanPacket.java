@@ -68,15 +68,19 @@ public class LeanPacket
 	public static boolean checksOut(byte[] buffer)
 	{
 		if (buffer[0] != (byte) 0xff || buffer[1] != (byte) 0xff) {
+			System.err.println("LeanPacket.checksOut(): Header error " + (int)(buffer[0]) + " " + (int)(buffer[1]));
 			return false;
 		}
 		int at = PAYLOAD_OFFSET + buffer[LENGTH_OFFSET];
 		if (at < 0 || at > buffer.length - 2) {
+			System.err.println("LeanPacket.checksOut(): data offset="+at+", length="+buffer.length);
 			return false;
 		}
 		int checksum = buffer[at] & 0xFF;
 		checksum = (checksum << 8) | buffer[at + 1] & 0xFF;
 		int compare = Checksum.calc( buffer[TYPE_OFFSET], buffer[LENGTH_OFFSET], buffer, PAYLOAD_OFFSET);
+		if (checksum != compare)
+				System.err.println("LeanPacket.checksOut(): checksum error " + checksum + " != " + compare);
 		return checksum == compare;
 	}
 }
