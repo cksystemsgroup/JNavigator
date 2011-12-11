@@ -74,6 +74,11 @@ public class DummyPositionProvider implements IPositionProvider
 	private Double speedOverGround;
 	
 	/**
+	 * The currently used geodetic system. 
+	 */
+	private IGeodeticSystem geodeticSystem = new WGS84();
+	
+	/**
 	 * Construct a DummyPositionProvider.
 	 * 
 	 * @param props the Properties to be used to search for the reference Position.
@@ -123,6 +128,10 @@ public class DummyPositionProvider implements IPositionProvider
 		if (!hasCourseOverGround)
 			return null;
 		return speedOverGround;
+	}
+
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
 	}
 
 }

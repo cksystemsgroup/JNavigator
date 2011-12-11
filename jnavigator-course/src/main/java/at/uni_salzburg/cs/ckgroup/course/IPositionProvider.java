@@ -50,4 +50,11 @@ public interface IPositionProvider
 	 * @return The current course over ground in degrees or null if not present.
 	 */
 	public Double getCourseOverGround ();
+	
+	/**
+	 * Return the currently used geodetic system.
+	 * 
+	 * @return the currently used geodetic system.
+	 */
+	public IGeodeticSystem getGeodeticSystem ();
 }
