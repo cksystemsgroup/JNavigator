@@ -20,8 +20,10 @@
  */
 package at.uni_salzburg.cs.ckgroup.gps;
 
+import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.WGS84;
 import at.uni_salzburg.cs.ckgroup.nmea.Nmea0183Message;
 import at.uni_salzburg.cs.ckgroup.nmea.Nmea0183MessageListener;
 import at.uni_salzburg.cs.ckgroup.util.StringUtils;
@@ -81,6 +83,11 @@ public class GpsPositionProvider implements IPositionProvider, Nmea0183MessageLi
 	 * to <code>null>/code>.
 	 */
 	private int speedOverGroundCounter = 0;
+	
+	/**
+	 * The currently used geodetic system.
+	 */
+	private IGeodeticSystem geodeticSystem = new WGS84();
 	
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getCurrentPosition()
@@ -222,6 +229,13 @@ public class GpsPositionProvider implements IPositionProvider, Nmea0183MessageLi
 		double seconds = value/100 - degrees;
 		double angle = degrees + seconds / 0.6;
 		return angle;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getGeodeticSystem()
+	 */
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
 	}
 
 

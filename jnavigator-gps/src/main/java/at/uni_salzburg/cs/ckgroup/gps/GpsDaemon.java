@@ -167,12 +167,12 @@ public class GpsDaemon extends Thread implements RtcmSc104MessageListener, Nmea0
 			}
 //		} catch (ArrayIndexOutOfBoundsException e) {
 //			e.printStackTrace();
-//			System.out.println ("readLine Exception");
+//			System.err.println ("readLine Exception");
 //		}
 		
-//		System.out.print ("GpsDaemon.readLine: '");
-//		System.out.write (b, 0, count);
-//		System.out.println ("'");
+//		System.err.print ("GpsDaemon.readLine: '");
+//		System.err.write (b, 0, count);
+//		System.err.println ("'");
 		
 		return count;
 	}
@@ -218,7 +218,7 @@ public class GpsDaemon extends Thread implements RtcmSc104MessageListener, Nmea0
 					} catch (Nmea0183MalformedMessageException e)
 					{
 						++malformedMessages;
-//						System.out.print ("Message received (err): " + new String(line,0,len));
+						System.err.print ("Message received (err): '" + new String(line,0,len) + "'");
 						// TODO handle these errors
 					}
 				}
