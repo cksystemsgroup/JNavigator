@@ -22,6 +22,7 @@ package at.uni_salzburg.cs.ckgroup.communication;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,7 +30,6 @@ import java.util.Properties;
 
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
-import at.uni_salzburg.cs.ckgroup.util.StringUtils;
 
 /**
  * This class links a <code>ITranceiver</code> to a <code>Dispatcher</code>. It
@@ -109,25 +109,25 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 	/**
 	 * This variable maps a packet type to a <code>IDataTransferObject</code> class.
 	 */
-	private Map packetTypeToDtoMap = new HashMap ();
+	private Map<Integer,Class<?>> packetTypeToDtoMap = new HashMap<Integer,Class<?>>();
 	
 	/**
 	 * This variable maps a <code>IDataTransferObject</code> class to a packet type.
 	 */
-	private Map dtoToPacketTypeMap = new HashMap ();
+	private Map<Class<?>,Integer> dtoToPacketTypeMap = new HashMap<Class<?>,Integer>();
 	
 	/**
 	 * This variable maps a packet type to the <code>IDataTransferObject</code> class
 	 * constructor that takes a byte array as parameter.
 	 */
-	private Map packetTypeToConstructorMap = new HashMap ();
+	private Map<Integer,Constructor<?>> packetTypeToConstructorMap = new HashMap<Integer,Constructor<?>>();
 	
 	/**
 	 * This variable maps a <code>IDataTransferObject</code> class to a boolean value that
 	 * indicates whether the class should be registered with the associated
 	 * dispatcher.
 	 */
-	private Map classToRegisterMap = new HashMap ();
+	private Map<Class<?>, Boolean> classToRegisterMap = new HashMap<Class<?>, Boolean>();
 	
 	/**
 	 * The associated dispatcher.
@@ -194,8 +194,8 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 		if (mappingListString == null || "".equals(mappingListString))
 			throw new ConfigurationException ("Property " + PROP_MAPPING_LIST + " not configured.");
 		
-//		String[] mappingList = mappingListString.trim().split ("\\s*,\\s*");
-		String[] mappingList = StringUtils.splitOnCharAndTrim(',', mappingListString);
+		String[] mappingList = mappingListString.trim().split ("\\s*,\\s*");
+//		String[] mappingList = StringUtils.splitOnCharAndTrim(',', mappingListString);
 		for (int k=0; k < mappingList.length; k++) {
 			String typePropString = PROP_MAPPING_PREFIX + mappingList[k] + PROP_MAPPING_TYPE_SUFFIX;
 			String typeString = props.getProperty (typePropString);
@@ -213,8 +213,8 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 				throw new ConfigurationException ("Property " + classPropString + " not configured.");
 
 			try {
-				Class classInstance = Class.forName (className);
-				Class[] interfaces = classInstance.getInterfaces();
+				Class<?> classInstance = Class.forName (className);
+				Class<?>[] interfaces = classInstance.getInterfaces();
 				
 				boolean isADTO = false;
 				for (int j=0; j < interfaces.length; j++)
@@ -232,10 +232,10 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 					throw new ConfigurationException ("Class " + className + " at " + classPropString +
 							" is no derivative of " + IDataTransferObject.class.getName());
 				
-	        	Class partypes[] = new Class[1];
+	        	Class<?> partypes[] = new Class[1];
 	            partypes[0] = byte[].class;
 
-	            Constructor ctor = classInstance.getConstructor (partypes);
+	            Constructor<?> ctor = classInstance.getConstructor (partypes);
 				
 				Integer typeIndex = Integer.valueOf (typeString); 
 				if (typeIndex.intValue() <= 0)
@@ -262,9 +262,9 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 	public void setDtoProvider (IDataTransferObjectProvider dtoProvider) {
 		this.dtoProvider = dtoProvider;
 		
-		Iterator i = dtoToPacketTypeMap.keySet().iterator();
+		Iterator<Class<?>> i = dtoToPacketTypeMap.keySet().iterator();
 		while (i.hasNext()) {
-			Class classInstance = (Class) i.next();
+			Class<?> classInstance = i.next();
 			Boolean register = (Boolean) classToRegisterMap.get (classInstance);
 			if (register.booleanValue())
 				dtoProvider.addDataTransferObjectListener (this, classInstance);
@@ -296,9 +296,9 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 			try {
 				packet = transceiver.receive();
 				Integer typeIndex = new Integer (packet.getType()&0xFF);
-	            Constructor ctor = (Constructor) packetTypeToConstructorMap.get (typeIndex);
+	            Constructor<?> ctor = packetTypeToConstructorMap.get (typeIndex);
 	            if (ctor == null)
-	            	throw new ConfigurationException ("No mapping found for packet type " + typeIndex);
+	            	throw new ConfigurationException ("No mapping found for packet type " + typeIndex + " (" + Thread.currentThread().getName() + ")");
 	            Object arglist[] = new Object[1];
 	            arglist[0] = packet.getPayload();
 	            IDataTransferObject dto = (IDataTransferObject) ctor.newInstance (arglist);
@@ -310,6 +310,9 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 			} catch (ConfigurationException e) {
 				e.printStackTrace();
 				Thread.yield();
+			} catch (SocketException e) {
+				if (!"Socket closed".equals(e.getMessage()))
+					e.printStackTrace();
 			} catch (Exception e) {
 //				System.err.println ("\nCan not forward packet to dispatcher. " + (packet == null ? "(null)" : packet.toString()));
 				e.printStackTrace();
@@ -327,6 +330,7 @@ public class TransceiverAdapter extends Thread implements ISender, IDataTransfer
 	public void terminate () {
 		running = false;
 		reconnectingAllowed = false;
+		transceiver.close();
 	}
 	
 	/**

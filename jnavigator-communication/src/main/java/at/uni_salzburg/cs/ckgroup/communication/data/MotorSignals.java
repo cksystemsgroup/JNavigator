@@ -30,13 +30,6 @@ import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
  */
 public class MotorSignals implements IDataTransferObject {
 	
-	/**
-	 * The scaling factor of the actuator values.
-	 */
-	public static final double MOTOR_SIGNAL_FACTOR = 1.0;
-	
-	public static final double MOTOR_SIGNAL_FACTOR_NEW = 0.001;
-
     /**
      * The front motor speed in RPM
      */
@@ -65,13 +58,13 @@ public class MotorSignals implements IDataTransferObject {
     /**
      * The length of the payload in bytes.
      */
-    private static final int payloadLength = 10;
+    static final int payloadLength = 10;
     
     /**
      * Construct an <code>MotorSignals</code> object, having all parameters set to zero.
      */
     public MotorSignals () {
-    	front = right = rear  = left  = id = 0;
+    	front = right = rear = left = id = 0;
     }
     
     /**
@@ -82,11 +75,11 @@ public class MotorSignals implements IDataTransferObject {
 	 * @param rear the rear motor speed in RPM
 	 * @param left the left motor speed in RPM
 	 */
-    public MotorSignals (double front, double right, double rear, double left, int id) {
-    	this.front = (short) (front * MOTOR_SIGNAL_FACTOR);
-    	this.right = (short) (right * MOTOR_SIGNAL_FACTOR);
-    	this.rear = (short) (rear * MOTOR_SIGNAL_FACTOR);
-    	this.left = (short) (left * MOTOR_SIGNAL_FACTOR);
+    public MotorSignals (short front, short right, short rear, short left, int id) {
+    	this.front = front;
+    	this.right = right;
+    	this.rear = rear;
+    	this.left = left;
     	this.id = (short)id;
     }
     
@@ -96,7 +89,17 @@ public class MotorSignals implements IDataTransferObject {
      * @param data the byte array that contains the data.
      */
     public MotorSignals (byte[] data) {
-    	int k = 0;
+    	this (data, 0);
+    }
+    
+    /**
+     * Construct an <code>MotorSignals</code> object from a byte array.
+     * 
+     * @param data the byte array that contains the data.
+     * @param offset the offset in the byte array where the packet starts.
+     */
+    public MotorSignals (byte[] data, int offset) {
+    	int k = offset;
     	front = (short) ((data[k++] & 0xFF) << 8 | data[k++] & 0xFF);
     	right = (short) ((data[k++] & 0xFF) << 8 | data[k++] & 0xFF);
     	rear  = (short) ((data[k++] & 0xFF) << 8 | data[k++] & 0xFF);
@@ -111,15 +114,15 @@ public class MotorSignals implements IDataTransferObject {
 		byte[] data = new byte[payloadLength];
 		
 		int k=0;
-		data[k++] = (byte) (front >> 8);
+		data[k++] = (byte) ((front >> 8) & 0xFF);
 		data[k++] = (byte) (front & 0xFF);
-		data[k++] = (byte) (right >> 8);
+		data[k++] = (byte) ((right >> 8) & 0xFF);
 		data[k++] = (byte) (right & 0xFF);
-		data[k++] = (byte) (rear >> 8);
+		data[k++] = (byte) ((rear >> 8) & 0xFF);
 		data[k++] = (byte) (rear & 0xFF);
-		data[k++] = (byte) (left >> 8);
+		data[k++] = (byte) ((left >> 8) & 0xFF);
 		data[k++] = (byte) (left & 0xFF);
-		data[k++] = (byte) (id >> 8);
+		data[k++] = (byte) ((id >> 8) & 0xFF);
 		data[k++] = (byte) (id & 0xFF);
 			
 		return data;
@@ -138,36 +141,36 @@ public class MotorSignals implements IDataTransferObject {
 		return buf.toString();
 	}
 
-	public double getFront() {
-		return front * MOTOR_SIGNAL_FACTOR_NEW;
+	public short getFront() {
+		return front;
 	}
 
-	public void setFront(double front) {
-		this.front = (short)(front / MOTOR_SIGNAL_FACTOR_NEW);
+	public void setFront(short front) {
+		this.front = front;
 	}
 
-	public double getRight() {
-		return right * MOTOR_SIGNAL_FACTOR_NEW;
+	public short getRight() {
+		return right;
 	}
 
-	public void setRight(double right) {
-		this.right = (short)(right / MOTOR_SIGNAL_FACTOR_NEW);
+	public void setRight(short right) {
+		this.right = right;
 	}
 
-	public double getRear() {
-		return rear * MOTOR_SIGNAL_FACTOR_NEW;
+	public short getRear() {
+		return rear;
 	}
 
-	public void setRear(double rear) {
-		this.rear = (short)(rear / MOTOR_SIGNAL_FACTOR_NEW);
+	public void setRear(short rear) {
+		this.rear = rear;
 	}
 
-	public double getLeft() {
-		return left * MOTOR_SIGNAL_FACTOR_NEW;
+	public short getLeft() {
+		return left;
 	}
 
-	public void setLeft(double left) {
-		this.left = (short)(left / MOTOR_SIGNAL_FACTOR_NEW);
+	public void setLeft(short left) {
+		this.left = left;
 	}
 
 	public short getId() {

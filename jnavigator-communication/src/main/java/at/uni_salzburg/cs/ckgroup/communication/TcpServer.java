@@ -32,7 +32,7 @@ import at.uni_salzburg.cs.ckgroup.io.TcpSocketServer;
  * 
  * @author Clemens Krainer
  */
-public class TcpServer extends TcpSocketServer {
+public class TcpServer extends TcpSocketServer implements IDataTransferObjectForwarder {
 
 	/**
 	 * The properties of this <code>TcpServer</code> and it's attached objects.

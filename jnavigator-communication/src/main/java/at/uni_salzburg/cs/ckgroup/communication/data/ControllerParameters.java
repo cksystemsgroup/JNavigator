@@ -1,5 +1,5 @@
 /*
- * @(#) ControlParams.java
+ * @(#) ControllerParameters.java
  *
  * This code is part of the JAviator project: javiator.cs.uni-salzburg.at
  * Copyright (c) 2009  Clemens Krainer
@@ -20,6 +20,9 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication.data;
 
+import java.util.Locale;
+import java.util.Properties;
+
 import at.uni_salzburg.cs.ckgroup.communication.CommunicationException;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 
@@ -30,6 +33,11 @@ import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
  * @author Clemens Krainer
  */
 public abstract class ControllerParameters implements IDataTransferObject {
+	
+	public static final String PROP_KP = "Kp";
+	public static final String PROP_KI = "Ki";
+	public static final String PROP_KD = "Kd";
+	public static final String PROP_KDD = "Kdd";
 
 	private short kProportional;
 	private short kIntegral;
@@ -37,6 +45,21 @@ public abstract class ControllerParameters implements IDataTransferObject {
 	private short kSecondDerivative;
 
 	private static final int payloadLength = 8;
+	
+	private static final double FACTOR_PARAMETER = 1000.0;
+	
+	/**
+	 * @param props
+	 * @param prefix
+	 */
+	public ControllerParameters(Properties props, String prefix) {
+		this (
+			Double.parseDouble(props.getProperty(prefix+PROP_KP, "0")),
+			Double.parseDouble(props.getProperty(prefix+PROP_KI, "0")),
+			Double.parseDouble(props.getProperty(prefix+PROP_KD, "0")),
+			Double.parseDouble(props.getProperty(prefix+PROP_KDD, "0"))
+		);
+	}
 
 	/**
 	 * @param kProportional
@@ -44,13 +67,11 @@ public abstract class ControllerParameters implements IDataTransferObject {
 	 * @param kDerivative
 	 * @param kSecondDerivative
 	 */
-	public ControllerParameters(double kProportional, double kIntegral,
-			double kDerivative, double kSecondDerivative) {
-
-		this.kProportional = (short) kProportional;
-		this.kIntegral = (short) kIntegral;
-		this.kDerivative = (short) kDerivative;
-		this.kSecondDerivative = (short) kSecondDerivative;
+	public ControllerParameters(double kProportional, double kIntegral, double kDerivative, double kSecondDerivative) {
+		setKProportional(kProportional);
+		setKIntegral(kIntegral);
+		setKDerivative(kDerivative);
+		setKSecondDerivative(kSecondDerivative);
 	}
 
 	/**
@@ -100,32 +121,56 @@ public abstract class ControllerParameters implements IDataTransferObject {
 		return buf.toString();
 	}
 
+	public void saveParameters (Properties props, String prefix) {
+		props.setProperty(prefix+PROP_KP,  String.format(Locale.US, "%.3f", getKProportional()));
+		props.setProperty(prefix+PROP_KI,  String.format(Locale.US, "%.3f", getKIntegral()));
+		props.setProperty(prefix+PROP_KD,  String.format(Locale.US, "%.3f", getKDerivative()));
+		props.setProperty(prefix+PROP_KDD, String.format(Locale.US, "%.3f", getKSecondDerivative()));
+	}
+	
 	/**
 	 * @return
 	 */
 	public double getKProportional() {
-		return kProportional;
+		return kProportional /  FACTOR_PARAMETER;
+	}
+
+	public void setKProportional(double kProportional) {
+		this.kProportional = (short) (kProportional * FACTOR_PARAMETER);
 	}
 
 	/**
 	 * @return
 	 */
 	public double getKIntegral() {
-		return kIntegral;
+		return kIntegral /  FACTOR_PARAMETER;
+	}
+
+	public void setKIntegral(double kIntegral) {
+		this.kIntegral = (short) (kIntegral * FACTOR_PARAMETER);
 	}
 
 	/**
 	 * @return
 	 */
 	public double getKDerivative() {
-		return kDerivative;
+		return kDerivative /  FACTOR_PARAMETER;
+	}
+
+	public void setKDerivative(double kDerivative) {
+		this.kDerivative = (short) (kDerivative * FACTOR_PARAMETER);
 	}
 
 	/**
 	 * @return
 	 */
 	public double getKSecondDerivative() {
-		return kSecondDerivative;
+		return kSecondDerivative /  FACTOR_PARAMETER;
 	}
 
+	public void setKSecondDerivative(double kSecondDerivative) {
+		this.kSecondDerivative = (short) (kSecondDerivative * FACTOR_PARAMETER);
+	}
+
+	
 }

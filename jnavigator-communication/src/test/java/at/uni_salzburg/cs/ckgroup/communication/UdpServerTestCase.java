@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.io.UdpSocketServer;
 
 public class UdpServerTestCase extends TestCase {
@@ -58,98 +59,95 @@ public class UdpServerTestCase extends TestCase {
 	 * Create a <code>UdpServer</code> and use a <code>Transceiver</code> as UDP
 	 * client. Send one packet via UDP and verify that it arrives on the other
 	 * side.
+	 * @throws ConfigurationException 
+	 * @throws IOException 
 	 */
-	public void testCase01 () {
+	public void testCase01 () throws IOException, ConfigurationException {
+		UdpServer server = new UdpServer (serverProps);
+		server.setDtoProvider (dtoProvider);
+		Thread serverThread = new Thread(server);
+		serverThread.start();
 		
-		try {
-			UdpServer server = new UdpServer (serverProps);
-			server.setDtoProvider (dtoProvider);
-			ServerReceiver serverReceiver = new ServerReceiver (server);
-			serverReceiver.start();
-			try { Thread.sleep(100); } catch (InterruptedException e) {;}
-			
-			DatagramTransceiver client = new DatagramTransceiver (clientProps);
-			client.send(packetOne);
-			
-			try { Thread.sleep(500); } catch (InterruptedException e) {;}
-			
-			assertEquals (1, listenerOne.counter);
-			arrayCompare (packetOne.getPayload(), listenerOne.dto.toByteArray());
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail ();
-		}
+//		ServerReceiver serverReceiver = new ServerReceiver (server);
+//		serverReceiver.start();
+		try { Thread.sleep(100); } catch (InterruptedException e) {;}
+		
+		DatagramTransceiver client = new DatagramTransceiver (clientProps);
+		client.send(packetOne);
+		
+		try { Thread.sleep(100); } catch (InterruptedException e) {;}
+		
+		assertEquals (1, listenerOne.counter);
+		arrayCompare (packetOne.getPayload(), listenerOne.dto.toByteArray());
 	}
 	
 	
 	
 	
-	private class UdpClient {
-		private InetSocketAddress serverAddress;
-		private DatagramSocket clientSocket;
-
-		public UdpClient (Properties props) throws SocketException {
-			String host = props.getProperty ("host");
-			int port = Integer.parseInt (props.getProperty ("port"));
-			serverAddress = new InetSocketAddress(host, port);
-			clientSocket = new DatagramSocket();
-		}
-		
-		public void send (byte[] packet) throws IOException {
-			DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length);
-			datagramPacket.setSocketAddress(serverAddress);
-			clientSocket.send(datagramPacket);
-		}
-		
-		public byte[] receive() throws IOException {
-			byte[] buffer = new byte[64];
-			DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
-			clientSocket.receive(datagramPacket);
-			return Arrays.copyOf (buffer, datagramPacket.getLength());
-		}
-		
-		public void close () {
-			clientSocket.close();
-		}
-	}
-	
-	private class ServerReceiver extends Thread {
-		
-		private UdpSocketServer server;
-		public byte[] buffer;
-
-		public ServerReceiver (UdpSocketServer server) {
-			this.server = server;
-		}
-		
-		public void run () {
-			buffer = null;
-			try {
-				buffer = server.receiveDatagram();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private class ClientReceiver extends Thread {
-		
-		private UdpClient client;
-		public byte[] buffer;
-
-		public ClientReceiver (UdpClient client) {
-			this.client = client;
-		}
-		
-		public void run () {
-			buffer = null;
-			try {
-				buffer = client.receive();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+//	private class UdpClient {
+//		private InetSocketAddress serverAddress;
+//		private DatagramSocket clientSocket;
+//
+//		public UdpClient (Properties props) throws SocketException {
+//			String host = props.getProperty ("host");
+//			int port = Integer.parseInt (props.getProperty ("port"));
+//			serverAddress = new InetSocketAddress(host, port);
+//			clientSocket = new DatagramSocket();
+//		}
+//		
+//		public void send (byte[] packet) throws IOException {
+//			DatagramPacket datagramPacket = new DatagramPacket(packet, packet.length);
+//			datagramPacket.setSocketAddress(serverAddress);
+//			clientSocket.send(datagramPacket);
+//		}
+//		
+//		public byte[] receive() throws IOException {
+//			byte[] buffer = new byte[64];
+//			DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
+//			clientSocket.receive(datagramPacket);
+//			return Arrays.copyOf (buffer, datagramPacket.getLength());
+//		}
+//		
+//		public void close () {
+//			clientSocket.close();
+//		}
+//	}
+//	
+//	private class ServerReceiver extends Thread {
+//		
+//		private UdpSocketServer server;
+//		public byte[] buffer;
+//
+//		public ServerReceiver (UdpSocketServer server) {
+//			this.server = server;
+//		}
+//		
+//		public void run () {
+//			buffer = null;
+//			try {
+//				buffer = server.receiveDatagram();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+//	
+//	private class ClientReceiver extends Thread {
+//		
+//		private UdpClient client;
+//		public byte[] buffer;
+//
+//		public ClientReceiver (UdpClient client) {
+//			this.client = client;
+//		}
+//		
+//		public void run () {
+//			buffer = null;
+//			try {
+//				buffer = client.receive();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 }

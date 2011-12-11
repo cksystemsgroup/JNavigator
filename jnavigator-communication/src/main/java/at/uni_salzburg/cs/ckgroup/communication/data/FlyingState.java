@@ -1,8 +1,8 @@
 /*
- * @(#) IDataTransferObjectListener.java
+ * @(#) FlyingState.java
  *
  * This code is part of the JAviator project: javiator.cs.uni-salzburg.at
- * Copyright (c) 2009  Clemens Krainer
+ * Copyright (c) 2011  Clemens Krainer
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. 
  */
-package at.uni_salzburg.cs.ckgroup.communication;
+package at.uni_salzburg.cs.ckgroup.communication.data;
 
-import java.io.IOException;
-
-
-/**
- * This interface implements a listener for <code>IDataTransferObject</code> objects.
- * 
- * @author Clemens Krainer
- */
-public interface IDataTransferObjectListener {
-
-	/**
-	 * Receive a <code>IDataTransferObject</code>.
-	 * 
-	 * @param dto the <code>IDataTransferObject</code> to be received.
-	 * @throws IOException if an DTO can not be processed.
-	 */
-	public void receive (IDataTransferObject dto) throws IOException;
+public enum FlyingState {
+	NONE,
+	HELI_STATE_GROUND,
+	HELI_STATE_FLYING,
+	FREE_03,
+	HELI_STATE_SHUTDOWN
 }

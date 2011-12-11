@@ -39,5 +39,14 @@ public class CommunicationException extends IOException {
 	public CommunicationException(String message) {
 		super(message);
 	}
-
+	
+	/**
+	 * Construct a new <code>CommunicationException</code>.
+	 *  
+	 * @param message the message of the exception.
+	 * @param t the according throwable.
+	 */
+	public CommunicationException(String message, Throwable t) {
+		super(message, t);
+	}
 }

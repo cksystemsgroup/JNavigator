@@ -72,8 +72,8 @@ public class Packet {
 	public Packet (byte type, byte[] payload) throws IOException {
 		this.type = type;
 		this.payload = payload;
-		if (payload != null && payload.length > 127)
-			throw new IOException("Message too long. Only lengths up to 127 bytes are supported.");
+		if (payload != null && payload.length > 255)
+			throw new IOException("Message too long. Only lengths up to 127 bytes are supported. Requested lenght is " + payload.length);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class Packet {
 		for (int k=0; k < size; k++) {
 			ch = in.read();
 			if (ch < 0)
-				throw new IOException ("Premature end of InputStream at reading the payload.");
+				throw new IOException ("Premature end of InputStream at reading the payload. type=" + type + ", size=" + size + ", read=" + k);
 			payload[k] = (byte) ch;
 		}
 		

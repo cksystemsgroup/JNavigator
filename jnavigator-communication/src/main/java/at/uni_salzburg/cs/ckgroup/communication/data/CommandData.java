@@ -1,5 +1,5 @@
 /*
- * @(#) NavigationData.java
+ * @(#) CommandData.java
  *
  * This code is part of the JAviator project: javiator.cs.uni-salzburg.at
  * Copyright (c) 2009  Clemens Krainer
@@ -74,7 +74,7 @@ public class CommandData implements IDataTransferObject {
     private static final int payloadLength = 8;
     
     /**
-	 * Construct an <code>ActuatorData</code> object.
+	 * Construct an <code>CommandData</code> object.
 	 * 
 	 * @param roll the roll angle in degrees
 	 * @param pitch the pitch angle in degrees
@@ -89,7 +89,7 @@ public class CommandData implements IDataTransferObject {
     }
     
     /**
-     * Construct an <code>ActuatorData</code> object from a byte array.
+     * Construct an <code>CommandData</code> object from a byte array.
      * 
      * @param data the byte array that contains the data.
      */

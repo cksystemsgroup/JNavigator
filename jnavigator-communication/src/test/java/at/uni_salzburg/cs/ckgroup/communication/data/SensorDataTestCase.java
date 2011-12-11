@@ -37,9 +37,9 @@ public class SensorDataTestCase extends TestCase {
 	 * <code>SensorData</code> object and back into an array of bytes.
 	 */
 	public void testCase01() {
-		byte payload[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-				14, 15, 16, 17, 18,	19, 20, 21, 22, 23, 24, 25, 26,
-				27, 28, 29, 30, 31, 32, 33, 34, 35, 36,	37, 38 };
+		byte payload[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+				15, 16, 17, 18,	19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+				29, 30, 31, 32, 33, 34, 35, 36,	37, 38, 39, 40, 41, 42 };
 
 		try {
 			SensorData sd = new SensorData(payload);
@@ -60,9 +60,9 @@ public class SensorDataTestCase extends TestCase {
 	 * <code>SensorData</code> object.
 	 */
 	public void testCase02() {
-		byte payload[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-				14, 15, 16, 17, 18,	19, 20, 21, 22, 23, 24, 25, 26,
-				27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38 };
+		byte payload[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+				15, 16, 17, 18,	19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+				29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
 
 		try {
 			SensorData sd = new SensorData(payload);
@@ -141,7 +141,15 @@ public class SensorDataTestCase extends TestCase {
 			short ddz = (short) (sd.getDDz() / SensorData.ACCEL_FACTOR);
 			assertEquals("ddz HI", (byte) (ddz >> 8), payload[k++]);
 			assertEquals("ddz LO", (byte) (ddz & 0xFF), payload[k++]);
-			
+
+			short maps = (short) (sd.getMaps() / SensorData.MAPS_FACTOR);
+			assertEquals ("voltage HI", (byte) (maps >> 8), payload[k++]);
+			assertEquals ("voltage LO", (byte) (maps & 0xFF), payload[k++]);
+
+			short temp = (short) (sd.getTemp() / SensorData.TEMPERATURE_FACTOR);
+			assertEquals ("voltage HI", (byte) (temp >> 8), payload[k++]);
+			assertEquals ("voltage LO", (byte) (temp & 0xFF), payload[k++]);
+
 			short voltage = (short) (sd.getBattery() / SensorData.BATTERY_FACTOR);
 			assertEquals ("voltage HI", (byte) (voltage >> 8), payload[k++]);
 			assertEquals ("voltage LO", (byte) (voltage & 0xFF), payload[k++]);
@@ -164,7 +172,7 @@ public class SensorDataTestCase extends TestCase {
 			assertNull(sd);
 		} catch (CommunicationException e) {
 			assertEquals(
-					"Input data length of 4 is not equal to the expected length of 38 bytes",
+					"Input data length of 4 is not equal to the expected length of 42 bytes",
 					e.getMessage());
 		}
 	}
@@ -174,9 +182,9 @@ public class SensorDataTestCase extends TestCase {
 	 */
 	public void testCase04 () {
 		
-		byte payload[] = { 1, 2, 3, -4, 5, 6, -7, 8, -9, 10, 11, 12, 13,
-				-127, 15,	16,	-17, 18, 19, 20, 21, -22, 23, 127, -25, -26,
-				27, -28, -29, -30, 31, -32, 33, 34, -35, 36, -37, 38 };
+		byte payload[] = { 1, 2, 3, -4, 5, 6, -7, 8, -9, 10, 11, 12, 13, -127,
+				15,	16,	-17, 18, 19, 20, 21, -22, 23, 127, -25, -26, 27, -28,
+				-29, -30, 31, -32, 33, 34, -35, 36, -37, 38, -39, 40, -41, 42 };
 		
 		try {
 			SensorData ad = new SensorData (payload);
@@ -203,9 +211,9 @@ public class SensorDataTestCase extends TestCase {
 	 */
 	public void testCase05 () {
 		
-		byte payload[] = { 1, 2, 3, -4, 5, 6, -7, 8, -9, 10, 11, 12, 13,
-				-127, 15,	16,	-17, 18, 19, 20, 21, -22, 23, 127, -25, -26,
-				27, -28, -29, -30, 31, -32, 33, 34, -35, 36, -37, 38 };
+		byte payload[] = { 1, 2, 3, -4, 5, 6, -7, 8, -9, 10, 11, 12, 13, -127,
+				15,	16,	-17, 18, 19, 20, 21, -22, 23, 127, -25, -26, 27, -28,
+				-29, -30, 31, -32, 33, 34, -35, 36, -37, 38, -39, 40, -41, 42 };
 		
 		try {
 			SensorData ad = new SensorData (payload);
@@ -240,36 +248,41 @@ public class SensorDataTestCase extends TestCase {
 			short ddx =        (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
 			short ddy =        (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
 			short ddz =        (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
+			short maps =       (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
+			short temp =       (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
 			short battery =    (short) ((payload[k++] << 8) | (payload[k++] & 0xFF));
 
-			assertEquals (   roll * SensorData.ANGLE_FACTOR,     ad.getRoll (), 1E-9);
-			assertEquals (  pitch * SensorData.ANGLE_FACTOR,     ad.getPitch (), 1E-9);
-			assertEquals (    yaw * SensorData.ANGLE_FACTOR,     ad.getYaw (), 1E-9);
+			assertEquals (   roll * SensorData.ANGLE_FACTOR,       ad.getRoll (), 1E-9);
+			assertEquals (  pitch * SensorData.ANGLE_FACTOR,       ad.getPitch (), 1E-9);
+			assertEquals (    yaw * SensorData.ANGLE_FACTOR,       ad.getYaw (), 1E-9);
 
-			assertEquals (  dRoll * SensorData.ANG_RATE_FACTOR,  ad.getDRoll (), 1E-9);
-			assertEquals ( dPitch * SensorData.ANG_RATE_FACTOR,  ad.getDPitch (), 1E-9);
-			assertEquals (   dYaw * SensorData.ANG_RATE_FACTOR,  ad.getDYaw (), 1E-9);
+			assertEquals (  dRoll * SensorData.ANG_RATE_FACTOR,    ad.getDRoll (), 1E-9);
+			assertEquals ( dPitch * SensorData.ANG_RATE_FACTOR,    ad.getDPitch (), 1E-9);
+			assertEquals (   dYaw * SensorData.ANG_RATE_FACTOR,    ad.getDYaw (), 1E-9);
 
-			assertEquals ( ddRoll * SensorData.ANG_ACCEL_FACTOR, ad.getDDRoll (), 1E-9);
-			assertEquals (ddPitch * SensorData.ANG_ACCEL_FACTOR, ad.getDDPitch (), 1E-9);
-			assertEquals (  ddYaw * SensorData.ANG_ACCEL_FACTOR, ad.getDDYaw (), 1E-9);
+			assertEquals ( ddRoll * SensorData.ANG_ACCEL_FACTOR,   ad.getDDRoll (), 1E-9);
+			assertEquals (ddPitch * SensorData.ANG_ACCEL_FACTOR,   ad.getDDPitch (), 1E-9);
+			assertEquals (  ddYaw * SensorData.ANG_ACCEL_FACTOR,   ad.getDDYaw (), 1E-9);
 
-			assertEquals (      x * SensorData.LENGTH_FACTOR,    ad.getX (), 1E-9);
-			assertEquals (      y * SensorData.LENGTH_FACTOR,    ad.getY (), 1E-9);
-			assertEquals (      z * SensorData.LENGTH_FACTOR,    ad.getZ (), 1E-9);
+			assertEquals (      x * SensorData.LENGTH_FACTOR,      ad.getX (), 1E-9);
+			assertEquals (      y * SensorData.LENGTH_FACTOR,      ad.getY (), 1E-9);
+			assertEquals (      z * SensorData.LENGTH_FACTOR,      ad.getZ (), 1E-9);
 
-			assertEquals (     dx * SensorData.VELOCITY_FACTOR,  ad.getDx (), 1E-9);
-			assertEquals (     dy * SensorData.VELOCITY_FACTOR,  ad.getDy (), 1E-9);
-			assertEquals (     dz * SensorData.VELOCITY_FACTOR,  ad.getDz (), 1E-9);
+			assertEquals (     dx * SensorData.VELOCITY_FACTOR,    ad.getDx (), 1E-9);
+			assertEquals (     dy * SensorData.VELOCITY_FACTOR,    ad.getDy (), 1E-9);
+			assertEquals (     dz * SensorData.VELOCITY_FACTOR,    ad.getDz (), 1E-9);
 			
-			assertEquals (    ddx * SensorData.ACCEL_FACTOR,     ad.getDDx (), 1E-9);
-			assertEquals (    ddy * SensorData.ACCEL_FACTOR,     ad.getDDy (), 1E-9);
-			assertEquals (    ddz * SensorData.ACCEL_FACTOR,     ad.getDDz (), 1E-9);
+			assertEquals (    ddx * SensorData.ACCEL_FACTOR,       ad.getDDx (), 1E-9);
+			assertEquals (    ddy * SensorData.ACCEL_FACTOR,       ad.getDDy (), 1E-9);
+			assertEquals (    ddz * SensorData.ACCEL_FACTOR,       ad.getDDz (), 1E-9);
 
-			assertEquals (battery * SensorData.BATTERY_FACTOR,   ad.getBattery (), 1E-9);
+			assertEquals (   maps * SensorData.MAPS_FACTOR,        ad.getMaps (), 1E-9);
+			assertEquals (   temp * SensorData.TEMPERATURE_FACTOR, ad.getTemp (), 1E-9);
+			assertEquals (battery * SensorData.BATTERY_FACTOR,     ad.getBattery (), 1E-9);
 
-			assertEquals ("SensorData: roll=258, pitch=1020, yaw=1286, dRoll=-1784, dPitch=-2294, dYaw=2828, ddRoll=3457, ddPitch=3856, " +
-					"ddYaw=-4334, x=4884, y=5610, z=6015, dx=-6170, dy=7140, dz=-7198, ddx=8160, ddy=8482, ddz=-8924, battery=-9434", ad.toString ());
+			assertEquals ("SensorData: roll=258, pitch=1020, yaw=1286, dRoll=-1784, dPitch=-2294, dYaw=2828, ddRoll=3457, " +
+					"ddPitch=3856, ddYaw=-4334, x=4884, y=5610, z=6015, dx=-6170, dy=7140, dz=-7198, ddx=8160, ddy=8482, " +
+					"ddz=-8924, maps=-9434, temp=-9944, battery=-10454", ad.toString ());
 		} catch (CommunicationException e) {
 			e.printStackTrace();
 			fail ();

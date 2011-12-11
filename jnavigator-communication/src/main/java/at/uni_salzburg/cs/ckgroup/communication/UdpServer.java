@@ -33,7 +33,7 @@ import at.uni_salzburg.cs.ckgroup.io.UdpSocketServer;
  * 
  * @author Clemens Krainer
  */
-public class UdpServer extends UdpSocketServer implements ITransceiver {
+public class UdpServer extends UdpSocketServer implements ITransceiver, IDataTransferObjectForwarder {
 
 	/**
 	 * Forward received objects to this provider.
@@ -46,6 +46,11 @@ public class UdpServer extends UdpSocketServer implements ITransceiver {
 	private TransceiverAdapter adapter;
 	
 	/**
+	 * This server runs a receiving loop.
+	 */
+	boolean running = false;
+	
+	/**
 	 * Construct a <code>TcpServer</code>.
 	 * 
 	 * @param props the properties to be used for construction. 
@@ -55,7 +60,7 @@ public class UdpServer extends UdpSocketServer implements ITransceiver {
 	public UdpServer(Properties props) throws IOException, ConfigurationException {
 		super(props);
 		adapter = new TransceiverAdapter (props, this);
-		adapter.start();
+//		adapter.start();
 	}
 	
 	/**
@@ -81,6 +86,18 @@ public class UdpServer extends UdpSocketServer implements ITransceiver {
 		byte[] buffer = receiveDatagram ();
 		Packet packet = new Packet (new ByteArrayInputStream(buffer));
 		return packet;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		adapter.run();
+	}
+	
+	public void terminate() {
+		adapter.terminate();
+		close();
 	}
 	
 }

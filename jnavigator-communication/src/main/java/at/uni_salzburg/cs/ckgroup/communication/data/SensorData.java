@@ -37,9 +37,21 @@ public class SensorData implements IDataTransferObject {
 	public static final double LENGTH_FACTOR = 0.001;
 	public static final double VELOCITY_FACTOR = 0.01;
 	public static final double ACCEL_FACTOR = (double)9810 / 4681;
+	public static final double MAPS_FACTOR = 0.001;
+	public static final double TEMPERATURE_FACTOR = 0.001;
 	public static final double BATTERY_FACTOR = 0.001;
-	
 	public static final double ANGLE_FACTOR_NEW = 0.001;
+	
+	/* scaling constants */
+//	private static final double  FACTOR_EULER_ANGLE = 2000*Math.PI/65536.0;    /* [units] --> [mrad] (2*PI*1000 mrad/2^16) */
+//	private static final double  FACTOR_ANGULAR_VEL = 8500.0/32768.0;          /* [units] --> [mrad/s] */
+//	private static final double  FACTOR_ANGULAR_ACC = 8500.0/32768.0*76.3;     /* [units] --> [mrad/s^2] */
+//	private static final double  FACTOR_LINEAR_ACC  = 9810.0/4681.0;           /* [units] --> [mm/s^2] (4681=32768000/7000) */
+//	private static final double  FACTOR_BMU_MAPS    = 115000000.0/16777216.0;  /* [0-5V]  --> [115000000mPa] */
+//	private static final double  FACTOR_BMU_TEMP    = 10000.0/4096.0;          /* [0-1V]  --> [0-10000cC] */
+//	private static final double  FACTOR_BMU_BATT    = 18000.0/1024.0;          /* [0-5V]  --> [0-18000mV] */
+//	private static final double  FACTOR_SONAR       = 3000.0/1024.0;           /* [0-5V]  --> [0-3000mm] */
+//	private static final double  FACTOR_PARAMETER   = 0.001;                   /* [mrad]  --> [rad] */
 
 	/**
 	 * The current roll value.
@@ -130,6 +142,16 @@ public class SensorData implements IDataTransferObject {
 	 * The second derivative of the current Z value.
 	 */
 	private short ddz = 0;
+	
+	/**
+	 * BMU-specific data
+	 */
+	private short maps = 0;
+	
+	/**
+	 * BMU-specific data, temperature
+	 */
+	private short temp = 0;
 
 	/**
 	 * The accumulator battery voltage in mV.
@@ -139,7 +161,7 @@ public class SensorData implements IDataTransferObject {
 	/**
 	 * The length of this data transfer object in bytes when converted to a byte array.
 	 */
-	private static final int payloadLength = 38;
+	static final int payloadLength = 42;
 	
 	/**
 	 * Construct an empty <code>SensorData</code> data transfer object.
@@ -149,16 +171,42 @@ public class SensorData implements IDataTransferObject {
 	}
 	
 	/**
+	 * Construct an empty <code>SensorData</code> data transfer object from an <code>JaviatorData</code> data transfer object.
+	 */
+	public SensorData (JaviatorData jd) {
+		roll = (short)(1000.0 * jd.getRoll());
+		pitch = (short)(1000.0 * jd.getPitch());
+		yaw = (short)(1000.0 * jd.getYaw());
+		dRoll = (short)(1000.0 * jd.getDroll());
+		dPitch = (short)(1000.0 * jd.getDpitch());
+		dYaw = (short)(1000.0 * jd.getDyaw());
+		ddRoll = 0;
+		ddPitch = 0;
+		ddYaw = 0;
+		x = (short)(1000.0 * jd.getX_pos());
+		y = (short)(1000.0 * jd.getY_pos());
+		z = (short)(1000.0 * jd.getSonar() - 120);
+		dx = 0;
+		dy = 0;
+		dz = 0;
+		ddx = (short)(1000.0 * jd.getDdx());
+		ddy = (short)(1000.0 * jd.getDdy());
+		ddz = (short)(1000.0 * jd.getDdz());
+		maps = (short)(1000.0 * jd.getMaps());
+		temp = (short)(1000.0 * jd.getTemp());
+		battery = (short)(1000.0 * jd.getBatt());
+	}
+	
+	/**
 	 * Construct a <code>SensorData</code> data transfer object from a byte array.
 	 * 
 	 * @param data the byte array
 	 * @throws CommunicationException thrown in case of an incorrect length of the provided data.
 	 */
 	public SensorData (byte[] data) throws CommunicationException {
-
-		if (payloadLength != data.length)
+		if (payloadLength > data.length)
 			throw new CommunicationException ("Input data length of " + data.length +
-					" is not equal to the expected length of " + payloadLength + " bytes");
+					" is smaller than the expected length of " + payloadLength + " bytes");
 
 		int k = 0;
 		roll =       (short) ((data[k++] << 8) | (data[k++] & 0xFF));
@@ -179,6 +227,8 @@ public class SensorData implements IDataTransferObject {
 		ddx =        (short) ((data[k++] << 8) | (data[k++] & 0xFF));
 		ddy =        (short) ((data[k++] << 8) | (data[k++] & 0xFF));
 		ddz =        (short) ((data[k++] << 8) | (data[k++] & 0xFF));
+		maps =       (short) ((data[k++] << 8) | (data[k++] & 0xFF));
+		temp =       (short) ((data[k++] << 8) | (data[k++] & 0xFF));
 		battery =    (short) ((data[k++] << 8) | (data[k++] & 0xFF));
 	}
 
@@ -206,6 +256,8 @@ public class SensorData implements IDataTransferObject {
 		data[k++] = (byte) (ddx >> 8);			data[k++] = (byte) (ddx & 0xFF);
 		data[k++] = (byte) (ddy >> 8);			data[k++] = (byte) (ddy & 0xFF);
 		data[k++] = (byte) (ddz >> 8);			data[k++] = (byte) (ddz & 0xFF);
+		data[k++] = (byte) (maps >> 8);		    data[k++] = (byte) (maps & 0xFF);
+		data[k++] = (byte) (temp >> 8);		    data[k++] = (byte) (temp & 0xFF);
 		data[k++] = (byte) (battery >> 8);		data[k++] = (byte) (battery & 0xFF);
 		return data;
 	}
@@ -338,6 +390,20 @@ public class SensorData implements IDataTransferObject {
 	}
 
 	/**
+	 * @return the maps in meters
+	 */
+	public double getMaps() {
+		return maps * MAPS_FACTOR;
+	}
+
+	/**
+	 * @return the current temperature in degrees.
+	 */
+	public double getTemp() {
+		return temp * TEMPERATURE_FACTOR;
+	}
+
+	/**
 	 * @return the accumulator battery condition
 	 */
 	public double getBattery () {
@@ -367,28 +433,80 @@ public class SensorData implements IDataTransferObject {
 		buf.append(", ddx=").append(ddx);
 		buf.append(", ddy=").append(ddy);
 		buf.append(", ddz=").append(ddz);
+		buf.append(", maps=").append(maps);
+		buf.append(", temp=").append(temp);
 		buf.append(", battery=").append(battery);
 		return buf.toString();
 	}
 
-	public double getdRoll() {
-		return dRoll * ANGLE_FACTOR_NEW;
+
+
+	public double getDdx() {
+		return ddx * LENGTH_FACTOR;
 	}
 
+	public void setDdx(double ddx) {
+		this.ddx = (short) (ddx / LENGTH_FACTOR);
+	}
+
+	public double getDdy() {
+		return ddy * LENGTH_FACTOR;
+	}
+
+	public void setDdy(double ddy) {
+		this.ddy = (short) (ddy / LENGTH_FACTOR);
+	}
+
+	public double getDdz() {
+		return ddz * LENGTH_FACTOR;
+	}
+
+	public void setDdz(double ddz) {
+		this.ddz = (short) (ddz / LENGTH_FACTOR);
+	}
+
+	public void setX(double x) {
+		this.x = (short) (x / LENGTH_FACTOR);
+	}
+
+	public void setY(double y) {
+		this.y = (short) (y / LENGTH_FACTOR);
+	}
+
+	public void setZ(double z) {
+		this.z = (short) (z / LENGTH_FACTOR);
+	}
+
+	public void setDx(double dx) {
+		this.dx = (short) (dx / LENGTH_FACTOR);
+	}
+
+	public void setDy(double dy) {
+		this.dy = (short) (dy / LENGTH_FACTOR);
+	}
+
+	public void setDz(double dz) {
+		this.dz = (short) (dz / LENGTH_FACTOR);
+	}
+
+	public void setMaps(double maps) {
+		this.maps = (short) (maps / MAPS_FACTOR);
+	}
+
+	public void setTemp(double temp) {
+		this.temp = (short) (temp / TEMPERATURE_FACTOR);
+	}
+
+	public void setBattery(double battery) {
+		this.battery = (short) (battery / BATTERY_FACTOR);
+	}
+	
 	public void setdRoll(double dRoll) {
 		this.dRoll = (short) (dRoll / ANGLE_FACTOR_NEW);
 	}
 
-	public double getdPitch() {
-		return dPitch * ANGLE_FACTOR_NEW;
-	}
-
 	public void setdPitch(double dPitch) {
 		this.dPitch = (short) (dPitch / ANGLE_FACTOR_NEW);
-	}
-
-	public double getdYaw() {
-		return dYaw * ANGLE_FACTOR_NEW;
 	}
 
 	public void setdYaw(double dYaw) {
@@ -419,30 +537,6 @@ public class SensorData implements IDataTransferObject {
 		this.ddYaw = (short) (ddYaw / ANGLE_FACTOR_NEW);
 	}
 
-	public double getDdx() {
-		return ddx * LENGTH_FACTOR;
-	}
-
-	public void setDdx(double ddx) {
-		this.ddx = (short) (ddx / LENGTH_FACTOR);
-	}
-
-	public double getDdy() {
-		return ddy * LENGTH_FACTOR;
-	}
-
-	public void setDdy(double ddy) {
-		this.ddy = (short) (ddy / LENGTH_FACTOR);
-	}
-
-	public double getDdz() {
-		return ddz * LENGTH_FACTOR;
-	}
-
-	public void setDdz(double ddz) {
-		this.ddz = (short) (ddz / LENGTH_FACTOR);
-	}
-
 	public void setRoll(double roll) {
 		this.roll = (short) (roll / ANGLE_FACTOR_NEW);
 	}
@@ -455,31 +549,4 @@ public class SensorData implements IDataTransferObject {
 		this.yaw = (short) (yaw / ANGLE_FACTOR_NEW);
 	}
 
-	public void setX(double x) {
-		this.x = (short) (x / LENGTH_FACTOR);
-	}
-
-	public void setY(double y) {
-		this.y = (short) (y / LENGTH_FACTOR);
-	}
-
-	public void setZ(double z) {
-		this.z = (short) (z / LENGTH_FACTOR);
-	}
-
-	public void setDx(double dx) {
-		this.dx = (short) (dx / LENGTH_FACTOR);
-	}
-
-	public void setDy(double dy) {
-		this.dy = (short) (dy / LENGTH_FACTOR);
-	}
-
-	public void setDz(double dz) {
-		this.dz = (short) (dz / LENGTH_FACTOR);
-	}
-
-	public void setBattery(short battery) {
-		this.battery = battery;
-	}
 }

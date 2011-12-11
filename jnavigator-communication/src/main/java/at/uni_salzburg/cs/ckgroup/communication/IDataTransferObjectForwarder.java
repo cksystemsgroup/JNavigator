@@ -1,8 +1,8 @@
 /*
- * @(#) ITransceiver.java
+ * @(#) IDataTransferObjectForwarder.java
  *
  * This code is part of the JAviator project: javiator.cs.uni-salzburg.at
- * Copyright (c) 2009  Clemens Krainer
+ * Copyright (c) 20011  Clemens Krainer
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,36 +20,10 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication;
 
-import java.io.IOException;
+public interface IDataTransferObjectForwarder extends Runnable {
 
-/**
- * This interface covers the functionality of a transceiver. A transceiver
- * abstracts either a connection or packet oriented link to a resource. It
- * allows sending and receiving <code>Packet</code> objects without bothering
- * about the low level details of the accessed resource.
- * 
- * @author Clemens Krainer
- */
-public interface ITransceiver {
-
-	/**
-	 * Send a packet.
-	 * 
-	 * @param packet
-	 * @throws IOException thrown on I/O errors
-	 */
-	public void send (Packet packet) throws IOException;
+	public void setDtoProvider (IDataTransferObjectProvider dispatcher);
 	
-	/**
-	 * Receive a packet.
-	 * 
-	 * @return
-	 * @throws IOException thrown on I/O errors
-	 */
-	public Packet receive () throws IOException;
+	public void terminate();
 	
-	/**
-	 * Closes the underlying communication channels.
-	 */
-	public void close ();
 }

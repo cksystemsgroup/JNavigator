@@ -274,4 +274,16 @@ public class Transceiver implements ITransceiver {
 	IConnection getConnection () {
 		return connection;
 	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.communication.ITransceiver#close()
+	 */
+	public void close() {
+		try {
+			if (connection != null)
+				connection.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

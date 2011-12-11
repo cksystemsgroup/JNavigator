@@ -81,19 +81,27 @@ public class DatagramTransceiver implements ITransceiver {
 	 */
 	public void send(Packet packet) throws IOException {
 		byte[] ba = packet.toByteArray();
-		DatagramPacket datagramPacket = new DatagramPacket(ba, ba.length);
-		datagramPacket.setAddress(serverAddress.getAddress());
-		clientSocket.send(datagramPacket);
+		DatagramPacket datagramPacket = new DatagramPacket(ba, ba.length, serverAddress);
+		synchronized (this) {
+			clientSocket.send(datagramPacket);
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.communication.ITransceiver#receive()
 	 */
 	public Packet receive() throws IOException {
-		byte[] buffer = new byte[64];
+		byte[] buffer = new byte[256];
 		DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
 		clientSocket.receive(datagramPacket);
 		return new Packet (new ByteArrayInputStream (Arrays.copyOf (buffer, datagramPacket.getLength())));
+	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.communication.ITransceiver#close()
+	 */
+	public void close() {
+		clientSocket.close();
 	}
 
 }

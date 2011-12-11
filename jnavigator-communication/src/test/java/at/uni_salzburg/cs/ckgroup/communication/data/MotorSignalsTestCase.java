@@ -1,5 +1,5 @@
 /*
- * @(#) MotorSignals.java
+ * @(#) MotorSignalsTestCase.java
  *
  * This code is part of the JAviator project: javiator.cs.uni-salzburg.at
  * Copyright (c) 2009  Clemens Krainer
@@ -35,23 +35,18 @@ public class MotorSignalsTestCase extends TestCase {
 	 * the correct conversion.
 	 */
 	public void testCase01 () {
-	    double front = 29765;
-	    double right = 16261;
-	    double rear = 17027;
-	    double left = 22861;
+	    short front = 29765;
+	    short right = 16261;
+	    short rear = 17027;
+	    short left = 22861;
 	    short id = 739;
-
-	    short fr = (short) (front * MotorSignals.MOTOR_SIGNAL_FACTOR);
-	    short ri = (short) (right * MotorSignals.MOTOR_SIGNAL_FACTOR);
-	    short re = (short) (rear * MotorSignals.MOTOR_SIGNAL_FACTOR);
-	    short le = (short) (left * MotorSignals.MOTOR_SIGNAL_FACTOR);
 	    
 	    byte[] expected = new byte[] {
-    		(byte) (fr >> 8), (byte) (fr & 0xFF),
-    		(byte) (ri >> 8), (byte) (ri & 0xFF),
-    		(byte) (re >> 8), (byte) (re & 0xFF),
-    		(byte) (le >> 8), (byte) (le & 0xFF),
-    		(byte) (id >> 8), (byte) (id & 0xFF)
+    		(byte) (front >> 8), (byte) (front & 0xFF),
+    		(byte) (right >> 8), (byte) (right & 0xFF),
+    		(byte) (rear  >> 8), (byte) (rear  & 0xFF),
+    		(byte) (left  >> 8), (byte) (left  & 0xFF),
+    		(byte) (id    >> 8), (byte) (id    & 0xFF)
 	    }; 
 	    
 		MotorSignals ad = new MotorSignals (front, right, rear, left, id);
@@ -66,20 +61,20 @@ public class MotorSignalsTestCase extends TestCase {
 	 * the <code>toString()</code> method.
 	 */
 	public void testCase02 () {
-		MotorSignals ad = new MotorSignals (12, 34, 54, 90, (short)1111);
+		MotorSignals ad = new MotorSignals ((short)1245, (short)31123, (short)546, (short)9767, (short)1111);
 		String adString = ad.toString();
-		assertEquals ("MotorSignals: front=12, right=34, rear=54, left=90, id=1111", adString);
+		assertEquals ("MotorSignals: front=1245, right=31123, rear=546, left=9767, id=1111", adString);
 
-		ad = new MotorSignals (12345,-31034,354,900, (short)27);
+		ad = new MotorSignals ((short)12345, (short)(-31034), (short)354, (short)9621, (short)27);
 		adString = ad.toString();
-		assertEquals ("MotorSignals: front=12345, right=-31034, rear=354, left=900, id=27", adString);
+		assertEquals ("MotorSignals: front=12345, right=-31034, rear=354, left=9621, id=27", adString);
 	}
 	
 	/**
 	 * Verify the construction from byte arrays.
 	 */
 	public void testCase03 () {
-		MotorSignals ad = new MotorSignals (12345,-11034,354,900, (short)109);
+		MotorSignals ad = new MotorSignals ((short)12345, (short)(-11034), (short)354, (short)943, (short)109);
 		byte[] adData = ad.toByteArray();
 		System.out.println ("Expected: " + ad.toString());
 		
@@ -90,5 +85,32 @@ public class MotorSignalsTestCase extends TestCase {
 		assertEquals (adData.length, b.length);
 		for (int k=0; k < b.length; k++)
 			assertEquals ("result  Array index "+k, adData[k], b[k]);
+	}
+	
+	
+	/**
+	 * Verify the construction from byte arrays.
+	 */
+	public void testCase04 () {
+		int ofs = 11;
+		MotorSignals ad = new MotorSignals ((short)12345, (short)(-11034), (short)354, (short)943, (short)109);
+		byte[] adData = new byte[ad.toByteArray().length + ofs]; 
+		
+		int k=0;
+		while (k < ofs)
+			adData[k] = (byte)k++;
+		
+		for (byte b : ad.toByteArray())
+			adData[k++] = b;
+			
+		System.out.println ("Expected: " + ad.toString());
+		
+		MotorSignals ad2 = new MotorSignals (adData, ofs);
+		byte[] b = ad2.toByteArray();
+		System.out.println ("Result:   " + ad2.toString());
+		
+		assertEquals (adData.length-ofs, b.length);
+		for (int n=0; n < b.length; n++)
+			assertEquals ("result  Array index "+n, adData[n+ofs], b[n]);
 	}
 }

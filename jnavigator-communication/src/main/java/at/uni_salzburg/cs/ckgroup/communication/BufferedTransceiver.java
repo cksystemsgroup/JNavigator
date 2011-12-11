@@ -226,4 +226,11 @@ public class BufferedTransceiver implements ITransceiver {
 	public void terminate () {
 		running = false;
 	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.communication.ITransceiver#close()
+	 */
+	public void close() {
+		transceiver.close();
+	}
 }

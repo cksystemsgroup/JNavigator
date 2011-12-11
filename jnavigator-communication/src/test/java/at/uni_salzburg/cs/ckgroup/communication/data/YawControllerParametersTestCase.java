@@ -76,7 +76,7 @@ public class YawControllerParametersTestCase extends TestCase {
 		YawControllerParameters base = new YawControllerParameters (1, -1, 2, -2);
 
 		String actual = base.toString();
-		assertEquals ("YawControllerParameters: kProportional=1, kIntegral=-1, kDerivative=2, kSecondDerivative=-2", actual);
+		assertEquals ("YawControllerParameters: kProportional=1000, kIntegral=-1000, kDerivative=2000, kSecondDerivative=-2000", actual);
 	}
 	
 	/**

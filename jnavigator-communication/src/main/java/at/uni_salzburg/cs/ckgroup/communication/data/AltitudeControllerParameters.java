@@ -20,6 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication.data;
 
+import java.util.Properties;
+
 import at.uni_salzburg.cs.ckgroup.communication.CommunicationException;
 
 /**
@@ -30,6 +32,14 @@ import at.uni_salzburg.cs.ckgroup.communication.CommunicationException;
  */
 public class AltitudeControllerParameters extends ControllerParameters {
 
+	/**
+	 * @param props
+	 * @param prefix
+	 */
+	public AltitudeControllerParameters (Properties props, String prefix) {
+		super(props, prefix);
+	}
+	
 	/**
 	 * @param kProportional
 	 * @param kIntegral
