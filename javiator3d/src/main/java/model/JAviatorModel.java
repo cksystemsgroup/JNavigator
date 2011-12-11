@@ -35,6 +35,7 @@ package model;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.Hashtable;
 
 import javax.media.j3d.Appearance;
@@ -108,9 +109,9 @@ public class JAviatorModel extends BranchGroup implements Model
 
     private TransformGroup       frame2        = new TransformGroup( );
 
-    private String               filename      = "models/javiator5.3ds";
+    private static final String  filename      = "models/javiator5.3ds";
 
-    private String               prop_filename = "models/prop.3ds";
+    private static final String  prop_filename = "models/prop.3ds";
 
     private String               name;
 
@@ -180,8 +181,18 @@ public class JAviatorModel extends BranchGroup implements Model
             // path to find texture files
             loader.noTextures( ); // if you do not want to load textures
 
-            Scene theScene = loader.load( filename );
-            Scene theScene2 = loader.load( prop_filename );
+//            InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+//            Scene theScene = loader.load(new InputStreamReader(inStream));
+//            inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(prop_filename);
+//            Scene theScene2 = loader.load(new InputStreamReader(inStream));
+
+            URL url = Thread.currentThread().getContextClassLoader().getResource(filename);
+            Scene theScene = loader.load(url);
+            url = Thread.currentThread().getContextClassLoader().getResource(prop_filename);
+            Scene theScene2 = loader.load(url);
+            
+//            Scene theScene = loader.load( filename );
+//            Scene theScene2 = loader.load( prop_filename );
 
             Hashtable<String,TransformGroup> nameTable = theScene.getNamedObjects( );
             BranchGroup root = theScene.getSceneGroup( );

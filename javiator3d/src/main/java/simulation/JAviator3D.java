@@ -53,6 +53,10 @@ import model.JAviatorModel;
  */
 public class JAviator3D
 {
+	
+	private boolean oldControlTerminal = true;
+	
+	private static final float PI180TH = (float)(Math.PI/180.0);
 
     private static Scene  scene;
 
@@ -61,8 +65,12 @@ public class JAviator3D
     public JAviator3D( )
     {
     }
+    
+	public void setOldControlTerminal(boolean oldControlTerminal) {
+		this.oldControlTerminal = oldControlTerminal;
+	}
 
-    public void resetModel( )
+	public void resetModel( )
     {
         javiatorModel.moveModel( new Point3f( ) );
         javiatorModel.rotateModel( 0.0f, 0.0f, 0.0f );
@@ -73,12 +81,21 @@ public class JAviator3D
      
         float helicopterX, helicopterY, helicopterZ, helicopterRoll, helicopterPitch, helicopterYaw;
         
-        helicopterX = - y / 1000f;
-        helicopterY = z / 1000f;
-        helicopterZ = x /1000f;
-        helicopterRoll = - roll / 1000f;
-        helicopterPitch = pitch / 1000f;
-        helicopterYaw = yaw / 1000f;
+        if (oldControlTerminal) {
+	        helicopterX = - y / 1000f;
+	        helicopterY = z / 1000f;
+	        helicopterZ = x /1000f;
+	        helicopterRoll = - roll / 1000f;
+	        helicopterPitch = pitch / 1000f;
+	        helicopterYaw = yaw / 1000f;
+        } else {
+	        helicopterX = - y;
+	        helicopterY = z;
+	        helicopterZ = x;
+	        helicopterRoll = - roll * PI180TH;
+	        helicopterPitch = pitch * PI180TH;
+	        helicopterYaw = yaw * PI180TH;
+        }
         
         if( z > 0 )
         {
