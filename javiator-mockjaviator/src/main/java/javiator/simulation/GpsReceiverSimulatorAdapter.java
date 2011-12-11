@@ -23,11 +23,6 @@ package javiator.simulation;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
 import java.util.Properties;
 import java.util.Timer;
 
@@ -35,7 +30,7 @@ import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
-import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
@@ -74,7 +69,7 @@ import at.uni_salzburg.cs.ckgroup.simulation.GpsReceiverSimulator;
  * 
  * @author Clemens Krainer
  */
-public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener, IPositionProvider, Runnable
+public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransferObjectListener, IPositionProvider
 {	
 	private static final Logger LOG = Logger.getLogger(GpsReceiverSimulatorAdapter.class.getName());
 	
@@ -114,7 +109,12 @@ public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener,
 	/**
 	 * This buffer stores the <code>SensorData</code> object that drops in via the <code>ISensorDataListener</code> interface.
 	 */
-    private SensorData sensorData;
+//    private SensorData sensorData;
+    
+	/**
+	 * This buffer stores the <code>SimulationData</code> object that drops in via the <code>ISensorDataListener</code> interface.
+	 */
+    private SimulationData simulationData;
     
     /**
      * The current speed over ground in meters per second.
@@ -150,32 +150,33 @@ public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener,
 	 * This is the <code>OutputStream</code> for logging.
 	 */
 //	private PrintStream log = null;
-	
+
 	/**
 	 * Construct a <code>GpsReceiverSimulatorAdapter</code>.
 	 * 
 	 * @throws IOException
 	 */
-	public GpsReceiverSimulatorAdapter () throws IOException {
+	public GpsReceiverSimulatorAdapter (Properties props) throws IOException {
 		
-		System.out.println (System.getProperty("java.class.path"));
-		
-		String propertyFileName = System.getProperty (PROP_GPS_RECEIVER_SIMULATOR_PROPERTIES);
-		InputStream propsStream = null;
-		
-		if (propertyFileName == null) {
-			System.out.println ("Property " + PROP_GPS_RECEIVER_SIMULATOR_PROPERTIES + " not set, trying file name " + DEFAULT_PROPERTY_FILE_NAME + " in CLASSPATH");
-			propsStream = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (DEFAULT_PROPERTY_FILE_NAME);
-		} else {
-			propsStream = new FileInputStream (propertyFileName);
+		if (props == null) {
+			System.out.println (System.getProperty("java.class.path"));
+			
+			String propertyFileName = System.getProperty (PROP_GPS_RECEIVER_SIMULATOR_PROPERTIES);
+			InputStream propsStream = null;
+			
+			if (propertyFileName == null) {
+				System.out.println ("Property " + PROP_GPS_RECEIVER_SIMULATOR_PROPERTIES + " not set, trying file name " + DEFAULT_PROPERTY_FILE_NAME + " in CLASSPATH");
+				propsStream = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (DEFAULT_PROPERTY_FILE_NAME);
+			} else {
+				propsStream = new FileInputStream (propertyFileName);
+			}
+	
+			if (propsStream == null)
+				throw new NullPointerException ("Can not find default property file " + DEFAULT_PROPERTY_FILE_NAME);
+			
+			props = new Properties ();
+			props.load(propsStream);
 		}
-
-		if (propsStream == null)
-			throw new NullPointerException ("Can not find default property file " + DEFAULT_PROPERTY_FILE_NAME);
-		
-		Properties props = new Properties ();
-		props.load(propsStream);
-		
         double latitudeReference = Double.parseDouble (props.getProperty (PROP_REFERENCE_LATITUDE,"0"));
         double longitudeReference = Double.parseDouble (props.getProperty (PROP_REFERENCE_LONGITUDE,"0"));
         double altitudeReference = Double.parseDouble (props.getProperty (PROP_REFERENCE_ALTITUDE,"0"));
@@ -190,43 +191,60 @@ public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener,
         timer.schedule (gpsReceiverSimulator, 100, 100);
         
         int port = Integer.parseInt (props.getProperty(PROP_GPS_RECEIVER_SIMULATOR_PORT,"3333"));
-        socketServer = new SocketServerThread (port);
+        socketServer = new SocketServerThread (gpsReceiverSimulator, port);
 	}
 	
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#receive(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)
 	 */
 	public void receive(IDataTransferObject dto) throws IOException {
-		if (dto instanceof SensorData) {
-			sensorData =  (SensorData) dto;
-			double dX = sensorData.getDdRoll();
-			double dY = sensorData.getDdPitch();
+//		if (dto instanceof SensorData) {
+//			sensorData =  (SensorData) dto;
+//			double dX = sensorData.getDdRoll();
+//			double dY = sensorData.getDdPitch();
+//			
+//			speedOverGround = Math.sqrt(dX*dX + dY*dY);
+//			
+//			courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
+//			if (courseOverGround < 0)
+//				courseOverGround += 360;
+//			
+//			return;
+//		}
+		
+		if (dto instanceof SimulationData) {
+			simulationData = (SimulationData) dto;
+			double dX = simulationData.getDx();
+			double dY = simulationData.getDy();
 			
 			speedOverGround = Math.sqrt(dX*dX + dY*dY);
 			
 			courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
 			if (courseOverGround < 0)
 				courseOverGround += 360;
+			
+			return;
 		}
-		else
-			LOG.warn("Can not handle dto: " + dto);
+
+		LOG.warn("Can not handle dto: " + dto);
 	}
 
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getCurrentPosition()
 	 */
 	public PolarCoordinate getCurrentPosition () {
-		SensorData s = sensorData;
+//		SensorData s = sensorData;
+		SimulationData s = simulationData;
 		
 		if (s == null) {
 			if (LOG.isDebugEnabled())
-				LOG.debug ("getCurrentPosition: SensorData: none available yet.");
+				LOG.debug ("getCurrentPosition: SimulationData: none available yet.");
 			return null;
 		}
 		
 		PolarCoordinate r = geodeticSystem.walk (referencePosition, s.getX(), -s.getY(), s.getZ());
 		if (LOG.isDebugEnabled())
-			LOG.debug ("getCurrentPosition: Position " + r.toString() + " SensorData " + s.toString());
+			LOG.debug ("getCurrentPosition: Position " + r.toString() + " SimulationData " + s.toString());
 
 		return r;
 	}
@@ -251,135 +269,19 @@ public class GpsReceiverSimulatorAdapter implements IDataTransferObjectListener,
 	public void run() {
 		socketServer.run();
 	}
-
-    /**
-	 * This class implements the socket server thread. It opens a
-	 * <code>ServerSocket</code> at the specified port number and waits for
-	 * clients to connect. It is a <code>WorkingThread</code> that takes an
-	 * incoming connection and does the actual receiving and sending.
-	 */
-    private class SocketServerThread extends Thread
-    {
-		/**
-		 * If <code>active</code> equals to <code>true</code> the socket
-		 * server thread waits for incoming connections.
-		 */
-		private boolean active = true;
-		
-		/**
-		 * The TCP/IP port number of this server. 
-		 */
-		public int port;
-		
-		/**
-		 * The <code>ServerSocket</code> waiting for new connections.
-		 */
-		private ServerSocket serverSocket;
-		
-		/**
-		 * Construct a <code>SocketServerThread</code>
-		 * 
-		 * @param port the TCP/IP port number to listen to
-		 */
-		public SocketServerThread (int port)
-		{
-			this.port = port;
-		}
-		
-		/* (non-Javadoc)
-		 * @see java.lang.Thread#run()
-		 */
-		public void run ()
-		{
-	        System.out.println ("SocketServerThread: start. port=" + port);
 	
-	        try {
-	            serverSocket = new ServerSocket (port);
-	            System.out.println ("SocketServerThread: Server started");
-	
-	            while (active) {
-					Socket clientSocket = serverSocket.accept ();
-					
-					if (!active)
-						  break;
-					
-					WorkerThread worker = new WorkerThread (clientSocket);
-					worker.start ();
-	            }
-	        } catch (IOException e)
-	        {
-				e.printStackTrace();
-				try {
-					serverSocket.close ();
-	            } catch (IOException e1) {}
-	        }
-
-	        System.out.println ("SocketServerThread: end.");
-		}
-		
-		/**
-		 * Terminate the mail server thread.
-		 */
-//		public void terminate () {
-//			active = false;
-//			try {
-//            	serverSocket.close ();
-//            } catch (IOException e) {}
-//            yield ();
-//		}
-    }
-
-    /**
-	 * This class implements a socket server worker thread that inherits an
-	 * established connection. It is this class that sends the GPS data to a
-	 * TCP/IP client.
+	/**
+	 * Terminate the currently running server thread.
 	 */
-    private class WorkerThread extends Thread {
-    	
-        /**
-         * The inherited socket with an established connection.
-         */
-        private Socket socket;
+	public void terminate() {
+		socketServer.terminate();
+	}
 
-        /**
-		 * Constructor.
-		 * 
-		 * @param socket
-		 *            a socket containing an already established connection to a
-		 *            client.
-		 */
-    	public WorkerThread (Socket socket) {
-    		this.socket = socket;
-    	}
-    	
-        /* (non-Javadoc)
-         * @see java.lang.Thread#run()
-         */
-        public void run ()
-        {
-			System.out.println ("GPS receiver: New client connected, name=" + this.getName());
-			
-        	try {
-            	int ch;
-            	InputStream gpsReceiver = gpsReceiverSimulator.getInputStream();
-            	OutputStream sockOut = socket.getOutputStream(); 
-
-        		while ((ch = gpsReceiver.read()) > 0)
-        			sockOut.write(ch);
-
-            } catch (IOException e) {
-            	if (e instanceof SocketException && e.getMessage().equals("Broken pipe"))
-            		System.out.println ("GPS receiver: Client disconnected, name=" + this.getName());
-            	else
-            		e.printStackTrace();            		
-            }
-        	
-            try {
-              socket.close ();
-            } catch (IOException e) {}
-        }
-    	
-    }
-
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getGeodeticSystem()
+	 */
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
+	}
 	
 }

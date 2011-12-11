@@ -2,8 +2,10 @@
 package javiator.simulation;
 
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.JaviatorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
 
 /**
  * Abstracts the physical model so that different ones can be evaluated
@@ -31,6 +33,20 @@ public interface JAviatorPhysicalModel
 	 */
 	public SensorData getSensorData();
 
+	/**
+	 * Get the sensor values
+	 * 
+	 * @return the sensor values
+	 */
+	public JaviatorData getJaviatorData();
+	
+	/**
+	 * Get the simulation data values
+	 * 
+	 * @return the simulation data values
+	 */
+	public SimulationData getSimulationData();
+	
 	/**
 	 * Specify the motor speeds for the model
 	 * 

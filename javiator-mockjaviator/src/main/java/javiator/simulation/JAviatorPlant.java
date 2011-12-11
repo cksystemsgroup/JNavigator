@@ -38,10 +38,11 @@ package javiator.simulation;
 import java.util.Properties;
 import java.util.Random;
 
-import javiator.JControl.StateObserver;
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.JaviatorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
 
 /**
  * @author Daniel Iercan (daniel.iercan@aut.upt.ro)
@@ -61,10 +62,11 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
 	public static final String PROP_CONTROLLER_PERIOD = "controllerPeriod";
 	public static final String PROP_GRAVITY_THRUST = "gravity";
 	public static final String PROP_GRAVITATIONAL_ACCELERATION = "gravitationalAcceleration";
+	public static final String PROP_PLANT_MASS = "mass";
 	
     // plant constants
     public static double g;
-    public static final double m                   = 1.720;  // kg
+    public double m                   = 2.2;    // kg
     public static final double l                   = 0.34;   // m
     public static final double d                   = 0.0240; // meter - converts from Thrust to torque
     public static final double ThrusttoAngMomentum = 0.0;    // account for the gyroscopic effect of rotors
@@ -102,7 +104,8 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
     private Vector3D           omega;
     private Vector3D           omeganew;
     private Vector3D		   acceleration;
-    private Vector3D	       vb;
+    @SuppressWarnings("unused")
+	private Vector3D	       vb;
     private Vector3D           accelerationb;
     // computed quantities
     private Vector3D           Force;
@@ -128,10 +131,10 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
     private int                reportRate;
     private int                reportCounter;
 
-    StateObserver zObserver;
-    StateObserver yawObserver;
-    StateObserver pitchObserver;
-    StateObserver rollObserver;
+//    StateObserver zObserver;
+//    StateObserver yawObserver;
+//    StateObserver pitchObserver;
+//    StateObserver rollObserver;
     
 	private Random noise;
 
@@ -157,8 +160,10 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
 	private double gravityThrust;
 
 	/** Coefficients derived from gravity and dimensions */
-	public double coefficientZ, coefficientRoll, coefficientPitch,
-			coefficientYaw;
+	public double coefficientZ;
+//	public double coefficientRoll;
+//	public double coefficientPitch;
+//	public double coefficientYaw;
 
 	public JAviatorPlant(Properties properties) {
 		setProperties(properties);
@@ -194,10 +199,10 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
 		acceleration = new Vector3D();
 		vb = new Vector3D();
 		accelerationb = new Vector3D();
-		zObserver = new StateObserver(coefficientZ, controllerPeriod, 0.0, 0.0);
-		yawObserver = new StateObserver(coefficientYaw, controllerPeriod, 0.0, 0.0);
-		pitchObserver = new StateObserver(coefficientPitch, controllerPeriod, 0.0, 0.0);
-		rollObserver = new StateObserver(coefficientRoll, controllerPeriod,	0.0, 0.0);
+//		zObserver = new StateObserver(coefficientZ, controllerPeriod, 0.0, 0.0);
+//		yawObserver = new StateObserver(coefficientYaw, controllerPeriod, 0.0, 0.0);
+//		pitchObserver = new StateObserver(coefficientPitch, controllerPeriod, 0.0, 0.0);
+//		rollObserver = new StateObserver(coefficientRoll, controllerPeriod,	0.0, 0.0);
 		
 		noise = new Random(1);
     }
@@ -224,11 +229,12 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
     	controllerPeriod = Double.parseDouble(properties.getProperty(PROP_CONTROLLER_PERIOD, "0.020"));
     	gravityThrust = Double.parseDouble(properties.getProperty(PROP_GRAVITY_THRUST, "1360.0"));
     	g = Double.parseDouble(properties.getProperty(PROP_GRAVITATIONAL_ACCELERATION, "9.8"));
-    	
-		coefficientZ = g*1000/gravityThrust;
-	    coefficientRoll = coefficientZ/effectiveXLength;
-	    coefficientPitch = coefficientZ/effectiveYLength;
-	    coefficientYaw = coefficientZ/effectiveZLength;
+    	m = Double.parseDouble(properties.getProperty(PROP_PLANT_MASS, "1.720"));
+    			
+		coefficientZ = g/gravityThrust;
+//	    coefficientRoll = 1000*coefficientZ/effectiveXLength;
+//	    coefficientPitch = 1000*coefficientZ/effectiveYLength;
+//	    coefficientYaw = 1000*coefficientZ/effectiveZLength;
     	
 		Ixx	= effectiveXLength*m*l;//  = 0.0187 Kg-m^2
 		Iyy = effectiveYLength*m*l;//  = 0.0187 Kg-m^2
@@ -249,10 +255,10 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
         Vector3D gravity = new Vector3D( 0.0, 0.0, -m * g );
 
         double t = controllerPeriod;
-        zObserver.setInitialValues(z*1000.0, dz*1000.0);
-        yawObserver.setInitialValues(yaw*1000.0, dyaw*1000.0);
-        pitchObserver.setInitialValues(pitch*1000.0, dpitch*1000.0);
-        rollObserver.setInitialValues(roll*1000.0, droll*1000.0);
+//        zObserver.setInitialValues(z*1000.0, dz*1000.0);
+//        yawObserver.setInitialValues(yaw*1000.0, dyaw*1000.0);
+//        pitchObserver.setInitialValues(pitch*1000.0, dpitch*1000.0);
+//        rollObserver.setInitialValues(roll*1000.0, droll*1000.0);
         
 		while (t < Te) {
 
@@ -328,24 +334,11 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
         //	dyaw is the component of omega along body z-axis
 		dyaw = omegabody.v[2];
         
-        if (reportRate > 0) {
-        	if (reportCounter == reportRate) {
-	        	System.out.println( "roll = " + roll + "  pitch = " + pitch + "  yaw = " + yaw + "  z = " + z + "  dz = " + dz );
-	        	System.out.println("x =  "+x.v[0]+"  dx=  "+v.v[0]+"  y=  "+x.v[1]+"  dy=  "+v.v[1]);
-	        	System.out.println("T1=  "+tFront+"  T2=  "+tLeft+"  T3=  "+tRear+"  T4=  "+tRight);
-	        	if (z > 0) {
-		        	double[] zObserved = zObserver.updateObserver(z, (tFront+tLeft+tRear+tRight)
-		        		*1000.0*Math.cos(pitch/1000.0)*Math.cos(roll/1000.0)/(coefficientZ*m)-gravityThrust);
-		        	System.out.println("real observed z: "+1000.0*z+"  "+1000.0*dz+"  "+zObserved[0]+"  "+zObserved[1]);
-		        	double[] yawObserved = yawObserver.updateObserver(yaw, (tFront-tLeft+tRear-tRight)*1000.0/(coefficientZ*m));
-		        	System.out.println("real observed yaw: "+1000.0*yaw+"  "+1000.0*dyaw+"  "+yawObserved[0]+"  "+yawObserved[1]);
-		        	double[] pitchObserved = pitchObserver.updateObserver(pitch, (tRear-tFront)*1000.0/(coefficientZ*m));
-		        	System.out.println("real observed pitch: "+1000.0*pitch+"  "+1000.0*dpitch+"  "+pitchObserved[0]+"  "+pitchObserved[1]);
-		        	double[] rollObserved = rollObserver.updateObserver(roll, (tLeft-tRight)*1000.0/(coefficientZ*m));
-		        	System.out.println("real observed roll: "+1000.0*roll+"  "+1000.0*droll+"  "+rollObserved[0]+"  "+rollObserved[1]);
-	        	}
-	        	reportCounter = 0;
-        	}
+        if (reportRate > 0 && reportCounter++ == reportRate) {
+        	System.out.println( "roll = " + roll + "  pitch = " + pitch + "  yaw = " + yaw + "  z = " + z + "  dz = " + dz );
+        	System.out.println("x =  "+x.v[0]+"  dx=  "+v.v[0]+"  y=  "+x.v[1]+"  dy=  "+v.v[1]);
+        	System.out.println("T1=  "+tFront+"  T2=  "+tLeft+"  T3=  "+tRear+"  T4=  "+tRight);
+	       	reportCounter = 0;
         }
     }
 
@@ -384,11 +377,75 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
     }
     
 
+	public JaviatorData getJaviatorData() {
+    	JaviatorData javiatorData = new JaviatorData();
+    	javiatorData.setRoll(roll);
+    	javiatorData.setPitch(pitch);
+    	javiatorData.setYaw(-yaw);
+
+    	javiatorData.setDroll(droll);
+    	javiatorData.setDpitch(dpitch);
+    	javiatorData.setDyaw(-dyaw);
+
+//    	s.setDdRoll(v.v[0]);	// Hack to get this through the SensorData for the GPS simulator
+//    	s.setDdPitch(v.v[1]);	// Hack to get this through the SensorData for the GPS simulator
+//    	s.setDdYaw(0);
+    	
+        javiatorData.setX_pos(x.v[0]);
+        javiatorData.setY_pos(x.v[1]);
+//		s.setDx(v.v[0]);
+//		s.setDy(v.v[1]);
+        javiatorData.setDdx(accelerationb.v[0]);
+        javiatorData.setDdy(accelerationb.v[1]);
+
+      	if(z_correction_flag)
+      		javiatorData.setSonar((z+sonar_position*Math.sin(pitch)+z_offset)/(Math.cos(pitch)*Math.cos(roll)) - z_offset);
+      	else
+      		javiatorData.setSonar(z);
+      	
+//    	s.setDz(dz);    	
+        javiatorData.setDdz(accelerationb.v[2]+g);
+        javiatorData.setMaps(10.123333);
+    	javiatorData.setBatt(13.2);
+    	javiatorData.setTemp(20.7);
+    	javiatorData.setState(JaviatorData.ST_NEW_DATA_BMU | JaviatorData.ST_NEW_DATA_SONAR | JaviatorData.ST_NEW_DATA_POS_X | JaviatorData.ST_NEW_DATA_POS_Y);
+		return javiatorData;
+	}
+
+	public SimulationData getSimulationData() {
+		SimulationData s = new SimulationData();
+    	s.setRoll(roll);
+    	s.setPitch(pitch);
+    	s.setYaw(yaw);
+
+    	s.setdRoll(droll);
+    	s.setdPitch(dpitch);
+    	s.setdYaw(dyaw);
+		
+//    	s.setDdPitch(ddPitch);
+//    	s.setDdRoll(ddRoll);
+//		s.setDdYaw(ddYaw);
+		
+        s.setX(x.v[0]);
+        s.setY(x.v[1]);
+        s.setZ(x.v[2]);
+        
+		s.setDx(v.v[0]);
+		s.setDy(v.v[1]);
+		s.setDz(v.v[2]);
+		
+        s.setDdx(accelerationb.v[0]);
+        s.setDdy(accelerationb.v[1]);
+        s.setDdz(accelerationb.v[2]);
+        
+		return s;
+	}
+
 //    public static double thrust2N(short thrust, double coefficientZ){
 //    	return percent_to_thrust(thrust, coefficientZ)/1000.0;
 //    }
     
-    private static int percent_to_thrust( double percent, double coefficientZ)
+    private int percent_to_thrust( double percent, double coefficientZ)
     {
         int thrust = (int)(percent * coefficientZ * m );
         return thrust > 0 ? thrust : 0 ;
@@ -396,26 +453,16 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
 
     public void setMotorSignals ( MotorSignals actuator )
     {
-    	double cz = coefficientZ;
-		tFront = percent_to_thrust(actuator.getFront(), cz);
-		tLeft = percent_to_thrust(actuator.getLeft(), cz);
-		tRear = percent_to_thrust(actuator.getRear(), cz);
-		tRight = percent_to_thrust(actuator.getRight(), cz);
+		tFront = percent_to_thrust(actuator.getFront(), coefficientZ);
+		tLeft = percent_to_thrust(actuator.getLeft(), coefficientZ);
+		tRear = percent_to_thrust(actuator.getRear(), coefficientZ);
+		tRight = percent_to_thrust(actuator.getRight(), coefficientZ);
     	
     	if (noiseFlag) {
     		tFront += Math.round (noise.nextFloat() * noiseFactor);
     		tLeft +=  Math.round (noise.nextFloat() * noiseFactor);
     		tRear +=  Math.round (noise.nextFloat() * noiseFactor);
     		tRight += Math.round (noise.nextFloat() * noiseFactor);
-		}
-    	
-		if (reportRate > 0) {
-			reportCounter++;
-			if (reportCounter == reportRate)
-				System.out.println("actuator.front=  " + actuator.getFront()
-						+ "  left=  " + actuator.getLeft() + "  rear=  "
-						+ actuator.getRear() + "  right=  "
-						+ actuator.getRight());
 		}
 	}
 
@@ -434,5 +481,7 @@ public final class JAviatorPlant implements JAviatorPhysicalModel
     {
         // As this is a real simulation and not a fake one, we ignore this data
     }
+
+
 
 }

@@ -32,14 +32,16 @@ import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
-import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.WGS84;
 import at.uni_salzburg.cs.ckgroup.io.IConnection;
 import at.uni_salzburg.cs.ckgroup.io.TcpSocketServer;
 
-public class LocationMessageSimulatorAdapter implements IDataTransferObjectListener, IPositionProvider, Runnable
+public class LocationMessageSimulatorAdapter extends Thread implements IDataTransferObjectListener, IPositionProvider
 {
 	private static final Logger LOG = Logger.getLogger(LocationMessageSimulatorAdapter.class.getName());
 	
@@ -84,7 +86,12 @@ public class LocationMessageSimulatorAdapter implements IDataTransferObjectListe
 	/**
 	 * This buffer stores the <code>SensorData</code> object that drops in via the <code>ISensorDataListener</code> interface.
 	 */
-    private SensorData sensorData;
+//    private SensorData sensorData;
+    
+	/**
+	 * This buffer stores the <code>SimulationData</code> object that drops in via the <code>ISensorDataListener</code> interface.
+	 */
+    private SimulationData simulationData;
     
     /**
      * The current speed over ground in meters per second.
@@ -117,31 +124,36 @@ public class LocationMessageSimulatorAdapter implements IDataTransferObjectListe
 	 */
 	private double referenceOrientation;
 	
-
+	/**
+	 * The currently used geodetic system. 
+	 */
+	private IGeodeticSystem geodeticSystem = new WGS84();
+	
 	/**
 	 * Construct a <code>LocationMessageSimulatorAdapter</code>.
 	 * 
 	 * @param properties
 	 * @throws IOException
 	 */
-	public LocationMessageSimulatorAdapter () throws IOException {
+	public LocationMessageSimulatorAdapter (Properties props) throws IOException {
 		
-		String propertyFileName = System.getProperty (PROP_LOCATION_MESSAGE_SIMULATOR_PROPERTIES);
-		InputStream propsStream = null;
-		
-		if (propertyFileName == null) {
-			System.out.println ("Property " + PROP_LOCATION_MESSAGE_SIMULATOR_PROPERTIES + " not set, trying file name " + DEFAULT_PROPERTY_FILE_NAME + " in CLASSPATH");
-			propsStream = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (DEFAULT_PROPERTY_FILE_NAME);
-		} else {
-			propsStream = new FileInputStream (propertyFileName);
+		if (props == null) {
+			String propertyFileName = System.getProperty (PROP_LOCATION_MESSAGE_SIMULATOR_PROPERTIES);
+			InputStream propsStream = null;
+			
+			if (propertyFileName == null) {
+				System.out.println ("Property " + PROP_LOCATION_MESSAGE_SIMULATOR_PROPERTIES + " not set, trying file name " + DEFAULT_PROPERTY_FILE_NAME + " in CLASSPATH");
+				propsStream = Thread.currentThread ().getContextClassLoader ().getResourceAsStream (DEFAULT_PROPERTY_FILE_NAME);
+			} else {
+				propsStream = new FileInputStream (propertyFileName);
+			}
+	
+			if (propsStream == null)
+				throw new NullPointerException ("Can not find default property file " + DEFAULT_PROPERTY_FILE_NAME);
+			
+			props = new Properties ();
+			props.load(propsStream);
 		}
-
-		if (propsStream == null)
-			throw new NullPointerException ("Can not find default property file " + DEFAULT_PROPERTY_FILE_NAME);
-		
-		Properties props = new Properties ();
-		props.load(propsStream);
-		
         double referenceX = Double.parseDouble (props.getProperty (PROP_REFERENCE_X,"0"));
         double referenceY = Double.parseDouble (props.getProperty (PROP_REFERENCE_Y,"0"));
         double referenceZ = Double.parseDouble (props.getProperty (PROP_REFERENCE_Z,"0"));
@@ -162,27 +174,36 @@ public class LocationMessageSimulatorAdapter implements IDataTransferObjectListe
 	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#receive(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)
 	 */
 	public void receive(IDataTransferObject dto) throws IOException {
-		if (dto instanceof SensorData) {
-			sensorData =  (SensorData) dto;
-			double dX = sensorData.getDdRoll();
-			double dY = sensorData.getDdPitch();
+		
+		if (dto instanceof SimulationData) {
+			simulationData = (SimulationData) dto;
+			double dX = simulationData.getDx();
+			double dY = simulationData.getDy();
 			
 			speedOverGround = Math.sqrt(dX*dX + dY*dY);
 			
 			courseOverGround = Math.toDegrees (Math.atan2 (dY, -dX));
 			if (courseOverGround < 0)
 				courseOverGround += 360;
+			
+			return;
 		}
-		else
-			LOG.warn("Can not handle dto: " + dto);
+
+		LOG.warn("Can not handle dto: " + dto);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getCourseOverGround()
+	 */
 	public Double getCourseOverGround() {
 		return new Double (courseOverGround);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getCurrentPosition()
+	 */
 	public PolarCoordinate getCurrentPosition() {
-		SensorData s = sensorData;
+		SimulationData s = simulationData;
 		
 		if (s == null) {
 			if (LOG.isDebugEnabled())
@@ -197,11 +218,21 @@ public class LocationMessageSimulatorAdapter implements IDataTransferObjectListe
 		return new PolarCoordinate (r.x, r.y, r.z);
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getSpeedOverGround()
+	 */
 	public Double getSpeedOverGround() {
 		return new Double (speedOverGround);
 	}
-
 	
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.course.IPositionProvider#getGeodeticSystem()
+	 */
+	public IGeodeticSystem getGeodeticSystem() {
+		return geodeticSystem;
+	}
+
+
 	private class SocketServerThread extends TcpSocketServer {
 
 		public SocketServerThread (Properties props) throws IOException {
@@ -220,6 +251,13 @@ public class LocationMessageSimulatorAdapter implements IDataTransferObjectListe
 	 */
 	public void run() {
 		socketServer.run();
+	}
+	
+	/**
+	 * Terminate the currently running server thread.
+	 */
+	public void terminate() {
+		socketServer.terminate();
 	}
 	
     /**

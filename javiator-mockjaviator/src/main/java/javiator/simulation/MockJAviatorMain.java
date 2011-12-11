@@ -23,11 +23,16 @@ package javiator.simulation;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
+import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
 import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
 import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
 public class MockJAviatorMain {
+	
+	private static final Logger LOG = Logger.getLogger(MockJAviatorMain.class);
 	
 	public static final String PROP_SIMULATE_GPS_RECEIVER = "simulate.gps";
 	public static final String PROP_SIMULATE_UBISENSE_RECEIVER = "simulate.ubisense";
@@ -40,18 +45,23 @@ public class MockJAviatorMain {
 	 */
 	public static void main(String[] args) throws IOException, InstantiationException {
 		
+		LOG.info("Starting MockJAviator");
+		
 		Properties props = PropertyUtils.loadProperties("MockJAviator.properties");
 		MockJAviator m = new MockJAviator(props);
 		
 		if (props.getProperty(PROP_SIMULATE_GPS_RECEIVER, "true").equals("true")) {
-			GpsReceiverSimulatorAdapter grsa = new GpsReceiverSimulatorAdapter();
-			new Thread(grsa).start();
-			m.addDataTransferObjectListener(grsa, SensorData.class);
+			LOG.info("Activating GPS receiver simulator.");
+			GpsReceiverSimulatorAdapter grsa = new GpsReceiverSimulatorAdapter(null);
+			grsa.start();
+//			m.addDataTransferObjectListener(grsa, SensorData.class);
+			m.addDataTransferObjectListener(grsa, SimulationData.class);
 		}
 
 		if (props.getProperty(PROP_SIMULATE_UBISENSE_RECEIVER, "false").equals("true")) {
-			LocationMessageSimulatorAdapter lmsa = new LocationMessageSimulatorAdapter();
-			new Thread(lmsa).start();
+			LOG.info("Activating Ubisense receiver simulator.");
+			LocationMessageSimulatorAdapter lmsa = new LocationMessageSimulatorAdapter(null);
+			lmsa.start();
 			m.addDataTransferObjectListener(lmsa, SensorData.class);
 		}
 		
