@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
 	<artifactId>jnavigator-io-native</artifactId>
 	<packaging>pom</packaging>
 
