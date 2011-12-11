@@ -1,0 +1,32 @@
+clem@zoot:~/new-jnavigator-workspace/JNavigator/javiator-c-code/gumstix/src> ./control -t 14 -j localhost:9879
+connecting to JAviator at host=localhost, port=9879
+loading configuration ... failed
+ERROR: could not open file control.cfg
+setting up JAviator port ... udp_socket_connect: UDP connecting to host=localhost, port=9879
+ok
+setting up Terminal port ... ok
+Ubisense disabled.
+setting up control loop
+starting control loop
+ERROR: connection to Terminal broken
+Connected to 127.0.0.1 36224
+parameter update: Idle Limit
+--> 8000
+parameter update: Roll/Pitch
+--> Kp: +1.700   Ki: +0.000   Kd: +0.700   Kdd: -0.070
+parameter update: Yaw
+--> Kp: +1.700   Ki: +0.000   Kd: +1.700   Kdd: +0.000
+parameter update: X/Y
+--> Kp: +0.000   Ki: +0.000   Kd: +0.000   Kdd: +0.000
+parameter update: Z
+--> Kp: +1.500   Ki: +0.000   Kd: -1.300   Kdd: +0.000
+State Switch...
+Loop Statistics:
+        to JAviator          51 us      max      204 us
+        from JAviator        11 us      max      146 us
+        from Terminal         1 us      max       46 us
+        to Terminal          11 us      max      169 us
+        control loop          7 us      max       41 us
+        sleep time        13912 us      max    17352 us
+        read time             0 us      max        0 us
+        complete loop        85 us      max      250 us
