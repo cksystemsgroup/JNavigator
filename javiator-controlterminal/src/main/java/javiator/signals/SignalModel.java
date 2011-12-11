@@ -147,7 +147,7 @@ public final class SignalModel extends MyPropertyChangeSupport {
         final double[] tmpArr = new double[array.size()];
         int i = 0;
 
-        Iterator it = array.iterator();
+        Iterator<Double> it = array.iterator();
         while (it.hasNext()) {
             tmpArr[i++] = ((Double) it.next()).doubleValue();
         }
@@ -155,14 +155,14 @@ public final class SignalModel extends MyPropertyChangeSupport {
         return tmpArr;
     }
 
-    public Iterator iterator() {
+    public Iterator<Double> iterator() {
         return array.iterator();
     }
 
     public synchronized void writeToFile(String pFileName) {
         try {
             PrintWriter out = new PrintWriter(new FileOutputStream(pFileName));
-            Iterator it = iterator();
+            Iterator<Double> it = iterator();
             while (it.hasNext()) {
                 out.write("" + ((Double) it.next()).doubleValue());
                 if (it.hasNext())
@@ -185,7 +185,7 @@ public final class SignalModel extends MyPropertyChangeSupport {
     
     public String toString(){
         String str="";
-        Iterator it = iterator();
+        Iterator<Double> it = iterator();
         while (it.hasNext()) {
             str+="" + ((Double) it.next()).doubleValue();
             if (it.hasNext())
