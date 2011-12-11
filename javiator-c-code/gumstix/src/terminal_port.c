@@ -180,6 +180,7 @@ static int process_data_packet( const comm_packet_t *packet )
             return javiator_port_forward( packet );
 
         case COMM_SWITCH_MODE:
+printf("COMM_SWITCH_MODE:\n");
             res = set_mode_switch( );
 			break;
 

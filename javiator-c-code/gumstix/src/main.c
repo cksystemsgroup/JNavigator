@@ -58,11 +58,40 @@
 #define TERMINAL_PORT       7000
 #define UBISENSE_PORT       9000
 #define CFG_FILENAME        "control.cfg"
+#define JAVIATOR_DEFAULT_PORT	9879
 
 static comm_channel_t       javiator_channel;
 static comm_channel_t       terminal_channel;
 static comm_channel_t       ubisense_channel;
 
+
+static int setup_socket_javiator_port (char *host, int port, int type)
+{
+    if (type == SOCK_UDP)
+		type = SOCK_UDP_CLIENT;
+
+    memset( &javiator_channel, 0, sizeof( javiator_channel ) );
+
+    if( socket_channel_create( &javiator_channel, type ) )
+    {
+        fprintf( stderr, "ERROR: unable to create javiator socket channel\n" );
+        return( -1 );
+    }
+
+    if( socket_channel_init( &javiator_channel, type, host, port ) )
+    {
+        fprintf( stderr, "ERROR: unable to initialize javiator socket channel\n" );
+        return( -1 );
+    }
+	
+    if( javiator_port_init( &javiator_channel ) )
+    {
+        fprintf( stderr, "ERROR: JAviator port not correctly initialized\n" );
+        return( -1 );
+    }
+
+    return( 0 );
+}
 
 static int setup_javiator_port( char *device, int baudrate )
 {
@@ -146,6 +175,7 @@ static void usage( char *binary )
             "\t -s        ... setup communication channel for receiving Ubisense data\n"
             "\t -t time   ... controller period in milliseconds\n"
             "\t -u        ... use TCP instead of UDP for ground communication\n"
+            "\t -j host:port ... attach to javiator via network\n"
             , binary );
 }
 
@@ -161,12 +191,15 @@ int main( int argc, char **argv )
     int    ctrl_gain  = REDUCED_CTRL_CMDS;
 	int    conn_type  = SOCK_UDP;
 	int    opt, fd;
+	char  *k;
+	char  *javiator_host = "localhost";
+	int    javiator_port = 0;
 
     memset( &javiator_channel, 0, sizeof( javiator_channel ) );
     memset( &terminal_channel, 0, sizeof( terminal_channel ) );
     memset( &ubisense_channel, 0, sizeof( ubisense_channel ) );
 
-	while( (opt = getopt( argc, argv, "chi:m:r:st:u" )) != -1 )
+	while( (opt = getopt( argc, argv, "chi:j:m:n:r:st:u" )) != -1 )
     {
 		switch( opt )
 		{
@@ -180,6 +213,22 @@ int main( int argc, char **argv )
 					fprintf( stderr, "ERROR: option '-i' requires a positive value\n" );
 					usage( argv[0] );
 					exit( 1 );
+				}
+				break;
+
+			case 'j':
+				if (optarg && strlen(optarg) > 1) {
+					javiator_host = strdup(optarg);
+					k = index(javiator_host,':');
+					javiator_port = 0;
+					if (k) {
+						*k++ = '\0';
+						javiator_port = atoi(k);
+					}
+					if (!javiator_port) {
+						javiator_port = JAVIATOR_DEFAULT_PORT;
+					}
+					fprintf (stderr, "connecting to JAviator at host=%s, port=%d\n", javiator_host, javiator_port);
 				}
 				break;
 
@@ -249,11 +298,20 @@ int main( int argc, char **argv )
 
     printf( "setting up JAviator port ... " );
 
-    if( setup_javiator_port( SERIAL_DEVICE, SERIAL_BAUDRATE ) )
-    {
-        printf( "failed\n" );
-        fprintf( stderr, "ERROR: could not setup the JAviator port\n" );
-        exit( 1 );
+    if (javiator_port) {
+        if (setup_socket_javiator_port (javiator_host, javiator_port, conn_type))
+        {
+            printf( "failed\n" );
+            fprintf( stderr, "ERROR: could not setup the JAviator network port\n" );
+            exit( 1 );
+        }
+    } else {
+        if( setup_javiator_port( SERIAL_DEVICE, SERIAL_BAUDRATE ) )
+        {
+            printf( "failed\n" );
+            fprintf( stderr, "ERROR: could not setup the JAviator port\n" );
+            exit( 1 );
+        }
     }
 
     printf( "ok\n" );
@@ -281,6 +339,8 @@ int main( int argc, char **argv )
         }
 
         printf( "ok\n" );
+    } else {
+        printf( "Ubisense disabled.\n" );
     }
 
     if( exec_loop )

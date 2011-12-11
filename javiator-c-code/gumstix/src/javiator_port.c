@@ -43,6 +43,7 @@ static javiator_sdat_t      javiator_data;
 #else
 static javiator_ldat_t      javiator_data;
 #endif
+static sensor_data_t	    sensor_data;
 static comm_channel_t *     comm_channel;
 static comm_packet_t        comm_packet;
 static char                 comm_packet_buf[ COMM_BUF_SIZE ];
@@ -63,10 +64,45 @@ static inline int parse_javiator_data( const comm_packet_t *packet )
     {
         fprintf( stderr, "WARNING: lost %u JAviator packet(s): received ID %u != local ID %u\n",
             (uint16_t)( local_id - javiator_data.id ), javiator_data.id, local_id );
+        local_id = javiator_data.id;
     }
 
     new_data = 1;
 
+    return( res );
+}
+
+static inline int parse_sensor_data( const comm_packet_t *packet )
+{
+    char buf[9];
+    int res = sensor_data_from_stream( &sensor_data, packet->payload, packet->size );
+
+    javiator_data.maps = 0;
+    javiator_data.temp = 0;
+    javiator_data.sonar = sensor_data.z;
+    javiator_data.batt = sensor_data.batt;
+    javiator_data.state = 0;
+    javiator_data.id = 0;
+    snprintf (buf, sizeof(buf), "%08d", sensor_data.x);
+    buf[8] = '\0';
+    memcpy (&javiator_data.x_pos, buf, sizeof(javiator_data.x_pos));
+    snprintf (buf, sizeof(buf), "%08d", sensor_data.y);
+    buf[8] = '\0';
+    memcpy (&javiator_data.y_pos, buf, sizeof(javiator_data.y_pos));
+
+#ifndef SHORT_JAVIATOR_DATA
+    javiator_data.roll = sensor_data.roll;
+    javiator_data.pitch = sensor_data.pitch;
+    javiator_data.yaw = sensor_data.yaw;
+    javiator_data.droll = sensor_data.droll;
+    javiator_data.dpitch = sensor_data.dpitch;
+    javiator_data.dyaw = sensor_data.dyaw;
+    javiator_data.ddx = sensor_data.ddx;
+    javiator_data.ddy = sensor_data.ddy;
+    javiator_data.ddz = sensor_data.ddz;
+#endif
+
+    new_data = 1;
     return( res );
 }
 
@@ -81,6 +117,9 @@ static int process_javiator_packet( const comm_packet_t *packet )
     {
         case COMM_JAVIATOR_DATA:
             return parse_javiator_data( packet );
+
+        case COMM_SENSOR_DATA:
+            return parse_sensor_data( packet );
 
         default:
             return terminal_port_forward( packet );

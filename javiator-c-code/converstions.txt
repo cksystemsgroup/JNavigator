@@ -1,0 +1,97 @@
+
+
+/* filter parameters */
+#define COF_MDIFF_POS           500                     /* [mm] maximum allowed position difference */
+#define COF_LIMIT_POS           2                       /* limit for counting position outliers */
+#define IIR_GAIN_LACC           0.2                     /* gain for linear accelerations */
+#define IIR_GAIN_RCMD           0.2                     /* gain for reference commands */
+#define AVG_SIZE_MAPS           1                       /* buffer size for pressure data */
+#define MED_SIZE_TEMP           15                      /* buffer size for temperature data */
+#define MED_SIZE_BATT           15                      /* buffer size for battery data */
+#define EKF_ATT_STD_E           0.01                    /* standard deviation Euler angle */
+#define EKF_ATT_STD_W           10                      /* standard deviation angular velocity */
+#define EKF_ATT_PH_SH           1                       /* estimation phase shift by 1 period */
+#define EKF_POS_STD_P           0.01                    /* standard deviation position data */
+#define EKF_POS_STD_V           100                     /* standard deviation linear velocity */
+#define EKF_POS_STD_A           10000                   /* standard deviation linear acceleration */
+
+/* plant parameters */
+#define X_LASER_POS_X           70                      /* [mm] x-laser position on x-axis */
+#define X_LASER_POS_Y          -75                      /* [mm] x-laser position on y-axis */
+#define X_LASER_POS_Z          -80                      /* [mm] x-laser position on z-axis */
+#define Y_LASER_POS_X          -50                      /* [mm] y-laser position on x-axis */
+#define Y_LASER_POS_Y           77                      /* [mm] y-laser position on y-axis */
+#define Y_LASER_POS_Z          -80                      /* [mm] y-laser position on z-axis */
+#define Z_SONAR_POS_X          -95                      /* [mm] z-sonar position on x-axis */
+#define Z_SONAR_POS_Y          -95                      /* [mm] z-sonar position on y-axis */
+#define Z_SONAR_POS_Z           55                      /* [mm] z-sonar position on z-axis */
+#define EARTH_GRAVITY           9810                    /* [mm/s^2] gravitational acceleration */
+
+/* controller parameters */
+#define COMMAND_THRESHOLD       35                      /* [iterations] max iterations to wait */
+#define ROLL_PITCH_LIMIT        300                     /* [mrad] max allowed roll/pitch angle */
+#define OFFSET_TEMPERATURE      700                     /* [mC] temperature calibration */
+#define MOTOR_REVVING_STEP      50                      /* inc/dec for motor revving up/down */
+
+/* numerical constants */
+#define MRAD_PI                 (1000*M_PI)             /* PI in [rad] to PI in [mrad] */
+#define MRAD_2PI                (2000*M_PI)             /* 2*PI in [rad] to 2*PI in [mrad] */
+
+/* scaling constants */
+#define FACTOR_EULER_ANGLE      MRAD_2PI/65536.0        /* [units] --> [mrad] (2*PI*1000 mrad/2^16) */
+#define FACTOR_ANGULAR_VEL      8500.0/32768.0          /* [units] --> [mrad/s] */
+#define FACTOR_ANGULAR_ACC      8500.0/32768.0*76.3     /* [units] --> [mrad/s^2] */
+#define FACTOR_LINEAR_ACC       9810.0/4681.0           /* [units] --> [mm/s^2] (4681=32768000/7000) */
+#define FACTOR_BMU_MAPS         115000000.0/16777216.0  /* [0-5V]  --> [115000000mPa] */
+#define FACTOR_BMU_TEMP         10000.0/4096.0          /* [0-1V]  --> [0-10000cC] */
+#define FACTOR_BMU_BATT         18000.0/1024.0          /* [0-5V]  --> [0-18000mV] */
+#define FACTOR_SONAR            3000.0/1024.0           /* [0-5V]  --> [0-3000mm] */
+#define FACTOR_PARAMETER        0.001                   /* [mrad]  --> [rad] */
+
+
+
+    sensor_data.roll   = FACTOR_EULER_ANGLE * javiator_data.roll;
+    sensor_data.pitch  = FACTOR_EULER_ANGLE * javiator_data.pitch;
+    sensor_data.yaw    = FACTOR_EULER_ANGLE * javiator_data.yaw;
+
+    sensor_data.dx      = FACTOR_ANGULAR_VEL * javiator_data.droll;
+    sensor_data.dy      = FACTOR_ANGULAR_VEL * javiator_data.dpitch;
+    sensor_data.dz      = FACTOR_ANGULAR_VEL * javiator_data.dyaw;
+
+    sensor_data.droll   = rotate_body_to_earth_dRoll ( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+    sensor_data.dpitch  = rotate_body_to_earth_dPitch( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+    sensor_data.dyaw    = rotate_body_to_earth_dYaw  ( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+
+    sensor_data.ddroll  = FACTOR_ANGULAR_ACC * (sensor_data.droll  - sensor_data.ddroll);
+    sensor_data.ddpitch = FACTOR_ANGULAR_ACC * (sensor_data.dpitch - sensor_data.ddpitch);
+    sensor_data.ddyaw   = FACTOR_ANGULAR_ACC * (sensor_data.dyaw   - sensor_data.ddyaw);
+
+    sensor_data.dx      = FACTOR_LINEAR_ACC * javiator_data.ddx;
+    sensor_data.dy      = FACTOR_LINEAR_ACC * javiator_data.ddy;
+    sensor_data.dz      = FACTOR_LINEAR_ACC * javiator_data.ddz;
+
+    sensor_data.ddx     = rotate_body_to_earth_X( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+    sensor_data.ddy     = rotate_body_to_earth_Y( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+    sensor_data.ddz     = rotate_body_to_earth_Z( sensor_data.dx, sensor_data.dy, sensor_data.dz );
+
+    sensor_data.ddz    += EARTH_GRAVITY;
+    /* IMPORTANT: the Z-axis is pointing DOWNWARDS in the aircraft
+       coordinate system, hence the sign of ddZ must be changed */
+    sensor_data.ddz     = -sensor_data.ddz;
+
+    sensor_data.ddx     = iir_lp_filter_update( &iir_acc_x, sensor_data.ddx );
+    sensor_data.ddy     = iir_lp_filter_update( &iir_acc_y, sensor_data.ddy );
+    sensor_data.ddz     = iir_lp_filter_update( &iir_acc_z, sensor_data.ddz );
+
+        sensor_data.z = FACTOR_SONAR * javiator_data.sonar;
+        sensor_data.z = rotate_body_to_earth_Z( Z_SONAR_POS_X,
+            Z_SONAR_POS_Y, Z_SONAR_POS_Z + sensor_data.z );
+
+    last_scaled_yaw    = sensor_data.yaw;
+    sensor_data.yaw   += yaw_wn_imu * MRAD_2PI;
+
+    sensor_data.maps   = FACTOR_BMU_MAPS * javiator_data.maps;
+    sensor_data.temp   = FACTOR_BMU_TEMP * javiator_data.temp - OFFSET_TEMPERATURE;
+    sensor_data.batt   = FACTOR_BMU_BATT * javiator_data.batt;
+
+

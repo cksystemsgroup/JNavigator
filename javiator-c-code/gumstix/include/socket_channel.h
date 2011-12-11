@@ -33,8 +33,8 @@ typedef enum
 {
     SOCK_SERVER,
     SOCK_CLIENT,
-	SOCK_UDP
-
+    SOCK_UDP,
+    SOCK_UDP_CLIENT
 } socket_type_t;
 
 int tcp_socket_channel_create( comm_channel_t *channel ); 
@@ -59,6 +59,7 @@ int socket_channel_create( comm_channel_t *channel, socket_type_t type )
 			return tcp_socket_channel_create( channel );
 
 		case SOCK_UDP:
+		case SOCK_UDP_CLIENT:
 			return udp_socket_channel_create( channel );
 
 		default:
@@ -76,6 +77,7 @@ int socket_channel_init( comm_channel_t *channel, socket_type_t type, char *addr
 			return tcp_socket_channel_init( channel, type, addr, port );
 
 		case SOCK_UDP:
+		case SOCK_UDP_CLIENT:
 			return udp_socket_channel_init( channel, type, addr, port );
 
 		default:
@@ -93,6 +95,7 @@ int socket_channel_destroy( comm_channel_t *channel, socket_type_t type )
 			return tcp_socket_channel_destroy( channel );
 
 		case SOCK_UDP:
+		case SOCK_UDP_CLIENT:
 			return udp_socket_channel_destroy( channel );
 
 		default:

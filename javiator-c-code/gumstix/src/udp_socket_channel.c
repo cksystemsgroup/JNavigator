@@ -69,7 +69,36 @@ static inline udp_connection_t *udp_get_connection( const comm_channel_t *channe
 
 static inline void close_connection( udp_connection_t *uc )
 {
-	uc->connected = 0;
+    struct sockaddr_in sa;
+    uc->connected = 0;
+print_local_addr(uc->fd);
+#if 1
+    sa.sin_family = AF_UNSPEC;
+#else
+    sa.sin_family = AF_INET;
+#endif
+    sa.sin_port = htons(0);
+    sa.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (connect (uc->fd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
+        perror ("disconnect");
+print_local_addr(uc->fd);
+    printf ("Closing UDP connection\n");
+}
+
+void print_local_addr(int s)
+{
+    struct sockaddr_in localaddr;
+    socklen_t len = 0;
+    char temp[INET_ADDRSTRLEN];
+    
+    len = sizeof(localaddr);
+    if (getsockname(s, (struct sockaddr *)&localaddr, &len) != 0) {
+        perror("getsockname failed");
+    }
+    
+    inet_ntop(AF_INET, &localaddr.sin_addr, temp, INET_ADDRSTRLEN);
+    printf("Local binding: address=%s, port=%d\n",
+           temp, ntohs(localaddr.sin_port));
 }
 
 static inline int udp_write( int fd, const uint8_t *buf, int len )
@@ -177,7 +206,7 @@ static int udp_socket_transmit( comm_channel_t *channel, const char *buf, int le
 static int udp_connection_connect( udp_connection_t *uc, uint8_t *buf, int len )
 {
 	struct sockaddr_in clientinfo;
-	size_t addrlen = sizeof( clientinfo );
+	socklen_t addrlen = sizeof( clientinfo );
 	int    res = recvfrom( uc->fd, buf, len, 0, (struct sockaddr *) &clientinfo, &addrlen );
 
 	if( res > 0 )
@@ -304,6 +333,35 @@ static int udp_socket_init( udp_connection_t *uc, int port )
 	return( 0 );
 }
 
+static int udp_socket_connect( udp_connection_t *uc, char *addr, int port )
+{
+    struct sockaddr_in clientinfo;
+
+    uc->fd = socket( AF_INET, SOCK_DGRAM, 0 );
+
+    if( uc->fd < 0 )
+    {
+        perror( "udp recv socket" );
+        return( -1 );
+    }
+
+    clientinfo.sin_family = AF_INET;
+    inet_aton(addr, &clientinfo.sin_addr.s_addr);
+    clientinfo.sin_port = htons( (short) port );
+printf ("udp_socket_connect: UDP connecting to host=%s, port=%d\n", addr, port);
+
+    if( connect( uc->fd, (struct sockaddr *) &clientinfo, sizeof( clientinfo ) ) < 0 )
+    {
+        fprintf( stderr, "ERROR in %s %d: server bind\n",
+            __FILE__, __LINE__);
+        close( uc->fd );
+        return( -1 );
+    }
+
+    uc->connected = 1;
+    return( 0 );
+}
+
 int udp_socket_channel_create( comm_channel_t *channel )
 {
     udp_connection_t *uc;
@@ -343,6 +401,9 @@ int udp_socket_channel_init( comm_channel_t *channel, socket_type_t type, char *
     {
 		return( -1 );
 	}
+
+    if (type == SOCK_UDP_CLIENT)
+        return udp_socket_connect( uc, addr, port );
 
 	return udp_socket_init( uc, port );
 }

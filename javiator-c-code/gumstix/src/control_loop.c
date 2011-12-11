@@ -34,9 +34,11 @@
 #include "comm_channel.h"
 #include "protocol.h"
 #include "javiator_port.h"
+#include "inertial_port.h"
 #include "terminal_port.h"
 #include "ubisense_port.h"
 #include "javiator_data.h"
+#include "inertial_data.h"
 #include "sensor_data.h"
 #include "command_data.h"
 #include "ctrl_params.h"
@@ -173,6 +175,7 @@ static motor_signals_t          motor_signals;
 static motor_offsets_t          motor_offsets;
 static trace_data_t             trace_data;
 
+
 /* controller statistics */
 #define STAT_TO_JAV             0
 #define STAT_FROM_JAV           1
@@ -305,12 +308,14 @@ static int check_terminal_connection( void )
     return( 0 );
 }
 
+int krc_counter = 0;
 static int get_command_data( void )
 {
     static double last_command_yaw = 0;
 
     if( terminal_port_is_shut_down( ) )
     {
+	fprintf( stdout, "Shutdown...\n" );
         heli_state = HELI_STATE_SHUTDOWN;
         terminal_port_reset_shut_down( );
     }
@@ -368,11 +373,25 @@ static int get_command_data( void )
         last_command_yaw   = command_data.yaw;
         command_data.yaw  += yaw_wn_cmd * MRAD_2PI;
 
+#if 1
+	if (krc_counter++ > 200) {
+		printf("Command data unfiltered: roll=%d, pitch=%d, yaw=%d, z=%d\n",
+			(int)command_data.roll, (int)command_data.pitch, (int)command_data.yaw, (int)command_data.z);
+		krc_counter=0;
+        }
+#endif
         /* apply low-pass filters */
         command_data.roll  = iir_lp_filter_update( &iir_cmd_roll,  command_data.roll );
         command_data.pitch = iir_lp_filter_update( &iir_cmd_pitch, command_data.pitch );
         command_data.yaw   = iir_lp_filter_update( &iir_cmd_yaw,   command_data.yaw );
         command_data.z     = iir_lp_filter_update( &iir_cmd_z,     command_data.z );
+#if 0
+	if (krc_counter++ > 200) {
+		printf("Command data filtered:   roll=%d, pitch=%d, yaw=%d, z=%d\n",
+			(int)command_data.roll, (int)command_data.pitch, (int)command_data.yaw, (int)command_data.z);
+		krc_counter=0;
+        }
+#endif
     }
 
     if( terminal_port_is_mode_switch( ) )

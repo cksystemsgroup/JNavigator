@@ -30,6 +30,7 @@
 #include "communication.h"
 #include "javiator_data.h"
 #include "motor_signals.h"
+#include "inertial_data.h"
 
 //#define SHORT_JAVIATOR_DATA
 
