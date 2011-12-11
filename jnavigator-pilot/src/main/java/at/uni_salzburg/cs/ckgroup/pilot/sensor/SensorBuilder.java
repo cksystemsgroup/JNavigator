@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import at.uni_salzburg.cs.ckgroup.pilot.IVehicleBuilder;
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
@@ -35,9 +36,10 @@ public class SensorBuilder {
 	private List<String> configErrors = new ArrayList<String>();
 	private Map<String, AbstractSensor> sensors = new HashMap<String, AbstractSensor>();
 	private String workDir;
+	private IVehicleBuilder vehicleBuilder;
 	
-	private static final String FMT_UNKNOWN_URI_TYPE = "No driver available to handle URI '%s' of sensor '%s'.";
-	private static final String FMT_SENSOR_CONFIG_ERROR = "Sensor %s has configuration errors: %s";
+	private static final String FMT_UNKNOWN_URI_TYPE = "No driver available to handle URI '%1$s' of sensor '%2$s' (%3$s).";
+	private static final String FMT_SENSOR_CONFIG_ERROR = "Sensor %1$s has configuration errors: %2$s";
 	
 	public void createSensors (Properties conf) {
 		configOk = true;
@@ -56,14 +58,18 @@ public class SensorBuilder {
 			AbstractSensor sensor = null;
 			
 			try {
-				if (uri.startsWith("rand:")) {
+				if (uri.startsWith("gps:")) {
+					sensor = new GpsSensor(props, vehicleBuilder);
+				} else if (uri.startsWith("sonar:")) {
+					sensor = new SonarSensor(props, vehicleBuilder);
+				} else if (uri.startsWith("rand:")) {
 					sensor = new RandomSensor(props);
 				} else if (uri.startsWith("x11:") && type.equals("snapshot")) {
 					sensor = new X11Snapshot(props);
 				} else if (uri.startsWith("file:") && type.equals("video4linux")) {
 					sensor = new X11FrameGrabber(props);
 				} else {
-					configErrors.add(String.format(FMT_UNKNOWN_URI_TYPE, uri, name));
+					configErrors.add(String.format(FMT_UNKNOWN_URI_TYPE, uri, name, s));
 					configOk = false;
 				}
 				
@@ -96,4 +102,12 @@ public class SensorBuilder {
 	public void setWorkDir(String workDir) {
 		this.workDir = workDir;
 	}
+
+	/**
+	 * @param vehicleBuilder the current vehicle builder instance.
+	 */
+	public void setVehicleBuilder(IVehicleBuilder vehicleBuilder) {
+		this.vehicleBuilder = vehicleBuilder;
+	}
+	
 }

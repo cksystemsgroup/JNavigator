@@ -1,5 +1,5 @@
 /*
- * @(#) X11FrameGrabber.java
+ * @(#) SonarSensor.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -21,21 +21,30 @@
 package at.uni_salzburg.cs.ckgroup.pilot.sensor;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.Properties;
 
+import at.uni_salzburg.cs.ckgroup.pilot.IVehicleBuilder;
 import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
-public class X11FrameGrabber extends AbstractSensor {
+public class SonarSensor extends AbstractSensor {
+	
+	public static final String OUTPUT_FORMAT = "Altitude: %1$.4f";
+	
+	private IVehicleBuilder vehicleBuilder;
 
-	public X11FrameGrabber(Properties props) throws URISyntaxException, ConfigurationException {
+	public SonarSensor(Properties props, IVehicleBuilder vehicleBuilder) throws URISyntaxException, ConfigurationException {
 		super(props);
-		// TODO Auto-generated method stub
+		this.vehicleBuilder = vehicleBuilder;
 	}
 
 	@Override
 	public String getValue() {
-		// TODO Auto-generated method stub
-		return "X11FrameGrabber sensor not yet implemented.";
+		double v = 0;
+		if (vehicleBuilder != null && vehicleBuilder.getAutoPilot() != null) {
+			v = vehicleBuilder.getAutoPilot().getAltitudeOverGround();
+		}
+		return String.format(Locale.US, OUTPUT_FORMAT, v);
 	}
 
 }

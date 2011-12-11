@@ -42,7 +42,12 @@ public interface IConfiguration {
 	/**
 	 * @return the type of the location system as a <code>LocationSystemType</code> object.
 	 */
-	public LocationSystemType getLocationSystemType();
+	public String getLocationSystemType();
+
+	/**
+	 * @return the type of the location system as a <code>LocationSystemType</code> object.
+	 */
+	public String getPilotType();
 
 	/**
 	 * @return the location system listener as an <code>URI</code> object.

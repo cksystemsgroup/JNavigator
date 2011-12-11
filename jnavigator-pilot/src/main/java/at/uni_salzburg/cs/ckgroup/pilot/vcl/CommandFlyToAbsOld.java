@@ -26,15 +26,13 @@ import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
-public class CommandFlyToAbs implements ICommand {
+public class CommandFlyToAbsOld implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandFlyToAbs.class);
+	Logger LOG = Logger.getLogger(CommandFlyToAbsOld.class);
 	
 	public static final double MINIMUM_PRECISION = 0.1;
 	
-	public static final double MINIIMUM_VELOCITY = 0.2;
-	
-	public static final double MAXIMUM_VELOCITY = 4.0;
+	public static final double MAXIMUM_ACCELERATION = 1.0;
 	
 	public static final long CYCLE_TIME = 500;
 	
@@ -43,11 +41,10 @@ public class CommandFlyToAbs implements ICommand {
 	private double precision;
 	private boolean running = false;
 
-	public CommandFlyToAbs (double latitude, double longitude, double altitude, double precision, double velocity) {
+	public CommandFlyToAbsOld (double latitude, double longitude, double altitude, double precision, double velocity) {
 		coordinate = new PolarCoordinate(latitude, longitude, altitude);
-		this.velocity = velocity > 0 ? velocity : MINIIMUM_VELOCITY;
+		this.velocity = velocity > 0 ? velocity : 0.2;
 		this.precision = precision > MINIMUM_PRECISION ? precision : MINIMUM_PRECISION;
-		LOG.info("Constructor " + coordinate + ", velocity=" + this.velocity + "m/s, precision=" + this.precision + "m.");
 	}
 	
 	public PolarCoordinate getCoordinate() {
@@ -73,22 +70,45 @@ public class CommandFlyToAbs implements ICommand {
 		CartesianCoordinate motionVector = destinationCartesian.subtract (whereCartesian);
 		double distance = motionVector.norm();
 		
-		double totalTime = distance / velocity;
-		double vMax = 1.5 * velocity;
-		if (vMax > MAXIMUM_VELOCITY) {
-			LOG.info("Reducing maximum velocity from " + vMax + "m/s to " + MAXIMUM_VELOCITY + "m/s.");
-			vMax = MAXIMUM_VELOCITY;
-			totalTime = 1.5 * distance / vMax;
-		}
+		double time = distance / velocity;
+		double p = time / 2.0;
+		double q = velocity * time / MAXIMUM_ACCELERATION;
+		double tOne = p;
+		if (p*p > q)
+			tOne -= Math.sqrt(p*p -q);
+		double vMax = tOne * MAXIMUM_ACCELERATION;
+		double tTwo = time - tOne;
+		double s1 = 0, s2 = 0, s3 = 0;
 		
-		LOG.info("Parameters: time=" + totalTime + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
-		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s.");
+		LOG.info("Parameters: time=" + time + ", tOne=" + tOne + ", tTwo=" + tTwo + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
+		LOG.info("Flying from " + where + " to " + coordinate + " in " + time + "s.");
 		running = true;
-		while (running && now < start + 1000.0 * totalTime + CYCLE_TIME) {
+		boolean sect1 = false, sect2 = false, sect3 = false, sect4 = false;
+		while (running && now < start + 1000.0 * time + CYCLE_TIME) {
 			now = System.currentTimeMillis();
+			
 			double tFlight = (now - start) / 1000.0;
-			double s = 2.0 * vMax * tFlight * tFlight * (3.0 - 2.0 * tFlight / totalTime) / (3.0 * totalTime);
-			CartesianCoordinate differenceVector = motionVector.multiply(s/distance);
+
+			if (tFlight < tOne) {
+				s1 = tFlight * tFlight * MAXIMUM_ACCELERATION / 2.0;
+				if (!sect1) { LOG.info("Section 1 reached."); sect1 = true; }				
+			} else if (tFlight > tOne && tFlight < tTwo) {
+				s1 = tOne * tOne * MAXIMUM_ACCELERATION / 2.0;
+				s2 = vMax * (tFlight - tOne);
+				if (!sect2) { LOG.info("Section 2 reached."); sect2 = true; }
+			} else if (tFlight > tTwo && tFlight < time) {
+				s1 = tOne * tOne * MAXIMUM_ACCELERATION / 2.0;
+				s2 = (tFlight - 2*tOne) * vMax;
+				s3 = (tFlight - tTwo) * vMax - (tFlight - tTwo) * (tFlight - tTwo) * MAXIMUM_ACCELERATION / 2.0;
+				if (!sect3) { LOG.info("Section 3 reached."); sect3 = true; }
+			} else {
+				s1 = s3 = tOne * tOne * MAXIMUM_ACCELERATION / 2;
+				s2 = (time - 2*tOne) * vMax;
+				if (!sect4) { LOG.info("Section 4 reached."); sect4 = true; }
+			}
+				
+			CartesianCoordinate differenceVector = motionVector.multiply((s1+s2+s3)/distance);
+//			PolarCoordinate setCoursePosition = gs.walk(where, differenceVector.x, differenceVector.y, differenceVector.z);
 			CartesianCoordinate setCourseCartesian = whereCartesian.add(differenceVector);
 			PolarCoordinate setCoursePosition = gs.rectangularToPolarCoordinates(setCourseCartesian);
 			interpreter.setSetCoursePosition(setCoursePosition);
@@ -106,7 +126,6 @@ public class CommandFlyToAbs implements ICommand {
 			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
 		}
 		
-		try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
 		if (running)
 			LOG.info("Destination " + coordinate + " reached.");
 		else

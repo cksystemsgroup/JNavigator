@@ -23,6 +23,7 @@ package at.uni_salzburg.cs.ckgroup.pilot.sensor;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
@@ -35,7 +36,9 @@ public class X11Snapshot extends AbstractSensor {
 	Logger LOG = Logger.getLogger(X11Snapshot.class);
 	
 	private static final String ERR_INVALID_SCHEME = "Invalid scheme '%s', handling 'x11' displays only.";
-	private static final String ERR_WORKDIR_NOT_EXISTENT = "";
+	private static final String ERR_WORKDIR_NOT_EXISTENT = "Work directory '%s' does not exist!";
+	
+	private static final String ERR_IMAGE_PATH = "images/X11SnapshotError.png";
 	
 	private String display;
 
@@ -84,25 +87,29 @@ public class X11Snapshot extends AbstractSensor {
 					new String[] {"xwd","-display",display,"-root","-out",xwdFile.getAbsolutePath()}
 					);
 			
-			int rc = process.waitFor();
-			if (rc != 0)
-				LOG.error("xwd: rc=" + rc);
+			int xwdRc = process.waitFor();
+			if (xwdRc != 0)
+				LOG.error("xwd: rc=" + xwdRc);
 			
 			process = Runtime.getRuntime().exec(
 					new String[] {"convert",xwdFile.getAbsolutePath(),imgFile.getAbsolutePath()}
 					);
-			rc = process.waitFor();
-			if (rc != 0)
-				LOG.error("convert: rc=" + rc);
 			
-			if (imgFile.exists()) {
-				FileInputStream in = new FileInputStream(imgFile);
-				int c;
-				while ( (c = in.read()) >= 0 ) {
-					os.write(c);
-				}
-				in.close();
+			int convertRc = process.waitFor();
+			if (convertRc != 0)
+				LOG.error("convert: rc=" + convertRc);
+			
+			InputStream in;
+			if (imgFile.exists() && xwdRc == 0 && convertRc == 0)
+				in = new FileInputStream(imgFile);
+			else
+				in = Thread.currentThread().getContextClassLoader().getResourceAsStream(ERR_IMAGE_PATH);
+			
+			int c;
+			while ( (c = in.read()) >= 0 ) {
+				os.write(c);
 			}
+			in.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

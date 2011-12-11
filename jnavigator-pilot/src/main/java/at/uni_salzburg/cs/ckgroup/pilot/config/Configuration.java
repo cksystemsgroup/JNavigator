@@ -42,6 +42,8 @@ public class Configuration implements IConfiguration {
 	
 	public static final String PLANT_CONFIG_TEMPLATE_FORMAT = "plant/%s-config.vm";
 	public static final String CONTROLLER_CONFIG_TEMPLATE_FORMAT = "controller/%s-config.vm";
+	public static final String LOCATION_SYS_CONFIG_TEMPLATE_FORMAT = "location/%s-config.vm";
+	public static final String PILOT_CONFIG_TEMPLATE_FORMAT = "pilot/%s-config.vm";
 	
 	/**
 	 * The uploaded configuration.
@@ -81,6 +83,7 @@ public class Configuration implements IConfiguration {
 	public static final String PROP_CONTROLLER_TYPE = "controller.type";
 	public static final String PROP_CONTROLLER_SIMULATED = "controller.simulated";
 	
+	public static final String PROP_PILOT_TYPE = "pilot.type";
 	public static final String PROP_PILOT_CONTROLLER_CONNECTOR = "pilot.controller.connector";
 	public static final String PROP_PILOT_NAME = "pilot.name";
 	public static final String PROP_PILOT_FGFS_UPDATE = "pilot.fgfs.update";
@@ -107,6 +110,7 @@ public class Configuration implements IConfiguration {
 		{ PROP_CONTROLLER_TYPE, "external" },
 		{ PROP_CONTROLLER_SIMULATED, "false" },
 		        
+		{ PROP_PILOT_TYPE },
 		{ PROP_PILOT_CONTROLLER_CONNECTOR },
 		{ PROP_PILOT_NAME },
 		
@@ -138,7 +142,12 @@ public class Configuration implements IConfiguration {
 	/**
 	 * The type of location system.
 	 */
-	private LocationSystemType locationSystemType;
+	private String locationSystemType;
+	
+	/**
+	 * The type of pilot.
+	 */
+	private String pilotType;
 	
 	/**
 	 * The configured listener of the location system. 
@@ -210,18 +219,21 @@ public class Configuration implements IConfiguration {
 				configOk = false;
 		}
 		
-		plantType = parsePlantType(PROP_PLANT_TYPE);
+		plantType = parseTemplate(PROP_PLANT_TYPE, PLANT_CONFIG_TEMPLATE_FORMAT);
 		plantListener = parseURI(PROP_PLANT_LISTENER);
 		plantSimulated = parseBool(PROP_PLANT_SIMULATED);
-		locationSystemType = parseLocSys(PROP_PLANT_LOCATION_SYSTEM_TYPE);
+		
+		locationSystemType = parseTemplate(PROP_PLANT_LOCATION_SYSTEM_TYPE, LOCATION_SYS_CONFIG_TEMPLATE_FORMAT);
 		locationSystemListener = parseURI(PROP_PLANT_LOCATION_SYSTEM_LISTENER);   
 		locationSystemUpdateRate = parseInt(PROP_PLANT_LOCATION_SYSTEM_UPDATE_RATE);
-		controllerType = parseControllerType(PROP_CONTROLLER_TYPE);
+		
+		controllerType = parseTemplate(PROP_CONTROLLER_TYPE, CONTROLLER_CONFIG_TEMPLATE_FORMAT);
 		controllerSimulated = parseBool(PROP_CONTROLLER_SIMULATED);
+		
+		pilotType = parseString(PROP_PILOT_TYPE);
 		pilotControllerConnector = parseURI(PROP_PILOT_CONTROLLER_CONNECTOR);
 		pilotName = parseString(PROP_PILOT_NAME);
 		fsfsUpdate = parseBool(PROP_PILOT_FGFS_UPDATE);
-
 		fgfsConnector = fsfsUpdate ? parseURI(PROP_PILOT_FGFS_CONNECTOR) : null;;
 		flightSimulatorType = fsfsUpdate ? getFightSim(PROP_PILOT_FGFS_TYPE) : null;
 		
@@ -244,27 +256,13 @@ public class Configuration implements IConfiguration {
 	}
 	
 	/**
-	 * @param param the property to be parsed. 
-	 * @return the parsed plant type as a <code>String</code> object.
-	 */
-	private String parsePlantType (String param) {
-		String p =  parseString (param);
-		String res = String.format(PLANT_CONFIG_TEMPLATE_FORMAT, p);
-		URL u = Thread.currentThread().getContextClassLoader().getResource(res);
-		if (u == null) {
-			configErrors.put(param, ERROR_MESSAGE_UNKNOWN_TYPE);
-			configOk = false;
-		}
-		return p;
-	}
-	
-	/**
 	 * @param param the property to be parsed.
-	 * @return the parsed controller type as a <code>String</code> object.
+	 * @param template the requested file name template. 
+	 * @return the parsed property as a <code>String</code> object.
 	 */
-	private String parseControllerType (String param) {
+	private String parseTemplate (String param, String template) {
 		String p =  parseString (param);
-		String res = String.format(CONTROLLER_CONFIG_TEMPLATE_FORMAT, p);
+		String res = String.format(template, p);
 		URL u = Thread.currentThread().getContextClassLoader().getResource(res);
 		if (u == null) {
 			configErrors.put(param, ERROR_MESSAGE_UNKNOWN_TYPE);
@@ -321,22 +319,7 @@ public class Configuration implements IConfiguration {
 		}
 		return i;
 	}
-	
-	/**
-	 * @param param the property to be parsed.
-	 * @return the parsed property as a <code>LocationSystemType</code> object.
-	 */
-	private LocationSystemType parseLocSys(String param) {
-		LocationSystemType t = LocationSystemType.NONE;
-		try {
-			t = LocationSystemType.valueOf(conf.getProperty(param));
-		} catch (Throwable e) {
-			configErrors.put(param, param);
-			configOk = false;
-		}
-		return t;
-	}
-	
+
 	/**
 	 * @param param the property to be parsed.
 	 * @return the parsed property as a <code>FlightSimulatorType</code> object.
@@ -413,10 +396,17 @@ public class Configuration implements IConfiguration {
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration#getLocationSystemType()
 	 */
-	public LocationSystemType getLocationSystemType() {
+	public String getLocationSystemType() {
 		return locationSystemType;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration#getPilotType()
+	 */
+	public String getPilotType() {
+		return pilotType;
+	}
+	
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration#getLocationSystemListener()
 	 */
@@ -492,5 +482,13 @@ public class Configuration implements IConfiguration {
 	 */
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
+	}
+	
+	/**
+	 * @param key the system property key of interest.
+	 * @return the value of the required property.
+	 */
+	public String getSystemProperty(String key) {
+		return System.getProperty(key);
 	}
 }

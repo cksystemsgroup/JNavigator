@@ -21,7 +21,6 @@
 package at.uni_salzburg.cs.ckgroup.pilot.sensor;
 
 import java.net.URISyntaxException;
-import java.util.Formatter;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -55,17 +54,23 @@ public class RandomSensor extends AbstractSensor {
 		lowerLimit = Float.parseFloat(ds[1].trim());
 		upperLimit = Float.parseFloat(ds[2].trim());
 		precision = Integer.parseInt(props.getProperty(PROP_PRECISION,"5"));
+		if (precision < 0)
+			precision = 0;
 	}
 	
 	@Override
 	public String getValue () {
 		float f = (float) (lowerLimit + Math.random() * (upperLimit - lowerLimit));
-		Formatter form = new Formatter();
-				
-		if (precision == 0)
-			return form.format(Locale.US, "%d", (int)f).toString();
+//		Formatter form = new Formatter();
+//				
+//		if (precision == 0)
+//			return form.format(Locale.US, "%d", (int)f).toString();
+//		
+//		return form.format(Locale.US, "%."+precision+"f", f).toString();
+//		if (precision == 0)
+//			return String.format(Locale.US, "%d", (int)f);
 		
-		return form.format(Locale.US, "%."+precision+"f", f).toString();
+		return String.format(Locale.US, "%."+precision+"f", f);
 	}
 
 }

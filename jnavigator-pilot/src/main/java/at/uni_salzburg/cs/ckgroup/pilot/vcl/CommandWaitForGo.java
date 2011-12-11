@@ -20,6 +20,36 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-public class CommandWaitForGo implements ICommand {
+import org.apache.log4j.Logger;
 
+
+public class CommandWaitForGo implements ICommand {
+	
+	Logger LOG = Logger.getLogger(CommandWaitForGo.class);
+	
+	boolean running = false;
+	boolean forcedTermination = false;
+
+	public void execute(IInterpreter interpreter) {
+		LOG.info("Waiting for take off clearance.");
+		running = true;
+		while (running && !interpreter.isClearanceForTakeOffGranted()) {
+			try { Thread.sleep(500); } catch (InterruptedException e) { }
+		}
+		running = false;
+		if (!forcedTermination)
+			LOG.info("Clearance for take off has been granted.");
+	}
+
+	public void terminate() {
+		LOG.info("Forced termination");
+		forcedTermination = true;
+		running = false;
+	}
+
+	public void waitForTermination() {
+		// intentionally empty
+		LOG.info("waitForTermination() not implemented.");
+		running = false;
+	}
 }

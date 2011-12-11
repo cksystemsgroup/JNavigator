@@ -22,12 +22,29 @@ package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.IOException;
 
+import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 
 public interface IVehicleBuilder {
 	
+	/**
+	 * @param configuration the current configuration.
+	 * @throws IOException thrown in case of I/O errors.
+	 */
 	public void setConfig (Configuration configuration) throws IOException;
 	
-	public void destroy();
+	/**
+	 * @return the currently used position provider.
+	 */
+	public IPositionProvider getPositionProvider();
 	
+	/**
+	 * @return the currently used autopilot.
+	 */
+	public IAutoPilot getAutoPilot();
+	
+	/**
+	 * Destroy the currently configured vehicle.
+	 */
+	public void destroy();
 }

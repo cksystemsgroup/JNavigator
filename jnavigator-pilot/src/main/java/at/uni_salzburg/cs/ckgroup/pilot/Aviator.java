@@ -22,16 +22,26 @@ package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import at.uni_salzburg.cs.ckgroup.ConfigurationException;
+import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
+import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.course.VehicleStatus;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandGoManual;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandLand;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.Interpreter;
 import at.uni_salzburg.cs.ckgroup.pilot.vcl.Parser;
 
 /**
  * This class is responsible for navigating the vehicle.
  */
-public class Aviator implements IAviator {
+public class Aviator implements IAviator, ISetCourseSupplier {
 	
 	Logger LOG = Logger.getLogger(Aviator.class);
 	
@@ -41,14 +51,18 @@ public class Aviator implements IAviator {
 	private Parser parser = new Parser();
 	
 	/**
-	 * This variable is true if the currently loaded VCL script is executed. 
+	 * The current VCL interpreter.
 	 */
-	private boolean vclExecutionActive = false;
-	
+	private Interpreter interpreter = new Interpreter();
+
 	/**
-	 * This variable contains the currently executed VCL script line. 
+	 * The current vehicle builder.
 	 */
-	private int currentCommandLine = -1;
+	private IVehicleBuilder vehicleBuilder;
+	
+	public Aviator () {
+		LOG.info("Constructor.");
+	}
 	
 	/**
 	 * Load a VCL script from an <code>InputStream</code> and parse it.
@@ -57,7 +71,10 @@ public class Aviator implements IAviator {
 	 * @throws IOException thrown in case of errors.
 	 */
 	public void loadVclScript (InputStream inStream) throws IOException {
+		LOG.info("Loading new VCL script.");
 		parser.parse(inStream);
+		if (interpreter.isExecuting() && parser.isScriptOk())
+			interpreter.loadCommandSequence(parser.getScript(), true);
 	}
 
 	/**
@@ -93,36 +110,75 @@ public class Aviator implements IAviator {
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.IAviator#start()
 	 */
 	public void start() {
-		// TODO Auto-generated method stub
-		LOG.error("Starting autonomous flights is not yet implemented.");
-		vclExecutionActive = true;
-		
-		// TODO implement
-		currentCommandLine = 6;
+		LOG.error("Starting autonomous flight.");
+		interpreter = new Interpreter();
+		interpreter.loadCommandSequence(parser.getScript(), false);
+		interpreter.setPositionProvider(vehicleBuilder.getPositionProvider());
+		interpreter.setAutoPilot(vehicleBuilder.getAutoPilot());
+		interpreter.start();
 	}
 
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.IAviator#stop()
 	 */
 	public void stop() {
-		// TODO Auto-generated method stub
-		LOG.error("Stopping autonomous flights is not yet implemented.");
-		vclExecutionActive = false;
+		LOG.error("Stopping autonomous flight.");
+		List<ICommand> land = new ArrayList<ICommand>();
+		land.add(new CommandLand());
+		land.add(new CommandGoManual());
+		interpreter.loadCommandSequence(land, true);
+		while (interpreter.isExecuting() && !interpreter.isIdle()) {
+			LOG.error("Waiting for the vehicle to land.");
+			try { Thread.sleep(2000); } catch (InterruptedException e) { }
+		}
+		vehicleBuilder.getAutoPilot().setAutoPilotFlight(false);
+		LOG.error("Autonomous flight stopped.");
+		interpreter.terminate();
 	}
 
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.IAviator#isVclExecuted()
 	 */
-	public boolean isVclExecuted() {
-		return vclExecutionActive;
+	public boolean isVclExecutionActive() {
+		return interpreter.isExecuting();
 	}
 
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.pilot.IAviator#getCurrentVclCommandLine()
 	 */
 	public int getCurrentVclCommandLine() {
+		return isVclExecutionActive() ? interpreter.getProgramCounter() : -1;
+	}
+
+	public VehicleStatus getSetCoursePosition(long time) {
+		PolarCoordinate position = interpreter.getSetCoursePosition();
+		VehicleStatus s = new VehicleStatus(position, 0, 0, 0, 0);
+		return s;
+	}
+
+	public IGeodeticSystem getGeodeticSystem() {
+		return interpreter.getGeodeticSystem();
+	}
+
+	public VehicleStatus[] getSetCourseData() {
 		// TODO Auto-generated method stub
-		return vclExecutionActive ? currentCommandLine : -1;
+		LOG.error("Aviator.getSetCourseData() not yet implemented.");
+		return null;
+	}
+
+	public long[] getTimeTable() {
+		// TODO Auto-generated method stub
+		LOG.error("Aviator.getTimeTable() not yet implemented.");
+		return null;
+	}
+
+	public void loadSetCourse(InputStream courseData) throws ConfigurationException, IOException {
+		// TODO Auto-generated method stub
+		LOG.error("Aviator.loadSetCourse() not yet implemented.");
+	}
+
+	public void setVehicleBuilder(IVehicleBuilder vehicleBuilder) {
+		this.vehicleBuilder = vehicleBuilder;
 	}
 	
 	

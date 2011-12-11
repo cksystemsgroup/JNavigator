@@ -40,5 +40,15 @@
 			<artifactId>jnavigator-course</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
+			<artifactId>javiator-mockjaviator</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<artifactId>jnavigator-jcontrol</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -13,7 +13,7 @@
 #if( $servletConfig.getServletContext().getAttribute("aviator").isScriptOk() )
 				<li>
 					<h2>Course Control</h2>
-#if( $servletConfig.getServletContext().getAttribute("aviator").isVclExecuted() )
+#if( $servletConfig.getServletContext().getAttribute("aviator").isVclExecutionActive() )
 					<form action="admin/html/courseStop" method="post" enctype="multipart/form-data">
 						<p>
 							To stop the currently running VCL script press the Stop Course button below.

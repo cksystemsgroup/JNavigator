@@ -1,5 +1,5 @@
 /*
- * @(#) LocationSystemType.java
+ * @(#) IInterpreter.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,10 +18,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot.config;
+package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-public enum LocationSystemType {
-	NONE,
-	GPS,
-	Ubisense
+import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
+import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+import at.uni_salzburg.cs.ckgroup.pilot.IAutoPilot;
+import at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration;
+
+public interface IInterpreter {
+
+	public IPositionProvider getPositionProvider();
+
+	public IConfiguration getConfiguration();
+	
+	public IAutoPilot getAutoPilot();
+	
+	public boolean isClearanceForTakeOffGranted();
+	
+	public void switchToManualMode();
+	
+//	public void switchToAutomaticMode();
+	
+	public void setSetCoursePosition(PolarCoordinate coordinate);
+	
+	public PolarCoordinate getCurrentPosition();
+	
+	public IGeodeticSystem getGeodeticSystem();
+	
 }

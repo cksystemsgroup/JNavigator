@@ -1,5 +1,5 @@
 ##
-## @(#) MockJAviator.properties - the new configuration
+## @(#) MockJAviator.properties - the old configuration 
 ##
 
 controllerPeriod = 0.014
@@ -7,8 +7,8 @@ mockJAviatorReportRate = 0
 simulate.gps = true
 simulate.ubisense = false
 
-mock-javiator.send.javiator-data = true
-mock-javiator.send.sensor-data = false
+mock-javiator.send.javiator-data = false
+mock-javiator.send.sensor-data = true
 mock-javiator.send.simulation-data = true
 
 plant.className = javiator.simulation.JAviatorPlant
@@ -22,19 +22,19 @@ plant.z_correction_flag = false
 plant.z_offset = 0.09
 plant.sonar_position = 0.13
 plant.controllerPeriod = 0.014
-plant.gravity = 32000.0
+plant.gravity = 1360.0
 plant.gravitationalAcceleration = 9.81
-plant.mass = 2.2
-
+plant.mass = 1.720
+    	
 connector.className = at.uni_salzburg.cs.ckgroup.communication.UdpServer
 connector.server.port = $configuration.getPlantListener().getPort()
 connector.server.timeout = 10000
 
-connector.mapping.list = javiator, motor-signals, switch-state, shutdown, simulation
+connector.mapping.list = sensor-data, motor-signals, switch-state, shutdown, simulation
 	
-connector.mapping.javiator.type = 2
-connector.mapping.javiator.className = at.uni_salzburg.cs.ckgroup.communication.data.JaviatorData
-connector.mapping.javiator.register = true
+connector.mapping.sensor-data.type = 4
+connector.mapping.sensor-data.className = at.uni_salzburg.cs.ckgroup.communication.data.SensorData
+connector.mapping.sensor-data.register = true
 
 connector.mapping.motor-signals.type = 5
 connector.mapping.motor-signals.className = at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals
@@ -51,3 +51,4 @@ connector.mapping.shutdown.register = true
 connector.mapping.simulation.type = 98
 connector.mapping.simulation.className = at.uni_salzburg.cs.ckgroup.communication.data.SimulationData
 connector.mapping.simulation.register = true
+

@@ -1,0 +1,169 @@
+##
+## @(#) pilot.properties - 
+##
+
+jcontrol.adapter.className = at.uni_salzburg.cs.ckgroup.communication.TransceiverAdapter
+#if( $configuration.getPlantListener().getScheme() == "udp" )
+jcontrol.adapter.transceiver.className = at.uni_salzburg.cs.ckgroup.communication.DatagramTransceiver
+jcontrol.adapter.transceiver.host = $configuration.getPilotControllerConnector().getHost()
+jcontrol.adapter.transceiver.port = $configuration.getPilotControllerConnector().getPort()
+#else
+jcontrol.adapter.transceiver.className = at.uni_salzburg.cs.ckgroup.communication.BufferedTransceiver
+jcontrol.adapter.transceiver.send.buffer.length = 10
+jcontrol.adapter.transceiver.reconnection.timeout = 500
+jcontrol.adapter.transceiver.maximum.reconnects = 5
+jcontrol.adapter.transceiver.connection.type = stream
+jcontrol.adapter.transceiver.connection.params.type = tcp
+jcontrol.adapter.transceiver.connection.params.className = at.uni_salzburg.cs.ckgroup.io.TcpSocket
+jcontrol.adapter.transceiver.connection.params.host = $configuration.getPilotControllerConnector().getHost()
+jcontrol.adapter.transceiver.connection.params.port = $configuration.getPilotControllerConnector().getPort()
+#end
+
+jcontrol.adapter.mapping.list = sensor-data, motor-signals, motor-offsets, ground-report, trace-data, \
+								command-data, r-p-control, yaw-control, alt-control, x-y-control, \
+								idle-limit, switch-state, switch-mode, shutdown, simulation
+
+jcontrol.adapter.mapping.sensor-data.type = 4
+jcontrol.adapter.mapping.sensor-data.className = at.uni_salzburg.cs.ckgroup.communication.data.SensorData
+jcontrol.adapter.mapping.sensor-data.register = true
+
+jcontrol.adapter.mapping.motor-signals.type = 5
+jcontrol.adapter.mapping.motor-signals.className = at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals
+jcontrol.adapter.mapping.motor-signals.register = false
+
+jcontrol.adapter.mapping.motor-offsets.type = 6
+jcontrol.adapter.mapping.motor-offsets.className = at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals
+jcontrol.adapter.mapping.motor-offsets.register = false
+
+jcontrol.adapter.mapping.ground-report.type = 8
+jcontrol.adapter.mapping.ground-report.className = at.uni_salzburg.cs.ckgroup.communication.data.GroundReport
+jcontrol.adapter.mapping.ground-report.register = true
+
+jcontrol.adapter.mapping.trace-data.type = 9
+jcontrol.adapter.mapping.trace-data.className = at.uni_salzburg.cs.ckgroup.communication.data.TraceData
+jcontrol.adapter.mapping.trace-data.register = false
+
+jcontrol.adapter.mapping.command-data.type = 10
+jcontrol.adapter.mapping.command-data.className = at.uni_salzburg.cs.ckgroup.communication.data.CommandData
+jcontrol.adapter.mapping.command-data.register = true
+
+jcontrol.adapter.mapping.r-p-control.type = 11
+jcontrol.adapter.mapping.r-p-control.className = at.uni_salzburg.cs.ckgroup.communication.data.AttitudeControllerParameters
+jcontrol.adapter.mapping.r-p-control.register = true
+
+jcontrol.adapter.mapping.yaw-control.type = 12
+jcontrol.adapter.mapping.yaw-control.className = at.uni_salzburg.cs.ckgroup.communication.data.YawControllerParameters
+jcontrol.adapter.mapping.yaw-control.register = true
+
+jcontrol.adapter.mapping.alt-control.type = 13
+jcontrol.adapter.mapping.alt-control.className = at.uni_salzburg.cs.ckgroup.communication.data.AltitudeControllerParameters
+jcontrol.adapter.mapping.alt-control.register = true
+
+jcontrol.adapter.mapping.x-y-control.type = 14
+jcontrol.adapter.mapping.x-y-control.className = at.uni_salzburg.cs.ckgroup.communication.data.PositionControllerParameters
+jcontrol.adapter.mapping.x-y-control.register = true
+
+jcontrol.adapter.mapping.idle-limit.type = 15
+jcontrol.adapter.mapping.idle-limit.className = at.uni_salzburg.cs.ckgroup.communication.data.IdleLimit
+jcontrol.adapter.mapping.idle-limit.register = true
+
+jcontrol.adapter.mapping.switch-state.type = 17
+jcontrol.adapter.mapping.switch-state.className = at.uni_salzburg.cs.ckgroup.communication.data.SwitchState
+jcontrol.adapter.mapping.switch-state.register = true
+
+jcontrol.adapter.mapping.switch-mode.type = 18
+jcontrol.adapter.mapping.switch-mode.className = at.uni_salzburg.cs.ckgroup.communication.data.SwitchMode
+jcontrol.adapter.mapping.switch-mode.register = true
+
+jcontrol.adapter.mapping.shutdown.type = 21
+jcontrol.adapter.mapping.shutdown.className = at.uni_salzburg.cs.ckgroup.communication.data.ShutdownEvent
+jcontrol.adapter.mapping.shutdown.register = true
+
+jcontrol.adapter.mapping.simulation.type = 98
+jcontrol.adapter.mapping.simulation.className = at.uni_salzburg.cs.ckgroup.communication.data.SimulationData
+jcontrol.adapter.mapping.simulation.register = true
+
+
+
+
+
+
+clock.className = at.uni_salzburg.cs.ckgroup.util.SystemClock
+
+
+pilot.algorithm.className = at.uni_salzburg.cs.ckgroup.control.PositionControlAlgorithm
+pilot.algorithm.debug = false
+
+pilot.algorithm.altitude.controller.className = at.uni_salzburg.cs.ckgroup.control.PDDController
+pilot.algorithm.altitude.controller.Kp = 401
+pilot.algorithm.altitude.controller.KpEpsilon = 0.3
+#pilot.algorithm.altitude.controller.Kd = -322.2
+pilot.algorithm.altitude.controller.Kd = -390
+pilot.algorithm.altitude.controller.KdEpsilon = 3
+pilot.algorithm.altitude.controller.Kd2 = 60
+pilot.algorithm.altitude.controller.Kdf = -0.1
+#pilot.algorithm.altitude.controller.report-counter = 100
+
+pilot.algorithm.position.controller.className = at.uni_salzburg.cs.ckgroup.control.PDDController
+pilot.algorithm.position.controller.Kp = 15
+pilot.algorithm.position.controller.KpEpsilon = 5
+pilot.algorithm.position.controller.Kd = -13.1
+pilot.algorithm.position.controller.KdEpsilon = 5
+#pilot.algorithm.position.controller.Kd2 = 3
+pilot.algorithm.position.controller.Kdf = -0.01
+#pilot.algorithm.position.controller.report-counter = 25
+
+# parameter update: Idle Limit
+# --> 8000
+# parameter update: Roll/Pitch
+# --> Kp: +1.700   Ki: +0.000   Kd: +0.500   Kdd: -0.070
+# parameter update: Yaw
+# --> Kp: +1.500   Ki: +0.000   Kd: +0.500   Kdd: +0.000
+# parameter update: X/Y
+# --> Kp: +0.210   Ki: +0.030   Kd: -0.060   Kdd: +0.001
+# parameter update: Z
+# --> Kp: +1.500   Ki: +0.500   Kd: +1.500   Kdd: +0.050
+
+jcontrol.idle.limit = 8000
+
+jcontrol.attitude.controller.Kp		= +1.700
+jcontrol.attitude.controller.Ki		= +0.000
+jcontrol.attitude.controller.Kd		= +0.500
+jcontrol.attitude.controller.Kdd	= -0.070
+
+jcontrol.yaw.controller.Kp	= +1.500
+jcontrol.yaw.controller.Ki	= +0.000
+jcontrol.yaw.controller.Kd	= +0.500
+jcontrol.yaw.controller.Kdd	= +0.000
+
+jcontrol.altitude.controller.Kp		= +1.500
+jcontrol.altitude.controller.Ki		= +0.500
+jcontrol.altitude.controller.Kd		= +1.500
+jcontrol.altitude.controller.Kdd	= +0.050
+
+jcontrol.x-y.controller.Kp	= +0.210
+jcontrol.x-y.controller.Ki	= +0.030
+jcontrol.x-y.controller.Kd	= -0.060
+jcontrol.x-y.controller.Kdd	= +0.001
+
+
+position.controller.className = at.uni_salzburg.cs.ckgroup.control.PDDController2
+position.controller.Kp = 15
+position.controller.KpEpsilon = 5
+#position.controller.Ki = 0.09
+position.controller.Kd = -13.1
+position.controller.KdEpsilon = 5
+#position.controller.Kd2 = 0.001
+position.controller.Kdf = -0.01
+#position.controller.report-counter = 25
+
+position.provider.className = at.uni_salzburg.cs.ckgroup.gps.GpsAdapter
+position.provider.gps.receiver = gps.simulator
+#position.provider.rtcm.message.provider = none
+#if( $configuration.getLocationSystemListener().getScheme() == "tcp" )
+position.provider.gps.simulator.type = tcp
+position.provider.gps.simulator.className = at.uni_salzburg.cs.ckgroup.io.TcpSocket
+position.provider.gps.simulator.host = $configuration.getLocationSystemListener().getHost()
+position.provider.gps.simulator.port = $configuration.getLocationSystemListener().getPort()
+#else
+#end

@@ -1,5 +1,5 @@
 /*
- * @(#) CommandFlyToAbs.java
+ * @(#) CommandJumpToAbs.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -26,36 +26,23 @@ import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
-public class CommandFlyToAbs implements ICommand {
+public class CommandJumpToAbs implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandFlyToAbs.class);
+	Logger LOG = Logger.getLogger(CommandJumpToAbs.class);
 	
 	public static final double MINIMUM_PRECISION = 0.1;
 	
-	public static final double MINIIMUM_VELOCITY = 0.2;
-	
-	public static final double MAXIMUM_VELOCITY = 4.0;
-	
-	public static final long CYCLE_TIME = 500;
-	
 	private PolarCoordinate coordinate;
-	private double velocity;
 	private double precision;
 	private boolean running = false;
 
-	public CommandFlyToAbs (double latitude, double longitude, double altitude, double precision, double velocity) {
+	public CommandJumpToAbs (double latitude, double longitude, double altitude, double precision) {
 		coordinate = new PolarCoordinate(latitude, longitude, altitude);
-		this.velocity = velocity > 0 ? velocity : MINIIMUM_VELOCITY;
 		this.precision = precision > MINIMUM_PRECISION ? precision : MINIMUM_PRECISION;
-		LOG.info("Constructor " + coordinate + ", velocity=" + this.velocity + "m/s, precision=" + this.precision + "m.");
 	}
 	
 	public PolarCoordinate getCoordinate() {
 		return coordinate;
-	}
-
-	public double getVelocity() {
-		return velocity;
 	}
 
 	public double getPrecision() {
@@ -64,51 +51,33 @@ public class CommandFlyToAbs implements ICommand {
 
 	public void execute(IInterpreter interpreter) {
 		long start = System.currentTimeMillis();
-		long now = start;
 		IGeodeticSystem gs = interpreter.getGeodeticSystem();
-
 		PolarCoordinate where = interpreter.getCurrentPosition();
 		CartesianCoordinate whereCartesian = gs.polarToRectangularCoordinates(where);
 		CartesianCoordinate destinationCartesian = gs.polarToRectangularCoordinates(coordinate);
-		CartesianCoordinate motionVector = destinationCartesian.subtract (whereCartesian);
+		CartesianCoordinate motionVector = whereCartesian.subtract (destinationCartesian);
 		double distance = motionVector.norm();
 		
-		double totalTime = distance / velocity;
-		double vMax = 1.5 * velocity;
-		if (vMax > MAXIMUM_VELOCITY) {
-			LOG.info("Reducing maximum velocity from " + vMax + "m/s to " + MAXIMUM_VELOCITY + "m/s.");
-			vMax = MAXIMUM_VELOCITY;
-			totalTime = 1.5 * distance / vMax;
-		}
-		
-		LOG.info("Parameters: time=" + totalTime + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
-		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s.");
+		LOG.info("Jumping from " + where + " to " + coordinate);
 		running = true;
-		while (running && now < start + 1000.0 * totalTime + CYCLE_TIME) {
-			now = System.currentTimeMillis();
-			double tFlight = (now - start) / 1000.0;
-			double s = 2.0 * vMax * tFlight * tFlight * (3.0 - 2.0 * tFlight / totalTime) / (3.0 * totalTime);
-			CartesianCoordinate differenceVector = motionVector.multiply(s/distance);
-			CartesianCoordinate setCourseCartesian = whereCartesian.add(differenceVector);
-			PolarCoordinate setCoursePosition = gs.rectangularToPolarCoordinates(setCourseCartesian);
-			interpreter.setSetCoursePosition(setCoursePosition);
-			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
-		}
+		interpreter.setSetCoursePosition(coordinate);
+
+		try { Thread.sleep(500); } catch (InterruptedException e) { }
 		
 		if (running && distance > precision)
-			LOG.info("Flying time is over. Waiting for the vehicle to finally reach it's destination. Distance is " + distance + "m.");
+			LOG.info("Waiting for the vehicle to finally reach it's destination. Distance is " + distance + "m.");
 		
-		interpreter.setSetCoursePosition(coordinate);
 		while (running && distance > precision) {
 			PolarCoordinate currentPosition = interpreter.getCurrentPosition();
 			CartesianCoordinate currentPositionCartesian = gs.polarToRectangularCoordinates(currentPosition);
 			distance = destinationCartesian.subtract(currentPositionCartesian).norm();
-			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+			try { Thread.sleep(500); } catch (InterruptedException e) { }
+			LOG.info("Waiting for the vehicle to finally reach it's destination. Distance is " + distance + "m.");
 		}
 		
-		try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+		long now = System.currentTimeMillis();
 		if (running)
-			LOG.info("Destination " + coordinate + " reached.");
+			LOG.info("Destination " + coordinate + " reached in " + ((now-start)/1000) + "s");
 		else
 			LOG.info("Command terminated at position " + interpreter.getCurrentPosition() + ", distance is " + distance + "m.");
 		

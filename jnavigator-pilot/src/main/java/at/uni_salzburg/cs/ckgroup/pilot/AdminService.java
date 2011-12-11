@@ -66,6 +66,11 @@ public class AdminService extends DefaultService {
 			servicePath = request.getRequestURI().substring(request.getContextPath().length());
 		
 		String[] cmd = servicePath.trim().split("/+");
+		if (cmd.length < 3) {
+			emit404(request, response);
+			return;
+		}
+		
 		boolean textMode = "text".equals(cmd[2]);
 		String action = cmd[3];
 		

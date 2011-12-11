@@ -16,11 +16,11 @@
 				<tbody>
 #foreach( $sensor in $sb.getSensors() )
 #set( $v = "" )
-#set( $v = $sensor.getValue() )
+#set( $v = $sensor.getValue().replaceAll("\n","</br>") )
 					<tr>
 						<td>$sensor.name</td>
 						<td>$sensor.uri</td>
-						<td><a href="$contextPath/sensor/$sensor.Path">$contextPath/sensor/$sensor.Path</a></td>
+						<td><a href="$contextPath/sensor/$sensor.Path">$sensor.Path</a></td>
 						<td>$v</td>
 					</tr>
 #end

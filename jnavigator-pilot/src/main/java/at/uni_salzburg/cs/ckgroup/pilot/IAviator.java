@@ -54,7 +54,7 @@ public interface IAviator {
 	/**
 	 * @return if the loaded VCL script is currently executed.
 	 */
-	public boolean isVclExecuted();
+	public boolean isVclExecutionActive();
 	
 	/**
 	 * @return the currently executed VCL command line. 

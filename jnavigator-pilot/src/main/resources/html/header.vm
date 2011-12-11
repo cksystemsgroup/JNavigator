@@ -5,11 +5,28 @@
 		</div>
 		<div id="menu">
 			<ul>
+#if( false )			
 				<li class="current_page_item"><a href="$contextPath/status.tpl">Status</a></li>
+#end
+#set( $cfg = $servletConfig.getServletContext().getAttribute("configuration") )
+#if( $cfg.getSensorBuilder().isConfigOk() )
 				<li><a href="$contextPath/sensor.tpl">Sensors</a></li>
+#else
+				<li><a href="$contextPath/sensor.tpl" style="color: red;">Sensors</a></li>
+#end
+#if( $cfg.isConfigOk() )
 				<li><a href="$contextPath/config.tpl">Configuration</a></li>
+#else
+				<li><a href="$contextPath/config.tpl" style="color: red;">Configuration</a></li>
+#end
+#if( $servletConfig.getServletContext().getAttribute("aviator").isScriptOk() )
 				<li><a href="$contextPath/course.tpl">Course</a></li>
+#else
+				<li><a href="$contextPath/course.tpl" style="color: red;">Course</a></li>
+#end
+#if( $cfg.getSystemProperty("pilot.web.snoop") )
 				<li><a href="snoop">Snoop</a></li>
+#end
 			</ul>
 		</div>
 	</div>

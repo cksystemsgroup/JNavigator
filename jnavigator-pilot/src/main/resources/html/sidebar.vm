@@ -1,4 +1,5 @@
 		<div id="sidebar">
+<!--
 			<ul>
 				<li>
 					<h2>Tasks</h2>
@@ -11,6 +12,7 @@
 					</ul>
 				</li>
 			</ul>
+-->
 		</div>
 		<!-- end #sidebar -->
 		<div style="clear: both;">&nbsp;</div>

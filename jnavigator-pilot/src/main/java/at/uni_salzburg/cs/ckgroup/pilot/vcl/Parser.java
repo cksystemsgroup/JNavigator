@@ -49,6 +49,11 @@ public class Parser {
 				"\\s*(-?\\d+)(.\\d+)?\\s*\\)\\s*abs\\s+" +
 				"precision\\s+(\\d+)(.\\d+)?m" +
 				"\\s+(\\d+)(.\\d+)?mps", "$1:$2:$3$4:$5$6:$7$8"));
+		add(new CmdEntry (CommandJumpToAbs.class, "jump\\s+to\\s*\\(" +
+				"\\s*(-?\\d+.\\d+)\\s*," +
+				"\\s*(-?\\d+.\\d+)\\s*," +
+				"\\s*(-?\\d+)(.\\d+)?\\s*\\)\\s*abs\\s+" +
+				"precision\\s+(\\d+)(.\\d+)?m", "$1:$2:$3$4:$5$6"));
 		add(new CmdEntry (CommandHover.class, "hover\\s+for\\s+(\\d+)s", "$1"));
 		add(new CmdEntry (CommandLand.class, "land", null));
 		add(new CmdEntry (CommandTakeOff.class, "takeoff (\\d+)(.\\d+)? for (\\d+)s", "$1$2:$3"));

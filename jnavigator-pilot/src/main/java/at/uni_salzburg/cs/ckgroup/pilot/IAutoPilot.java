@@ -1,5 +1,5 @@
 /*
- * @(#) CommandGoAuto.java
+ * @(#) IAutoPilot.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -18,20 +18,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package at.uni_salzburg.cs.ckgroup.pilot.vcl;
+package at.uni_salzburg.cs.ckgroup.pilot;
 
-public class CommandGoAuto implements ICommand {
+import java.io.IOException;
+
+import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
+import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
+
+public interface IAutoPilot {
 	
-	public void execute(IInterpreter interpreter) {
-		// intentionally empty
-	}
+	public boolean isAutoPilotFlight();
 
-	public void terminate() {
-		// intentionally empty
-	}
-
-	public void waitForTermination() {
-		// intentionally empty
-	}
+	public void setAutoPilotFlight(boolean autoPilotFlight);
 	
+	public void startUpEngines() throws IOException;
+	
+	public void shutDownEngines() throws IOException;
+
+	public IPositionProvider getPositionProvider();
+	
+	public ISetCourseSupplier getSetCourseSupplier();
+	
+	public double getAltitudeOverGround();
 }

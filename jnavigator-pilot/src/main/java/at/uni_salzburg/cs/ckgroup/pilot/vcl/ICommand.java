@@ -1,5 +1,5 @@
 /*
- * @(#) IVclCommand.java
+ * @(#) ICommand.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer
@@ -20,21 +20,26 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
+import java.io.IOException;
+
 
 public interface ICommand {
 	
-//	private String command;
-//	private boolean valid;
-//	private VclAction action;
-//	private PolarCoordinate polarCoordinate;
-//	private CartesianCoordinate cartesianCoordinate;
-//	private Double velocity;
-//	private Boolean relative;
-//	
-//	public VclCommand (String command) {
-//		this.command = command;
-//	}
-
-
+	/**
+	 * Execute the command.
+	 * 
+	 * @param interpreter the current interpreter.
+	 */
+	public void execute(IInterpreter interpreter) throws IOException;
 	
+	/**
+	 * Terminate a running command immediately.
+	 */
+	public void terminate();
+	
+	/**
+	 * Wait for the intended termination of this command.
+	 */
+	public void waitForTermination();
+
 }

@@ -77,13 +77,20 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 			servletConfig.getServletContext().setAttribute("vehicleBuilder", vehicleBuilder);
 			servletConfig.getServletContext().setAttribute("configuration", configuration);
 			
+			aviator.setVehicleBuilder(vehicleBuilder);
+			
+			configuration.getSensorBuilder().setVehicleBuilder(vehicleBuilder);
+			
 			File contexTempDir = (File)servletConfig.getServletContext().getAttribute(AdminService.CONTEXT_TEMP_DIR);
+			configuration.setWorkDir (contexTempDir);
+
 			File confFile = new File (contexTempDir, props.getProperty(AdminService.PROP_CONFIG_FILE));
 			if (confFile.exists()) {
-				configuration.setWorkDir (contexTempDir);
 				configuration.loadConfig(new FileInputStream(confFile));
 				LOG.info("Loading existing configuration from " + confFile);
 			}
+			vehicleBuilder.setSetCourseSupplier(aviator);
+			vehicleBuilder.setWorkDir (contexTempDir);
 			vehicleBuilder.setConfig(configuration);
 		
 			File courseFile = new File (contexTempDir, props.getProperty(AdminService.PROP_COURSE_FILE));
@@ -96,21 +103,6 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 			throw new ServletException (e);
 		}
 
-		
-		
-//		String catalinaBase = System.getProperty(BackGroundTimerTask.PROP_CATALINA_BASE);
-//		if (catalinaBase == null)
-//			throw new ServletException ("Property " + BackGroundTimerTask.PROP_CATALINA_BASE + " is not set!");
-//		props.setProperty (BackGroundTimerTask.PROP_CATALINA_BASE, catalinaBase);
-//		
-//		try {
-//			long cycleTime = Long.parseLong(props.getProperty(PROP_CYCLE_TIME, "60000"));
-//			backGroundTimerTask = new BackGroundTimerTask(this);
-//			backGroundTimer = new Timer();
-//			backGroundTimer.schedule(backGroundTimerTask, 60000-(System.currentTimeMillis() % 60000), cycleTime);
-//		} catch (Exception e) {
-//			throw new ServletException (e);
-//		}
 	}
 
 	protected void service (HttpServletRequest request,
@@ -142,11 +134,6 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 		return props;
 	}
 
-//	public void loadConfig(InputStream inStream) throws IOException {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
 	public IAviator getAviator() {
 		return aviator;
 	}
@@ -158,15 +145,5 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 	public Configuration getConfiguration() {
 		return configuration;
 	}
-
-	
-//	public String getProperty(String key) {
-//		return props.getProperty(key);
-//	}
-//
-//	public String getProperty(String key, String deault) {
-//		return props.getProperty(key, deault);
-//	}
-	
 	
 }

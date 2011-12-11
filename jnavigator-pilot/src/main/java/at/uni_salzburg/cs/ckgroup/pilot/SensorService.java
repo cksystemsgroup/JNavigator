@@ -53,11 +53,7 @@ public class SensorService extends DefaultService {
 		AbstractSensor s = servletConfig.getConfiguration().getSensorBuilder().getSensors().get(p[2]);
 		
 		if (s != null) {
-//			if ("text/plain".equals(s.getMimeType())) {
-//				emitPlainText(response, s.getValue());
-//			} else {
-				emitByteArray(response, s.getMimeType(), s.getByteArray());
-//			}
+			emitByteArray(response, s.getMimeType(), s.getByteArray());
 		} else {
 			emit404 (request, response);
 		}

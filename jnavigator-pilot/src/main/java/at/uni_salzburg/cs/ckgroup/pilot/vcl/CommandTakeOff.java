@@ -20,23 +20,74 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-public class CommandTakeOff implements ICommand {
+import java.io.IOException;
 
-	private double altitude;
+import org.apache.log4j.Logger;
+
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+
+
+public class CommandTakeOff implements ICommand {
+	
+	Logger LOG = Logger.getLogger(CommandTakeOff.class);
+	
+	public static final double MAXIMUM_TAKEOFF_VELOCITY = 0.5;
+	
+	public static final long CYCLE_TIME = 200;
+
+	private double takeOffAltitude;
+	
+	private double altitude = 0;
 	
 	private long time;
 	
-	public CommandTakeOff (double altitude, long time) {
-		this.altitude = altitude;
-		this.time = time;
-	}
+	private boolean running = false;
 	
-	public double getAltitude() {
-		return altitude;
-	}
-	
-	public long getTime() {
-		return time;
+	/**
+	 * @param altitude required altitude in meters.
+	 * @param time the time to take-off in milliseconds.
+	 */
+	public CommandTakeOff (double takeOffAltitude, long time) {
+		this.takeOffAltitude = Math.abs(takeOffAltitude);
+		this.time = Math.abs(time * 1000);
+		long minimumTime = (long)(1000 * takeOffAltitude / MAXIMUM_TAKEOFF_VELOCITY);
+		this.time = this.time < minimumTime ? minimumTime : this.time;
 	}
 
+	public void execute(IInterpreter interpreter) throws IOException {
+		LOG.info("Starting engines.");
+		interpreter.getAutoPilot().startUpEngines();
+		
+		long start = System.currentTimeMillis();
+		long now = start;
+		PolarCoordinate where = interpreter.getCurrentPosition();
+		LOG.info("Take off started at " + where);
+		running = true;
+		while (running && now < start + time + CYCLE_TIME) {
+			now = System.currentTimeMillis();
+			altitude = takeOffAltitude * (now - start) / time;
+			where.setAltitude(altitude);
+			interpreter.setSetCoursePosition(where);
+			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+//			LOG.info("Take off in progress. Position is " + interpreter.getCurrentPosition() + ", Set course is " + where);
+		}
+		where.setAltitude(takeOffAltitude);
+		interpreter.setSetCoursePosition(where);
+		try { Thread.sleep(1000); } catch (InterruptedException e) { }
+		running = false;
+		LOG.info("Take off completed. Position is " + interpreter.getCurrentPosition() + ", Set course is " + where);
+	}
+
+	public void terminate() {
+		LOG.info("Forced termination");
+		running = false;
+	}
+
+	public void waitForTermination() {
+		LOG.info("Waiting for termination.");
+		while (running) {
+			try { Thread.sleep(500); } catch (InterruptedException e) { }
+		}
+		LOG.info("Termination completed.");
+	}
 }

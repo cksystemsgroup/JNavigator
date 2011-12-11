@@ -20,6 +20,19 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
+
+
 public class CommandGoManual implements ICommand {
 
+	public void execute(IInterpreter interpreter) {
+		interpreter.switchToManualMode();
+	}
+
+	public void terminate() {
+		// intentionally empty
+	}
+
+	public void waitForTermination() {
+		// intentionally empty
+	}
 }
