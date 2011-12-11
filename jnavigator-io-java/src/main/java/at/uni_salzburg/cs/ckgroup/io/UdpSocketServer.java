@@ -111,7 +111,7 @@ public class UdpSocketServer {
 	 * @throws IOException thrown in case of errors.
 	 */
 	public byte[] receiveDatagram () throws IOException {
-		byte[] buffer = new byte[64];
+		byte[] buffer = new byte[256];
 		DatagramPacket datagram = new DatagramPacket(buffer, buffer.length);
 		serverSocket.receive(datagram);
 		SocketAddress address = datagram.getSocketAddress();
