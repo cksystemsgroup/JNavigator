@@ -84,7 +84,7 @@ public class CommandFlyToAbsOld implements ICommand {
 		LOG.info("Flying from " + where + " to " + coordinate + " in " + time + "s.");
 		running = true;
 		boolean sect1 = false, sect2 = false, sect3 = false, sect4 = false;
-		while (running && now < start + 1000.0 * time + CYCLE_TIME) {
+		while (running && distance > precision && now < start + 1000.0 * time + CYCLE_TIME) {
 			now = System.currentTimeMillis();
 			
 			double tFlight = (now - start) / 1000.0;

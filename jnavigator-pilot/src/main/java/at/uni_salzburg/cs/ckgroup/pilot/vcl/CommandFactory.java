@@ -39,6 +39,15 @@ public class CommandFactory {
 				Double.parseDouble(cmdParams[4])
 			);
 			
+		} else if (cmdClass == CommandFlyToAbsOld.class) {
+			return new CommandFlyToAbs(
+				Double.parseDouble(cmdParams[0]),
+				Double.parseDouble(cmdParams[1]),
+				Double.parseDouble(cmdParams[2]),
+				Double.parseDouble(cmdParams[3]),
+				Double.parseDouble(cmdParams[4])
+			);
+			
 		} else if (cmdClass == CommandJumpToAbs.class) {
 			return new CommandJumpToAbs(
 				Double.parseDouble(cmdParams[0]),

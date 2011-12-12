@@ -180,6 +180,9 @@ public class Interpreter extends Thread implements IInterpreter {
 	}
 
 	public void setSetCoursePosition(PolarCoordinate setCoursePosition) {
+//		if (setCoursePosition != null && setCoursePosition.getAltitude() < 0) {
+//			LOG.error("setCoursePosition: " + setCoursePosition);
+//		}
 		this.setCoursePosition = setCoursePosition;
 	}
 

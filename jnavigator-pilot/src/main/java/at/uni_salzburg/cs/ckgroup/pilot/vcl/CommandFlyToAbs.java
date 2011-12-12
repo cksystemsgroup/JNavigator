@@ -84,7 +84,7 @@ public class CommandFlyToAbs implements ICommand {
 		LOG.info("Parameters: time=" + totalTime + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
 		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s.");
 		running = true;
-		while (running && now < start + 1000.0 * totalTime + CYCLE_TIME) {
+		while (running && distance > precision && now < start + 1000.0 * totalTime + CYCLE_TIME) {
 			now = System.currentTimeMillis();
 			double tFlight = (now - start) / 1000.0;
 			double s = 2.0 * vMax * tFlight * tFlight * (3.0 - 2.0 * tFlight / totalTime) / (3.0 * totalTime);
