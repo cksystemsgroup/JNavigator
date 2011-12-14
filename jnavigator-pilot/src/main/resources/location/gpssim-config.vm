@@ -7,10 +7,12 @@
 # -----------------------------------------------------------------------------
 
 # positive latitude values cause "N" (north) and negative values cause "S" (south) in the N/S indicator
-reference.latitude = 48.0
+#reference.latitude = 48.0
+reference.latitude = 47.82201946
 
 # positive longitude values cause "E" (east) and negative values cause "W" (west) in the E/W indicator
-reference.longitude = 13.0
+#reference.longitude = 13.0
+reference.longitude = 13.04082647
 
 # the altitude units are meters 
 reference.altitude = 440.0
