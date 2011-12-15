@@ -117,7 +117,7 @@ public class BirdsEyeView extends JPanel implements ICoordinateView
 	 * The <code>Vector</code> of the last <code>MAX_POSITIONS_IN_VIEW</code>
 	 * received coordinates.
 	 */
-	private Vector coordinates = new Vector ();
+	private Vector<PolarCoordinate> coordinates = new Vector<PolarCoordinate>();
 	
     /**
      * This variable contains a <b>en_US</b> schema. The simulator uses this
