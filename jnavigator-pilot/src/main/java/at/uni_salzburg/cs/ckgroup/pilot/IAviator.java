@@ -22,6 +22,9 @@ package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
 
 
 public interface IAviator {
@@ -60,4 +63,9 @@ public interface IAviator {
 	 * @return the currently executed VCL command line. 
 	 */
 	public int getCurrentVclCommandLine ();
+	
+	/**
+	 * @return the current VCL script as a list of <code>ICommand</code> objects.
+	 */
+	public List<ICommand> getVclSctipt ();
 }

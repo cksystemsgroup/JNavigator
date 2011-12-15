@@ -53,6 +53,7 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 	private ServiceEntry[] services = {
 		new ServiceEntry("/snoop.*", new SnoopService(this)),
 		new ServiceEntry("/admin/.*", new AdminService(this)),
+		new ServiceEntry("/json.*", new JsonQueryService(this)),
 		new ServiceEntry("/sensor/.*", new SensorService(this)),
 		new ServiceEntry(".*", new DefaultService(this))
 	};

@@ -100,6 +100,13 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 	}
 	
 	/**
+	 * @return the current VCL script as a list of <code>ICommand</code> objects.
+	 */
+	public List<ICommand> getVclSctipt () {
+		return parser.getScript();
+	}
+	
+	/**
 	 * @return the current VCL script errors as a list.
 	 */
 	public List<Boolean> getScriptErrors() {
