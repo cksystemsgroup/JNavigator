@@ -33,7 +33,7 @@ public class CommandLand implements ICommand {
 	
 	public static final double MAXIMUM_LAND_ACCELERATION = 0.3;
 	
-	public static final double MAXIMUM_LAND_VELOCITY = 0.3;
+	public static final double MAXIMUM_LAND_VELOCITY = 1;
 	
 	public static final long CYCLE_TIME = 200;
 	
