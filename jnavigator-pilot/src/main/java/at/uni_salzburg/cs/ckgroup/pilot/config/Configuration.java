@@ -33,6 +33,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 import at.uni_salzburg.cs.ckgroup.pilot.sensor.SensorBuilder;
 import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
@@ -72,14 +73,19 @@ public class Configuration implements IConfiguration {
 	public static final String ERROR_MESSAGE_INVALID_VALUE = "# invalid value!";
 	public static final String ERROR_MESSAGE_UNKNOWN_TYPE = "# unknown type!";
 	public static final String ERROR_MESSAGE_UNKNOWN_SENSOR_TYPE = "# unknown sensor type!";
-	
+
+	public static final String PROP_LOCATION_LATITUDE =  "latitude";
+	public static final String PROP_LOCATION_LONGITUDE =  "longitude";
+	public static final String PROP_LOCATION_ALTITUDE = "altitude";
+
 	public static final String PROP_PLANT_TYPE	= "plant.type";
 	public static final String PROP_PLANT_SIMULATED = "plant.simulated";
 	public static final String PROP_PLANT_LISTENER = "plant.listener";
 	public static final String PROP_PLANT_LOCATION_SYSTEM_TYPE = "plant.location.system.type";
 	public static final String PROP_PLANT_LOCATION_SYSTEM_LISTENER = "plant.location.system.listener";
 	public static final String PROP_PLANT_LOCATION_SYSTEM_UPDATE_RATE = "plant.location.system.update.rate";
-
+	public static final String PROP_PLANT_HOME_LOCATION = "plant.home.location";
+	
 	public static final String PROP_CONTROLLER_TYPE = "controller.type";
 	public static final String PROP_CONTROLLER_SIMULATED = "controller.simulated";
 	
@@ -106,6 +112,7 @@ public class Configuration implements IConfiguration {
 		{ PROP_PLANT_LOCATION_SYSTEM_TYPE, "GPS" },
 		{ PROP_PLANT_LOCATION_SYSTEM_LISTENER },
 		{ PROP_PLANT_LOCATION_SYSTEM_UPDATE_RATE, "10" },
+		{ PROP_PLANT_HOME_LOCATION, "48.0", "13.0", "440.0" },
 	
 		{ PROP_CONTROLLER_TYPE, "external" },
 		{ PROP_CONTROLLER_SIMULATED, "false" },
@@ -158,6 +165,11 @@ public class Configuration implements IConfiguration {
 	 * The configured update rate of the location system.
 	 */
 	private int locationSystemUpdateRate;
+	
+	/**
+	 * The configured home location of the plant. 
+	 */
+	private PolarCoordinate plantHomeLocation;
 	
 	/**
 	 * The type of flight dynamics controller.
@@ -226,6 +238,7 @@ public class Configuration implements IConfiguration {
 		locationSystemType = parseTemplate(PROP_PLANT_LOCATION_SYSTEM_TYPE, LOCATION_SYS_CONFIG_TEMPLATE_FORMAT);
 		locationSystemListener = parseURI(PROP_PLANT_LOCATION_SYSTEM_LISTENER);   
 		locationSystemUpdateRate = parseInt(PROP_PLANT_LOCATION_SYSTEM_UPDATE_RATE);
+		plantHomeLocation = parsePolarCoordinate(PROP_PLANT_HOME_LOCATION);
 		
 		controllerType = parseTemplate(PROP_CONTROLLER_TYPE, CONTROLLER_CONFIG_TEMPLATE_FORMAT);
 		controllerSimulated = parseBool(PROP_CONTROLLER_SIMULATED);
@@ -320,6 +333,17 @@ public class Configuration implements IConfiguration {
 		return i;
 	}
 
+	/**
+	 * @param param the property to be parsed.
+	 * @return the parsed property as a <code>PolarCoordinate</code>.
+	 */
+	private PolarCoordinate parsePolarCoordinate(String param) {
+		double latitude = Double.parseDouble(conf.getProperty(param + "." + PROP_LOCATION_LATITUDE));
+		double longitude = Double.parseDouble(conf.getProperty(param + "." + PROP_LOCATION_LONGITUDE));
+		double altitude = Double.parseDouble(conf.getProperty(param + "." + PROP_LOCATION_ALTITUDE));
+		return new PolarCoordinate(latitude, longitude, altitude);
+	}
+	
 	/**
 	 * @param param the property to be parsed.
 	 * @return the parsed property as a <code>FlightSimulatorType</code> object.
@@ -419,6 +443,13 @@ public class Configuration implements IConfiguration {
 	 */
 	public int getLocationSystemUpdateRate() {
 		return locationSystemUpdateRate;
+	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration#getPlantHomeLocation()
+	 */
+	public PolarCoordinate getPlantHomeLocation() {
+		return plantHomeLocation;
 	}
 
 	/* (non-Javadoc)

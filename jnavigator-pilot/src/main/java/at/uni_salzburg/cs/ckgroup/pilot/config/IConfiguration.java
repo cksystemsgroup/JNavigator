@@ -22,6 +22,8 @@ package at.uni_salzburg.cs.ckgroup.pilot.config;
 
 import java.net.URI;
 
+import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
+
 public interface IConfiguration {
 
 	/**
@@ -58,7 +60,12 @@ public interface IConfiguration {
 	 * @return the location system update rate as an integer value.
 	 */
 	public int getLocationSystemUpdateRate();
-
+	
+	/**
+	 * @return the plant's home location.
+	 */
+	public PolarCoordinate getPlantHomeLocation();
+	
 	/**
 	 * @return the controller type as a <code>String</code> object.
 	 */
