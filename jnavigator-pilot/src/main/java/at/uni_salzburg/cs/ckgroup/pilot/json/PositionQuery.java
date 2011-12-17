@@ -36,6 +36,9 @@ public class PositionQuery implements IJsonQuery {
 		Double courseOverGround = config.getVehicleBuilder().getPositionProvider().getCourseOverGround();
 		Double speedOverGround = config.getVehicleBuilder().getPositionProvider().getSpeedOverGround();
 		Double altitudeOverGround = config.getVehicleBuilder().getAutoPilot().getAltitudeOverGround();
+
+		if (pos == null)
+			return "";
 		
 		Map<String, Object> obj=new LinkedHashMap<String, Object>();
 		obj.put("latitude", pos.getLatitude());
