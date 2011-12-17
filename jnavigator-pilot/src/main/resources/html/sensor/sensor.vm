@@ -15,13 +15,18 @@
 				</thead>
 				<tbody>
 #foreach( $sensor in $sb.getSensors() )
+#set( $mt = $sensor.getMimeType() )
 #set( $v = "" )
 #set( $v = $sensor.getValue().replaceAll("\n","</br>") )
 					<tr>
 						<td>$sensor.name</td>
 						<td>$sensor.uri</td>
 						<td><a href="$contextPath/sensor/$sensor.Path">$sensor.Path</a></td>
+#if ( $mt == "image/png" )
+						<td><a href="$contextPath/sensor/$sensor.Path"><img src="$contextPath/sensor/$sensor.Path" style="width:200px" /></a></td>
+#else
 						<td>$v</td>
+#end
 					</tr>
 #end
 				<tbody>
