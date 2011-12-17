@@ -366,17 +366,12 @@
 		<repository>
 			<id>${site.id}</id>
 			<name>Inhouse Repository</name>
-			<url>http://${site.id}/archiva/repository/inhouse/</url>
+			<url>${inhouse.maven.repository}</url>
 		</repository>
 		<snapshotRepository>
-<!--
 			<id>${site.id}</id>
-			<name>Inhouse Snapshot Repository</name>
-			<url>http://${site.id}/archiva/repository/inhouse_snapshot/</url>
--->
-			<id>cs.uni-salzburg.at</id>
 			<name>JNavigator Snapshot Repository</name>
-			<url>scp://cs.edvz.sbg.ac.at/home/ckrainer/public_html/maven2</url>
+			<url>${inhouse_snapshot.maven.repository}</url>
 		</snapshotRepository>
 	</distributionManagement>
 <!--
