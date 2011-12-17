@@ -82,7 +82,7 @@ public class CommandFlyToAbs implements ICommand {
 		}
 		
 		LOG.info("Parameters: time=" + totalTime + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
-		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s.");
+		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s, distance=" + distance);
 		running = true;
 		while (running && distance > precision && now < start + 1000.0 * totalTime + CYCLE_TIME) {
 			now = System.currentTimeMillis();
@@ -94,14 +94,20 @@ public class CommandFlyToAbs implements ICommand {
 			interpreter.setSetCoursePosition(setCoursePosition);
 			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
 		}
-		
+
+		PolarCoordinate currentPosition = interpreter.getCurrentPosition();
+		CartesianCoordinate currentPositionCartesian = gs.polarToRectangularCoordinates(currentPosition);
+		distance = destinationCartesian.subtract(currentPositionCartesian).norm();
+
 		if (running && distance > precision)
 			LOG.info("Flying time is over. Waiting for the vehicle to finally reach it's destination. Distance is " + distance + "m.");
 		
 		interpreter.setSetCoursePosition(coordinate);
-		while (running && distance > precision) {
-			PolarCoordinate currentPosition = interpreter.getCurrentPosition();
-			CartesianCoordinate currentPositionCartesian = gs.polarToRectangularCoordinates(currentPosition);
+//		long overtimeStart = now = System.currentTimeMillis();
+		while (running && distance > precision /* && (now - overtimeStart < 20000 || distance > 10) */) {
+//			now = System.currentTimeMillis();
+			currentPosition = interpreter.getCurrentPosition();
+			currentPositionCartesian = gs.polarToRectangularCoordinates(currentPosition);
 			distance = destinationCartesian.subtract(currentPositionCartesian).norm();
 			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
 		}
