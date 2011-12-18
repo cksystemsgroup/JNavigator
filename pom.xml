@@ -4,7 +4,7 @@
 	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
 	<artifactId>jnavigator</artifactId>
 	<packaging>pom</packaging>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.2.1</version>
 	<name>JNavigator - Project</name>
 	<description>JNavigator Project</description>
 
@@ -58,8 +58,8 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:http://zoot/jnavigator/svn/trunk</connection>
-		<developerConnection>scm:svn:http://zoot/jnavigator/svn/trunk</developerConnection>
+		<connection>scm:svn:http://zoot.site/jnavigator/svn/tags/jnavigator-1.2.1</connection>
+		<developerConnection>scm:svn:http://zoot.site/jnavigator/svn/tags/jnavigator-1.2.1</developerConnection>
 	</scm>
 
 	<dependencyManagement>
