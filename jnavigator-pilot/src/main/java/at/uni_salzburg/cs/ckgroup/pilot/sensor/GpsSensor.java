@@ -48,6 +48,9 @@ public class GpsSensor extends AbstractSensor {
 		PolarCoordinate currentPosition = vehicleBuilder.getPositionProvider().getCurrentPosition();
 		Double speedOverGround = vehicleBuilder.getPositionProvider().getSpeedOverGround();
 		
+		if (currentPosition == null)
+			return "";
+		
 		return String.format(Locale.US, OUTPUT_FORMAT, 
 			currentPosition.getLatitude(),
 			currentPosition.getLongitude(),
