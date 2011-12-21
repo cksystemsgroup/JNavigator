@@ -76,7 +76,7 @@ public class AttitudeControllerParametersTestCase extends TestCase {
 		AttitudeControllerParameters base = new AttitudeControllerParameters (1, -1, 2, -2);
 
 		String actual = base.toString();
-		assertEquals ("AttitudeControllerParameters: kProportional=1, kIntegral=-1, kDerivative=2, kSecondDerivative=-2", actual);
+		assertEquals ("AttitudeControllerParameters: kProportional=1000, kIntegral=-1000, kDerivative=2000, kSecondDerivative=-2000", actual);
 	}
 	
 	/**

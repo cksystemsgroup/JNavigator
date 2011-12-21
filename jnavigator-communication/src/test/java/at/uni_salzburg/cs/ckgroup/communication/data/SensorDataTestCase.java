@@ -172,7 +172,7 @@ public class SensorDataTestCase extends TestCase {
 			assertNull(sd);
 		} catch (CommunicationException e) {
 			assertEquals(
-					"Input data length of 4 is not equal to the expected length of 42 bytes",
+					"Input data length of 4 is smaller than the expected length of 42 bytes",
 					e.getMessage());
 		}
 	}
