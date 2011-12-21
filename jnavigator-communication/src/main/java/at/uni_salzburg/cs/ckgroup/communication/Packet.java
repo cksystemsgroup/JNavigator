@@ -73,7 +73,7 @@ public class Packet {
 		this.type = type;
 		this.payload = payload;
 		if (payload != null && payload.length > 255)
-			throw new IOException("Message too long. Only lengths up to 127 bytes are supported. Requested lenght is " + payload.length);
+			throw new IOException("Message too long. Only lengths up to 255 bytes are supported. Requested lenght is " + payload.length + ".");
 	}
 	
 	/**
