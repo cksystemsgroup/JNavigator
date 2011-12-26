@@ -29,7 +29,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
 public class SonarSensor extends AbstractSensor {
 	
-	public static final String OUTPUT_FORMAT = "AltitudeOverGround: %1$.4f";
+	public static final String OUTPUT_FORMAT = "AltitudeOverGround: %1$.3f";
 	
 	private IVehicleBuilder vehicleBuilder;
 

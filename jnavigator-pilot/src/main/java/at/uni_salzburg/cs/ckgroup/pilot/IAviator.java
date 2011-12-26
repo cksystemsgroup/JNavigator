@@ -68,4 +68,9 @@ public interface IAviator {
 	 * @return the current VCL script as a list of <code>ICommand</code> objects.
 	 */
 	public List<ICommand> getVclSctipt ();
+
+	/**
+	 * @return the current status data as a <code>String</code> object.
+	 */
+	public String getStatusData();
 }

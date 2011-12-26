@@ -46,4 +46,5 @@ public interface IInterpreter {
 	
 	public IGeodeticSystem getGeodeticSystem();
 	
+	public String getStatusData ();
 }

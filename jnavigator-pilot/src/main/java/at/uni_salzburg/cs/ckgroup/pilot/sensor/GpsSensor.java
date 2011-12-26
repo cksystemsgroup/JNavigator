@@ -30,7 +30,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
 public class GpsSensor extends AbstractSensor {
 	
-	public static final String OUTPUT_FORMAT = "Latitude: %1$.8f\nLongitude: %2$.8f\nAltitude: %3$.8f\nCourseOverGround: %4$.0f\nSpeedOverGround: %5$.2f\n";
+	public static final String OUTPUT_FORMAT = "Latitude: %1$.8f\nLongitude: %2$.8f\nAltitude: %3$.3f\nCourseOverGround: %4$.0f\nSpeedOverGround: %5$.2f\n";
 	
 	private IVehicleBuilder vehicleBuilder;
 

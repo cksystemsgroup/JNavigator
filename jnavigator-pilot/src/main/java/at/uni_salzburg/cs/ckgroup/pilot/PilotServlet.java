@@ -55,6 +55,7 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 		new ServiceEntry("/admin/.*", new AdminService(this)),
 		new ServiceEntry("/json.*", new JsonQueryService(this)),
 		new ServiceEntry("/sensor/.*", new SensorService(this)),
+		new ServiceEntry("/status.*", new StatusService(this)),
 		new ServiceEntry(".*", new DefaultService(this))
 	};
 

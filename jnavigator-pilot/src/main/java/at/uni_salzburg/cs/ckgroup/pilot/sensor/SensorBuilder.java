@@ -1,5 +1,5 @@
 /*
- * @(#) SensorFactory.java
+ * @(#) SensorBuilder.java
  *
  * This code is part of the JNavigator project.
  * Copyright (c) 2011  Clemens Krainer

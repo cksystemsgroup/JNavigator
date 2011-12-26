@@ -22,6 +22,7 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
@@ -187,7 +188,13 @@ public class Interpreter extends Thread implements IInterpreter {
 	}
 
 	public PolarCoordinate getCurrentPosition() {
+		if (positionProvider == null)
+			return null;
+		
 		PolarCoordinate p = positionProvider.getCurrentPosition();
+		if (p == null)
+			return null;
+		
 		return new PolarCoordinate(p.latitude, p.longitude, autoPilot.getAltitudeOverGround());
 	}
 
@@ -201,6 +208,45 @@ public class Interpreter extends Thread implements IInterpreter {
 
 	public void setAutoPilot(IAutoPilot autoPilot) {
 		this.autoPilot = autoPilot;
+	}
+	
+	public String getStatusData () {
+		PolarCoordinate p = getCurrentPosition();
+		StringBuilder b = new StringBuilder();
+		if (p != null) {
+			b.append(String.format(Locale.US, "Latitude: %.8f\n", p.latitude));
+			b.append(String.format(Locale.US, "Longitude: %.8f\n", p.longitude));
+			b.append(String.format(Locale.US, "AltitudeOverGround: %.3f\n", p.altitude));
+		}
+		
+		PolarCoordinate dst = null;
+		Double velocity = null;
+		
+		if (activeCmd != null) {
+			if (activeCmd instanceof CommandFlyToAbs) {
+				CommandFlyToAbs cmd = (CommandFlyToAbs)activeCmd;
+				dst = cmd.getCoordinate();
+				velocity = Double.valueOf(cmd.getVelocity());
+			} else if (activeCmd instanceof CommandFlyToAbsOld) {
+				CommandFlyToAbsOld cmd = (CommandFlyToAbsOld)activeCmd;
+				dst = cmd.getCoordinate();
+				velocity = Double.valueOf(cmd.getVelocity());
+			} else if (activeCmd instanceof CommandJumpToAbs) {
+				CommandJumpToAbs cmd = (CommandJumpToAbs)activeCmd;
+				dst = cmd.getCoordinate();
+			}
+		}
+		
+		if (dst != null) {
+			b.append(String.format(Locale.US, "NextLatitude: %.8f\n", dst.latitude));
+			b.append(String.format(Locale.US, "NextLongitude: %.8f\n", dst.longitude));
+			b.append(String.format(Locale.US, "NextAltitudeOverGround: %.3f\n", dst.altitude));
+		}
+		
+		if (velocity != null)
+			b.append(String.format(Locale.US, "Velocity: %.1f\n", velocity));
+		
+		return b.toString();
 	}
 	
 }

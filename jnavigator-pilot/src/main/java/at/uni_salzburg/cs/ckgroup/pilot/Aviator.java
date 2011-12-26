@@ -187,6 +187,13 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 	public void setVehicleBuilder(IVehicleBuilder vehicleBuilder) {
 		this.vehicleBuilder = vehicleBuilder;
 	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.pilot.IAviator#getStatusData()
+	 */
+	public String getStatusData() {
+		return interpreter.getStatusData();
+	}
 	
 	
 }
