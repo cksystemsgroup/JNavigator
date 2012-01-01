@@ -150,7 +150,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.0-beta-3</version>
+					<version>3.0</version>
 					<configuration>
 						<inputEncoding>UTF-8</inputEncoding>
 						<outputEncoding>UTF-8</outputEncoding>
@@ -282,7 +282,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.0-beta-3</version>
+				<version>3.0</version>
 <!--
 				<configuration>
 					<inputEncoding>UTF-8</inputEncoding>
@@ -357,11 +357,9 @@
 
 	<distributionManagement>
 		<site>
-			<id>zoot</id>
-<!--
-			<url>scp://${site.host}/${site.basedir}</url>
--->
+			<id>${site.deployment.id}</id>
 			<url>scp://zoot/www/docs/zoot.site/jnavigator/site</url>
+			<!-- <url>scp://141.201.106.16/home/ckrainer/public_html/site/jnavigator</url> -->
 		</site>
 		<repository>
 			<id>${site.id}</id>
