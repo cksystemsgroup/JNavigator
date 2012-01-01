@@ -34,6 +34,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
 
 public class WaypointsQuery implements IJsonQuery {
 
+	@SuppressWarnings("unchecked")
 	public String execute(IServletConfig config) {
 		
 		
