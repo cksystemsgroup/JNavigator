@@ -20,14 +20,18 @@
  */
 package at.uni_salzburg.cs.ckgroup.course;
 
+import java.io.Serializable;
+
 /**
  * This class implements a 3-tuple to describe a position in a polar coordinate
  * system.
  * 
  * @author Clemens Krainer
  */
-public class PolarCoordinate
+public class PolarCoordinate implements Serializable
 {
+	private static final long serialVersionUID = 7565470124745087492L;
+
 	/**
 	 * The latitude value of this vector.
 	 * 
