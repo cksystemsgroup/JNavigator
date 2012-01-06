@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.pilot.json.IJsonQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.PositionQuery;
+import at.uni_salzburg.cs.ckgroup.pilot.json.SensorQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.WaypointsQuery;
 
 
@@ -44,6 +45,7 @@ public class JsonQueryService extends DefaultService {
 	private final static Map<String,IJsonQuery> actions = new HashMap<String, IJsonQuery>() {{
 		put("position", new PositionQuery());
 		put("waypoints", new WaypointsQuery());
+		put("sensors", new SensorQuery());
 	}};
 	
 	public JsonQueryService (IServletConfig servletConfig) {
