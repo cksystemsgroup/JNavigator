@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import at.uni_salzburg.cs.ckgroup.pilot.json.SensorQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.sensor.AbstractSensor;
 
 
@@ -50,6 +51,12 @@ public class SensorService extends DefaultService {
 			servicePath = request.getRequestURI().substring(request.getContextPath().length());
 		
 		String[] p = servicePath.split("/");
+		if ("sensors".equals(p[2])) {
+			SensorQuery query = new SensorQuery();
+			emitPlainText(response, query.execute(servletConfig));
+			return;
+		}
+		
 		AbstractSensor s = servletConfig.getConfiguration().getSensorBuilder().getSensors().get(p[2]);
 		
 		if (s != null) {
