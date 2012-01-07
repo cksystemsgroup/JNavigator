@@ -47,7 +47,7 @@ public class PositionQuery implements IJsonQuery {
 		obj.put("courseOverGround", courseOverGround);
 		obj.put("speedOverGround", speedOverGround);
 		obj.put("altitudeOverGround", altitudeOverGround);
-		obj.put("autoPilotFlight", Boolean.toString(config.getVehicleBuilder().getAutoPilot().isAutoPilotFlight()));
+		obj.put("autoPilotFlight", Boolean.valueOf(config.getVehicleBuilder().getAutoPilot().isAutoPilotFlight()));
 		
 		return JSONValue.toJSONString(obj);
 	}
