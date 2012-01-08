@@ -22,13 +22,16 @@ package at.uni_salzburg.cs.ckgroup.course;
 
 import java.io.Serializable;
 
+import org.json.simple.JSONAware;
+import org.json.simple.JSONObject;
+
 /**
  * This class implements a 3-tuple to describe a position in a polar coordinate
  * system.
  * 
  * @author Clemens Krainer
  */
-public class PolarCoordinate implements Serializable
+public class PolarCoordinate implements Serializable, JSONAware
 {
 	private static final long serialVersionUID = 7565470124745087492L;
 
@@ -167,4 +170,12 @@ public class PolarCoordinate implements Serializable
 		return "(" + latitude + "°, " + longitude + "°, " + altitude + "m)";
 	}
 
+	@SuppressWarnings("unchecked")
+	public String toJSONString() {
+	    JSONObject obj = new JSONObject();
+	    obj.put("latitude", latitude);
+	    obj.put("longitude", longitude);
+	    obj.put("altitude", altitude);
+	    return obj.toString();
+	}
 }
