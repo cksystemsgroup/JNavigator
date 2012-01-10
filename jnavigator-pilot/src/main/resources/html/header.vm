@@ -24,8 +24,10 @@
 #else
 				<li><a href="$contextPath/course.tpl" style="color: red;">Course</a></li>
 #end
+#if( 0 )
 #if( $cfg.getSystemProperty("pilot.web.snoop") )
 				<li><a href="snoop">Snoop</a></li>
+#end
 #end
 			</ul>
 		</div>

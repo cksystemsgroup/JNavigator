@@ -143,7 +143,7 @@ a:hover {
 	padding: 6px 5px 2px 5px;
 	border: 1px solid #DEDEDE;
 	background: #FFFFFF;
-	text-transform: lowercase;
+/* 	text-transform: lowercase; */
 	font: normal 11px Arial, Helvetica, sans-serif;
 	color: #5D781D;
 }
@@ -230,7 +230,7 @@ a:hover {
 
 .post .title a {
 	border: none;
-	text-transform: lowercase;
+/* 	text-transform: lowercase; */
 	color: #7D7764;
 }
 
@@ -395,7 +395,7 @@ a:hover {
 	margin: 0px;
 	padding: 0px 0px 20px 0px;
 	letter-spacing: -1px;
-	text-transform: lowercase;
+/* 	text-transform: lowercase; */
 	font-size: 26px;
 	color: #FFFFFF;
 }
@@ -461,7 +461,7 @@ a:hover {
 	margin: 0px;
 	padding: 0px;
 	letter-spacing: -2px;
-	text-transform: lowercase;
+/* 	text-transform: lowercase; */
 	font-size: 34px;
 	color: #345E9B;
 }
@@ -478,7 +478,7 @@ a:hover {
 	background: url(images/img07.jpg) no-repeat left top;
 	letter-spacing: -2px;
 	text-align: center;
-	text-transform: lowercase;
+/* 	text-transform: lowercase; */
 	font-size: 30px;
 	color: #FFFFFF;
 }

@@ -7,10 +7,10 @@
 			<table class="sensors">
 				<thead>
 					<tr>
-						<th>name</th>
-						<th>device URI</th>
-						<th>access path</th>
-						<th>current value</th>
+						<th>Name</th>
+						<th>Device URI</th>
+						<th>Access Path</th>
+						<th>Current Value</th>
 					</tr>
 				</thead>
 				<tbody>
