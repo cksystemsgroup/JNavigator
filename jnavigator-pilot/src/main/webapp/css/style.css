@@ -504,3 +504,6 @@ table.sensors thead tr {
     background-color: #e5decb;
 }
 
+input.sidebarTextInput {
+	width:220px;
+}
