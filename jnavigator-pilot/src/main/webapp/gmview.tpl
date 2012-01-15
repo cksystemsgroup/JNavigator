@@ -6,7 +6,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>ESE CPCC Google Maps Viewer</title>
 <link href="$contextPath/css/style.css" rel="stylesheet" type="text/css" media="screen" />
-<script src="http://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;sensor=false&amp;amp;key=ABQIAAAApGUYTzlXwtAjho0_wwtmART2yXp_ZAY8_ufC3CFXhHIE1NvwkxRHls80HZn5Q3wFin31SltZmLZlEQ" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;sensor=false&amp;amp;key=$systemProperties.getProperty("google.maps.api.key")" type="text/javascript"></script>
 <script src="js/gmviewer.js" type="text/javascript"></script>
 <!--
 <script src="js/raphael-min.js" type="text/javascript"></script>
