@@ -74,8 +74,13 @@ public class CommandFactory {
 		} else if (cmdClass == CommandNoop.class) {
 			return new CommandNoop();
 			
-		} else {
-			
+		} else if (cmdClass == CommandFollowDistance.class){
+			return new CommandFollowDistance(
+				cmdParams[0],
+				Double.parseDouble(cmdParams[1]),
+				Double.parseDouble(cmdParams[2]),
+				Double.parseDouble(cmdParams[3])
+			);
 		}
 		
 		return null;

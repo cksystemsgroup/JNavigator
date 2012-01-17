@@ -21,6 +21,7 @@
 package at.uni_salzburg.cs.ckgroup.pilot.config;
 
 import java.net.URI;
+import java.util.Map;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
@@ -85,6 +86,11 @@ public interface IConfiguration {
 	 * @return the pilot name.
 	 */
 	public String getPilotName();
+	
+	/**
+	 * @return the current pilot URI map.
+	 */
+	public Map<String, URI> getPilotUriMap(); 
 
 	/**
 	 * @return true if the pilot should update the FlightGear flight simulator.

@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import at.uni_salzburg.cs.ckgroup.pilot.json.IJsonQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.PositionQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.SensorQuery;
+import at.uni_salzburg.cs.ckgroup.pilot.json.SetCoursePositionQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.WaypointsQuery;
 
 
@@ -46,6 +47,7 @@ public class JsonQueryService extends DefaultService {
 		put("position", new PositionQuery());
 		put("waypoints", new WaypointsQuery());
 		put("sensors", new SensorQuery());
+		put("setCoursePosition", new SetCoursePositionQuery());
 	}};
 	
 	public JsonQueryService (IServletConfig servletConfig) {

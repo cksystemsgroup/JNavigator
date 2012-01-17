@@ -29,7 +29,7 @@ import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class CommandLand implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandLand.class);
+	private static final Logger LOG = Logger.getLogger(CommandLand.class);
 	
 	public static final double MAXIMUM_LAND_ACCELERATION = 0.3;
 	

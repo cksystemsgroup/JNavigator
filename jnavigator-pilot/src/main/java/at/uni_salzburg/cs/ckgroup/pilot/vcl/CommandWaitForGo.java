@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 
 public class CommandWaitForGo implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandWaitForGo.class);
+	private static final Logger LOG = Logger.getLogger(CommandWaitForGo.class);
 	
 	boolean running = false;
 	boolean forcedTermination = false;

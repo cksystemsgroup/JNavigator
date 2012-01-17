@@ -32,6 +32,7 @@ import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.VehicleStatus;
+import at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration;
 import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandGoManual;
 import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandLand;
 import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
@@ -60,6 +61,11 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 	 */
 	private IVehicleBuilder vehicleBuilder;
 	
+	/**
+	 * The current configuration.
+	 */
+	private IConfiguration config;
+	
 	public Aviator () {
 		LOG.info("Constructor.");
 	}
@@ -81,8 +87,7 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 	 * Destroy all dependent objects and unload the configuration.
 	 */
 	public void destroy() {
-		// TODO Auto-generated method stub
-		LOG.error("Destruction not yet implemented.");
+		interpreter.terminate();
 	}
 	
 	/**
@@ -122,6 +127,7 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 		interpreter.loadCommandSequence(parser.getScript(), false);
 		interpreter.setPositionProvider(vehicleBuilder.getPositionProvider());
 		interpreter.setAutoPilot(vehicleBuilder.getAutoPilot());
+		interpreter.setConfiguration(config);
 		interpreter.start();
 	}
 
@@ -193,6 +199,10 @@ public class Aviator implements IAviator, ISetCourseSupplier {
 	 */
 	public String getStatusData() {
 		return interpreter.getStatusData();
+	}
+
+	public void setConfig(IConfiguration config) {
+		this.config = config;
 	}
 	
 	

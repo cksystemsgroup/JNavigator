@@ -24,12 +24,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -101,6 +103,10 @@ public class Configuration implements IConfiguration {
 	 */
 	public static final String PROP_SENSOR_PREFIX = "sensor.";
 	public static final String PROP_SENSOR_LIST = PROP_SENSOR_PREFIX + "list";
+	
+	public static final String PROP_PILOT_PREFIX = "pilot.";
+	public static final String PROP_PILOT_LIST = PROP_PILOT_PREFIX + "list";
+	public static final String PROP_PILOT_ULR_SUFFIX = ".url";
 	
 	/**
 	 * The parameters and their default values. 
@@ -206,6 +212,10 @@ public class Configuration implements IConfiguration {
 	 */
 	private FlightSimulatorType flightSimulatorType;
 	
+	/**
+	 * The pilot URI map for the VCL interpreter.
+	 */
+	private Map<String, URI> pilotUriMap;
 	
 	/**
 	 * Load a vehicle configuration from an <code>InputStream</code> and build it.
@@ -253,6 +263,20 @@ public class Configuration implements IConfiguration {
 		Properties sensorProperties = PropertyUtils.extract(PROP_SENSOR_PREFIX, conf);
 		sensors.setWorkDir(workDir.getAbsolutePath());
 		sensors.createSensors(sensorProperties);
+		
+		pilotUriMap = new TreeMap<String, URI>();
+		String[] pilots = conf.getProperty(PROP_PILOT_LIST,"").split("\\s*,\\s*");
+		for (String p : pilots) {
+			if (p.isEmpty()) {
+				continue;
+			}
+			String url = conf.getProperty(PROP_PILOT_PREFIX + p + PROP_PILOT_ULR_SUFFIX, "").trim();
+			try {
+				pilotUriMap.put(p, new URI(url));
+			} catch (URISyntaxException e) {
+				LOG.error("Invalid URI to pilot '" + p + "': " + url);
+			}
+		}
 	}
 
 	/**
@@ -508,6 +532,13 @@ public class Configuration implements IConfiguration {
 		return sensors;
 	}
 
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration#getPilotUriMap()
+	 */
+	public Map<String, URI> getPilotUriMap() {
+		return pilotUriMap;
+	}
+	
 	/**
 	 * @param workDir the directory to be used for temporary files.
 	 */
@@ -522,4 +553,5 @@ public class Configuration implements IConfiguration {
 	public String getSystemProperty(String key) {
 		return System.getProperty(key);
 	}
+
 }

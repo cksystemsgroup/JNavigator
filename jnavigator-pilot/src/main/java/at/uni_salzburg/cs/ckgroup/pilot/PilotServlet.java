@@ -80,6 +80,7 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 			servletConfig.getServletContext().setAttribute("configuration", configuration);
 			
 			aviator.setVehicleBuilder(vehicleBuilder);
+			aviator.setConfig(configuration);
 			
 			configuration.getSensorBuilder().setVehicleBuilder(vehicleBuilder);
 			
@@ -127,9 +128,8 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 	}
 	
     public void destroy () {
-//    	backGroundTimer.cancel();
-//    	backGroundTimerTask.finish();
     	aviator.destroy();
+    	vehicleBuilder.destroy();
     }
 
 	public Properties getProperties() {

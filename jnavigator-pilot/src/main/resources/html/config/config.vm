@@ -24,7 +24,17 @@
 <tr><td><span style="$col">$param = $value</span><br/></td><td>#if($e)<span style="$col">$e</span>#{end}</td></tr>
 #end
 </table>
-		</div>
+	</div>
+#if( $cfg.getPilotUriMap().size() > 0 )
+	<div class="post">
+		<h2 class="title"><a href="#">Remote Pilots</a></h2>
+		<table>
+#foreach( $pilot in $cfg.getPilotUriMap().keySet() )
+			<tr><td>$pilot</td><td style="width:15px"></td><td>$cfg.getPilotUriMap().get($pilot)</td></tr>
+#end
+		</table>
+	</div>
+#end
 	</div>
 </div>
 <!-- end #content -->

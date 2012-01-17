@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 
 public class CommandHover implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandHover.class);
+	private static final Logger LOG = Logger.getLogger(CommandHover.class);
 	
 	private long time;
 	

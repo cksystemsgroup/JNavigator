@@ -28,7 +28,7 @@ import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class CommandJumpToAbs implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandJumpToAbs.class);
+	private static final Logger LOG = Logger.getLogger(CommandJumpToAbs.class);
 	
 	public static final double MINIMUM_PRECISION = 0.1;
 	

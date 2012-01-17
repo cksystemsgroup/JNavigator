@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 
 public class Parser {
 	
-	Logger LOG = Logger.getLogger(Parser.class);
+	private static final Logger LOG = Logger.getLogger(Parser.class);
 	
 	private List<Boolean> errors = new ArrayList<Boolean>();
 	private List<String> source = new ArrayList<String>();
@@ -62,8 +62,9 @@ public class Parser {
 				"precision\\s+(\\d+)(.\\d+)?m", "$1:$2:$3$4:$5$6"));
 		add(new CmdEntry (CommandHover.class, "hover\\s+for\\s+(\\d+)s", "$1"));
 		add(new CmdEntry (CommandLand.class, "land", null));
-		add(new CmdEntry (CommandTakeOff.class, "takeoff (\\d+)(.\\d+)? for (\\d+)s", "$1$2:$3"));
+		add(new CmdEntry (CommandTakeOff.class, "takeoff (\\d+)(.\\d+)?m? for (\\d+)s", "$1$2:$3"));
 		add(new CmdEntry (CommandWaitForGo.class, "waitfor\\s+go", null));
+		add(new CmdEntry (CommandFollowDistance.class, "follow\\s+(\\S+)\\s+distance\\((\\d+)m\\s*,\\s*(\\d+)deg,(\\d+)m\\)", "$1:$2:$3:$4"));
 	}};
 	
 	public void parse(InputStream inStream) throws IOException {

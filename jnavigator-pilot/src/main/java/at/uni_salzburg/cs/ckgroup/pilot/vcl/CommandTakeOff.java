@@ -29,7 +29,7 @@ import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class CommandTakeOff implements ICommand {
 	
-	Logger LOG = Logger.getLogger(CommandTakeOff.class);
+	private static final Logger LOG = Logger.getLogger(CommandTakeOff.class);
 	
 	public static final double MAXIMUM_TAKEOFF_VELOCITY = 0.5;
 	
