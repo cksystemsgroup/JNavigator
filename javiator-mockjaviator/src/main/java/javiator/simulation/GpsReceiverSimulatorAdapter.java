@@ -150,6 +150,11 @@ public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransfer
 	 * This is the <code>OutputStream</code> for logging.
 	 */
 //	private PrintStream log = null;
+	
+	/**
+	 * The timer that invokes the GPS receiver simulator.
+	 */
+	private Timer timer;
 
 	/**
 	 * Construct a <code>GpsReceiverSimulatorAdapter</code>.
@@ -187,7 +192,7 @@ public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransfer
 		geodeticSystem = new WGS84 ();
 		gpsReceiverSimulator.setGeodeticSystem(geodeticSystem);
 		
-        Timer timer = new Timer ();
+        timer = new Timer ();
         timer.schedule (gpsReceiverSimulator, 100, 100);
         
         int port = Integer.parseInt (props.getProperty(PROP_GPS_RECEIVER_SIMULATOR_PORT,"3333"));
@@ -274,7 +279,13 @@ public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransfer
 	 * Terminate the currently running server thread.
 	 */
 	public void terminate() {
+		timer.cancel();
 		socketServer.terminate();
+		try {
+			gpsReceiverSimulator.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -282,6 +293,10 @@ public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransfer
 	 */
 	public IGeodeticSystem getGeodeticSystem() {
 		return geodeticSystem;
+	}
+
+	public void close() {
+		// TODO Auto-generated method stub
 	}
 	
 }

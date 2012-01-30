@@ -374,4 +374,8 @@ public class PositionProvider implements IPositionProvider, ILocationMessageList
 		pos = tagOnePosition.add(pos);
 		return pos;
 	}
+
+	public void close() {
+		// TODO Auto-generated method stub
+	}
 }

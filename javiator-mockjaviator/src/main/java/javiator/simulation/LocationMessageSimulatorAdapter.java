@@ -259,6 +259,10 @@ public class LocationMessageSimulatorAdapter extends Thread implements IDataTran
 	public void terminate() {
 		socketServer.terminate();
 	}
+
+	public void close() {
+		// TODO Auto-generated method stub
+	}
 	
     /**
 	 * This class implements a socket server worker thread that inherits an
@@ -309,7 +313,6 @@ public class LocationMessageSimulatorAdapter extends Thread implements IDataTran
             	connection.close ();
             } catch (IOException e) {}
         }
-    	
     }
 
 }

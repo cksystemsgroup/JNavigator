@@ -349,6 +349,10 @@ public class SimplePilotTestCase extends TestCase
 			return geodeticSystem;
 		}
 
+		public void close() {
+			// TODO Auto-generated method stub
+		}
+
 	}
 	
 

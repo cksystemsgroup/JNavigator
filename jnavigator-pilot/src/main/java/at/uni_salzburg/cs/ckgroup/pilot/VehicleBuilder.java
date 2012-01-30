@@ -263,6 +263,9 @@ public class VehicleBuilder implements IVehicleBuilder {
 		
 		if (jcontrolAdapter != null)
 			jcontrolAdapter.terminate();
+		
+		if (positionProvider != null)
+			positionProvider.close();
 	}
 
 	/**

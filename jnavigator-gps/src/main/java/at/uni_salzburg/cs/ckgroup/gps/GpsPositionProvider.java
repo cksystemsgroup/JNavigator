@@ -238,5 +238,9 @@ public class GpsPositionProvider implements IPositionProvider, Nmea0183MessageLi
 		return geodeticSystem;
 	}
 
+	public void close() {
+		// TODO Auto-generated method stub
+	}
+
 
 }

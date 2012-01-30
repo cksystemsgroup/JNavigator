@@ -233,4 +233,8 @@ public class SimplePositionProvider implements IPositionProvider, ILocationMessa
 		return geodeticSystem;
 	}
 
+	public void close() {
+		// TODO Auto-generated method stub
+	}
+
 }

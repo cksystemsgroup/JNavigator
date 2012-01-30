@@ -316,6 +316,11 @@ public class GpsReceiverSimulator extends TimerTask implements IConnection
 	private String ageOfDiffCorr;
 	
 	/**
+	 * True as long as the GpsReceiverInputStream is active.
+	 */
+	private boolean inputStreamRunning = true;
+	
+	/**
 	 * Construct a GpsReceiverSimulator by means of properties.
 	 * 
 	 * @param properties the properties to be used. 
@@ -767,7 +772,7 @@ public class GpsReceiverSimulator extends TimerTask implements IConnection
 	 * @see at.uni_salzburg.cs.ckgroup.io.IConnection#close()
 	 */
 	public void close () throws IOException {
-		// Intentionally empty
+		inputStreamRunning = false;
 	}
 	
 	/**
@@ -882,7 +887,7 @@ public class GpsReceiverSimulator extends TimerTask implements IConnection
 			if (currentLine == null) {
 
 				int counter = 0;
-				while (readIndex == writeIndex) {
+				while (readIndex == writeIndex && inputStreamRunning) {
 					Thread.yield ();
 					if (counter++ > 3)
 						try { Thread.sleep (100); }

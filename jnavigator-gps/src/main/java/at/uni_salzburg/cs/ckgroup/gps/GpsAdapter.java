@@ -32,6 +32,8 @@ import at.uni_salzburg.cs.ckgroup.ConfigurationException;
  * @author Clemens Krainer
  */
 public class GpsAdapter extends GpsPositionProvider {
+	
+	private GpsDaemon gpsDaemon;
 
 	/**
 	 * Construct a <code>GpsAdapter</code>.
@@ -53,7 +55,16 @@ public class GpsAdapter extends GpsPositionProvider {
 	 */
 	private void init (Properties props) throws ConfigurationException, IOException {
 		GpsDaemonBuilder gpsDaemonBuilder = new GpsDaemonBuilder (props);
-		GpsDaemon gpsDaemon = gpsDaemonBuilder.getGpsDaemon ();
+		gpsDaemon = gpsDaemonBuilder.getGpsDaemon ();
 		gpsDaemon.addNmea0183MessageListener (this);
+	}
+
+	/* (non-Javadoc)
+	 * @see at.uni_salzburg.cs.ckgroup.gps.GpsPositionProvider#close()
+	 */
+	@Override
+	public void close() {
+		super.close();
+		gpsDaemon.terminate();
 	}
 }

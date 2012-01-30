@@ -57,4 +57,9 @@ public interface IPositionProvider
 	 * @return the currently used geodetic system.
 	 */
 	public IGeodeticSystem getGeodeticSystem ();
+	
+	/**
+	 * Close this position provider.
+	 */
+	public void close();
 }

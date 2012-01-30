@@ -161,10 +161,10 @@ public class AutoPilot implements IDataTransferObjectListener, ISender, IAutoPil
 	/**
 	 * True if the sensor data, set-course data, etc. should be logged. 
 	 */
-	private boolean logTheData = true;
+	private boolean logTheData = false;
 	
 	/**
-	 * The file where the data schould be logged into.
+	 * The file where the data should be logged into.
 	 */
 	private PrintWriter logWriter = null;
 	
@@ -434,7 +434,9 @@ public class AutoPilot implements IDataTransferObjectListener, ISender, IAutoPil
 		autoPilotFlight = false;
 		state = FlyingState.NONE;
 		mode = FlyingMode.NONE;
-		logWriter.close();
+		if (logTheData) {
+			logWriter.close();
+		}
 	}
 	
 	

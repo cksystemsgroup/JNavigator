@@ -134,4 +134,8 @@ public class DummyPositionProvider implements IPositionProvider
 		return geodeticSystem;
 	}
 
+	public void close() {
+		// TODO Auto-generated method stub
+	}
+
 }
