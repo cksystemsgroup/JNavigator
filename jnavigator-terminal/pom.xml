@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>jnavigator</artifactId>
 		<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.3</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>jnavigator-terminal</artifactId>
