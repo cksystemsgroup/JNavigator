@@ -50,6 +50,7 @@
 		<module>jnavigator-jcontrol</module>
 		<module>jnavigator-lab</module>
 		<module>jnavigator-location</module>
+		<module>jnavigator-mage</module>
 		<module>jnavigator-ubisense-otw</module>
 		<module>jnavigator-ui</module>
 		<module>jnavigator-util</module>
