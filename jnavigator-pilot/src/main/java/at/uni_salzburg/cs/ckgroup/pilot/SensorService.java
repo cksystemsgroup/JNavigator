@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.pilot.json.SensorQuery;
+import at.uni_salzburg.cs.ckgroup.pilot.json.WaypointsQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.sensor.AbstractSensor;
 
 
@@ -53,6 +54,12 @@ public class SensorService extends DefaultService {
 		String[] p = servicePath.split("/");
 		if ("sensors".equals(p[2])) {
 			SensorQuery query = new SensorQuery();
+			emitPlainText(response, query.execute(servletConfig));
+			return;
+		}
+		
+		if ("waypoints".equals(p[2])) {
+			WaypointsQuery query = new WaypointsQuery();
 			emitPlainText(response, query.execute(servletConfig));
 			return;
 		}
