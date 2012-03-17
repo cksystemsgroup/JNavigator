@@ -59,8 +59,8 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:http://zoot/jnavigator/svn/trunk</connection>
-		<developerConnection>scm:svn:http://zoot/jnavigator/svn/trunk</developerConnection>
+		<connection>scm:svn:http://zoot.site/jnavigator/svn-jnavigator/trunk</connection>
+		<developerConnection>scm:svn:http://zoot.site/jnavigator/svn-jnavigator/trunk</developerConnection>
 	</scm>
 
 	<dependencyManagement>
