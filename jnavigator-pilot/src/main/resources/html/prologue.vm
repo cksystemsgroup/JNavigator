@@ -4,7 +4,12 @@
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>Pilot</title>
+#set( $cfg = $servletConfig.getServletContext().getAttribute("configuration") )
+#set( $pilotName = $cfg.getPilotName() )
+#if( !$pilotName )
+#set( $pilotName = "Pilot" )
+#end
+<title>$pilotName</title>
 <link href="$contextPath/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
