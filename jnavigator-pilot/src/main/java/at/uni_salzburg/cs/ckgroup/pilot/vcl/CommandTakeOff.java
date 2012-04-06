@@ -59,6 +59,12 @@ public class CommandTakeOff implements ICommand {
 	}
 
 	public void execute(IInterpreter interpreter) throws IOException {
+		
+		if (interpreter.getAutoPilot().isAutoPilotFlight()) {
+			LOG.info("Take off command ignored, because we're already flying.");
+			return;
+		}
+		
 		LOG.info("Starting engines.");
 		interpreter.getAutoPilot().startUpEngines();
 		
