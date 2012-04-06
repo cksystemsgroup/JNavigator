@@ -38,7 +38,7 @@ public class MimeParser {
 		String[] x = contentType.split(";\\s*boundary=");
 		
 		if (x.length == 0 || !"multipart/form-data".equals(x[0]))
-			throw new IllegalArgumentException("Content type is not a valid 'multipart/form-data'.");
+			throw new IllegalArgumentException("Content type '"+contentType+"'is not a valid 'multipart/form-data'.");
 		
 		separator = "--" + x[1];
 		terminator = separator + "--";

@@ -21,6 +21,7 @@
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
@@ -50,7 +51,10 @@ public class CommandTakeOff implements ICommand {
 	public CommandTakeOff (double takeOffAltitude, long time) {
 		this.takeOffAltitude = Math.abs(takeOffAltitude);
 		this.time = Math.abs(time * 1000);
-		long minimumTime = (long)(1000 * takeOffAltitude / MAXIMUM_TAKEOFF_VELOCITY);
+		long minimumTime = (long)(1000 * this.takeOffAltitude / MAXIMUM_TAKEOFF_VELOCITY);
+		if (minimumTime < 2) {
+			minimumTime = 2;
+		}
 		this.time = this.time < minimumTime ? minimumTime : this.time;
 	}
 
@@ -90,4 +94,11 @@ public class CommandTakeOff implements ICommand {
 		}
 		LOG.info("Termination completed.");
 	}
+	
+	@Override
+	public String toString() {
+		// takeoff 1m for 5s
+		return String.format(Locale.US, "takeoff %.1fm for %ds", takeOffAltitude, time/1000);
+	}
+	
 }

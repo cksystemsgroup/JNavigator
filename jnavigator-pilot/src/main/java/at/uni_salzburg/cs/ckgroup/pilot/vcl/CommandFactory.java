@@ -20,6 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
+import org.json.simple.JSONObject;
+
 public class CommandFactory {
 	
 	public static ICommand build (Class<?> cmdClass, String[] cmdParams) {
@@ -86,4 +88,36 @@ public class CommandFactory {
 		return null;
 	}
 
+	public static ICommand build(JSONObject obj) {
+		
+		if ("takeOff".equals(obj.get("cmd"))) {
+			Object a = obj.get("altitude");
+			Double alt = a != null ? (Double)a : 1.0;
+			return new CommandTakeOff(
+				alt < 1.0 ? 1.0 : alt,
+				(Long)obj.get("time")
+			);
+		}
+			
+		if ("flyTo".equals(obj.get("cmd"))) {
+			return new CommandFlyToAbs(
+				(Double)obj.get("latitude"),
+				(Double)obj.get("longitude"),
+				(Double)obj.get("altitude"),
+				(Double)obj.get("precision"),
+				(Double)obj.get("velocity")
+			);
+		}
+
+		if ("hover".equals(obj.get("cmd"))) {
+			return new CommandHover((Long)obj.get("time"));
+		}
+		
+		if ("land".equals(obj.get("cmd"))) {
+			return new CommandLand();
+		}
+		
+		return null;
+	}
+	
 }

@@ -89,4 +89,9 @@ public class CommandLand implements ICommand {
 		}
 		LOG.info("Termination completed.");
 	}
+	
+	@Override
+	public String toString() {
+		return "land";
+	}
 }

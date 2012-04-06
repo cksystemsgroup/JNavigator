@@ -20,10 +20,13 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +36,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandFactory;
+import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
 
 
 public class AdminService extends DefaultService {
@@ -72,30 +81,33 @@ public class AdminService extends DefaultService {
 		}
 		
 		boolean textMode = "text".equals(cmd[2]);
+		boolean jsonMode = "json".equals(cmd[2]);
 		String action = cmd[3];
-		
-		MimeParser parser = new MimeParser(request.getContentType());
-		List<MimeEntry> list = parser.parse(request.getReader());
+
 		MimeEntry uploadedFile = null;
-		String name = null;
-		String fileName = null;
-		
-		for (MimeEntry entry : list) {
-			Map<String, String> headerMap = entry.getHeaders();
-			String contentDisposition = headerMap.get(MimeEntry.CONTENT_DISPOSITION);
+		if (request.getContentType().startsWith("multipart/form-data")) {
+			MimeParser parser = new MimeParser(request.getContentType());
+			List<MimeEntry> list = parser.parse(request.getReader());
+			String name = null;
+			String fileName = null;
 			
-			if (contentDisposition.matches(".*\\sname=\"(\\S*)\".*"))
-				name = contentDisposition.replaceFirst(".*\\sname=\"(\\S*)\".*", "$1");
-			
-			if (contentDisposition.matches(".*\\sfilename=\"(\\S*)\".*"))
-				fileName = contentDisposition.replaceFirst(".*\\sfilename=\"(\\S*)\".*", "$1");
-			
-//			System.out.println("cdName=" + name + ", fileName=" + fileName);
-			LOG.info("cdName=" + name + ", fileName=" + fileName);
-			
-			if (name != null && fileName != null && !"".equals(fileName)) {
-				uploadedFile = entry;
-				break;
+			for (MimeEntry entry : list) {
+				Map<String, String> headerMap = entry.getHeaders();
+				String contentDisposition = headerMap.get(MimeEntry.CONTENT_DISPOSITION);
+				
+				if (contentDisposition.matches(".*\\sname=\"(\\S*)\".*"))
+					name = contentDisposition.replaceFirst(".*\\sname=\"(\\S*)\".*", "$1");
+				
+				if (contentDisposition.matches(".*\\sfilename=\"(\\S*)\".*"))
+					fileName = contentDisposition.replaceFirst(".*\\sfilename=\"(\\S*)\".*", "$1");
+				
+	//			System.out.println("cdName=" + name + ", fileName=" + fileName);
+				LOG.info("cdName=" + name + ", fileName=" + fileName);
+				
+				if (name != null && fileName != null && !"".equals(fileName)) {
+					uploadedFile = entry;
+					break;
+				}
 			}
 		}
 		
@@ -114,7 +126,8 @@ public class AdminService extends DefaultService {
 				emit422(request, response);
 				return;
 			}
-		} else if (ACTION_COURSE_UPLOAD.equals(action)) {
+			
+		} else if (ACTION_COURSE_UPLOAD.equals(action) && !jsonMode) {
 			File courseFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_COURSE_FILE));
 			if (uploadedFile != null) {
 				saveFile (uploadedFile, courseFile);
@@ -125,26 +138,70 @@ public class AdminService extends DefaultService {
 				emit422(request, response);
 				return;
 			}
+		} else if (ACTION_COURSE_UPLOAD.equals(action) && jsonMode) {
+			File courseFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_COURSE_FILE));
+			saveJsonCourse(request.getInputStream(), courseFile);
+			servletConfig.getAviator().loadVclScript(new FileInputStream(courseFile));
+			nextPage = request.getContextPath() + "/course.tpl";
+			
 		} else if (ACTION_START_COURSE.equals(action)) {
 			servletConfig.getAviator().start();
 			nextPage = request.getContextPath() + "/course.tpl";
 			LOG.info("Course started.");
+			
 		} else if (ACTION_STOP_COURSE.equals(action)) {
 			servletConfig.getAviator().stop();
 			nextPage = request.getContextPath() + "/course.tpl";
 			LOG.info("Course stopped.");
-		} else{
+			
+		} else {
 			LOG.error("Can not handle: " + servicePath);
 			emit404(request, response);
 			return;
 		}
 		
-		if (textMode) {
+		if (textMode || jsonMode) {
 			emit200 (request, response);
 		} else {
 			emit301 (request, response, nextPage);	
 		}
 
+	}
+
+	private void saveJsonCourse(InputStream inStream, File courseFileName) throws IOException {
+		
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		byte[] buf = new byte[1024];
+		int len;
+		while ( (len = inStream.read(buf)) > 0 ) {
+			outStream.write(buf, 0, len);
+		}
+		
+//		System.out.println("Course:");
+//		System.out.println(outStream.toString());
+		
+		JSONParser parser = new JSONParser();
+		JSONArray a = null;
+		try {
+			a = (JSONArray)parser.parse(outStream.toString());
+		} catch (ParseException e) {
+			throw new IOException("at parsing JSON setcourse: '" + outStream.toString() + "'",e);
+		}
+		
+		PrintWriter course = new PrintWriter(courseFileName);
+		
+		for (int k=0, l=a.size(); k < l; ++k) {
+			JSONObject o = (JSONObject)a.get(k);
+			ICommand cmd = CommandFactory.build(o);
+			if (cmd != null) {
+				LOG.info("saveJsonCourse: Adding command " + cmd.toString());
+				course.println(cmd.toString());
+			} else {
+				LOG.error("saveJsonCourse: Unknown command found in JSON course upload: " + o.toJSONString());
+			}
+		}
+		
+		course.close();
 	}
 
 	private void saveFile(MimeEntry course, File file) throws IOException {

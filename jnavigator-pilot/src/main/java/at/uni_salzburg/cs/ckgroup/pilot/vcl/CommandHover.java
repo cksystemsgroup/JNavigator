@@ -20,6 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 
 
@@ -64,4 +66,9 @@ public class CommandHover implements ICommand {
 		LOG.info("Termination completed.");
 	}
 
+	@Override
+	public String toString() {
+		// hover for 10s
+		return String.format(Locale.US, "hover for %ds", time/1000);
+	}
 }
