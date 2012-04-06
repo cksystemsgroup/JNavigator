@@ -71,7 +71,7 @@ public class Interpreter extends Thread implements IInterpreter {
 				activeCmd.terminate();
 			if (disrupt)
 				LOG.info("Cancelling current command in line " + programCounter);
-			if (!disrupt && activeCmd != null)
+			if (activeCmd != null)
 				activeCmd.waitForTermination();
 			this.cmds = cmds.toArray(new ICommand[0]);
 			programCounter = 0;

@@ -20,6 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
@@ -36,12 +38,17 @@ public class CommandFlyToAbs implements ICommand {
 	
 	public static final double MAXIMUM_VELOCITY = 4.0;
 	
+	public static final double MAXIMUM_ACCELERATION = 2.0;
+	
 	public static final long CYCLE_TIME = 500;
+
+	private static final double MPS_PER_KMH = 1 / 3.6;
 	
 	private PolarCoordinate coordinate;
 	private double velocity;
 	private double precision;
 	private boolean running = false;
+	private boolean terminating = false;
 
 	public CommandFlyToAbs (double latitude, double longitude, double altitude, double precision, double velocity) {
 		coordinate = new PolarCoordinate(latitude, longitude, altitude);
@@ -84,7 +91,7 @@ public class CommandFlyToAbs implements ICommand {
 		LOG.info("Parameters: time=" + totalTime + ", vMax=" + vMax + ", dist=" + distance + ", velocity=" + velocity);
 		LOG.info("Flying from " + where + " to " + coordinate + " in " + totalTime + "s, distance=" + distance);
 		running = true;
-		while (running && distance > precision && now < start + 1000.0 * totalTime + CYCLE_TIME) {
+		while (running && !terminating && distance > precision && now < start + 1000.0 * totalTime + CYCLE_TIME) {
 			now = System.currentTimeMillis();
 			double tFlight = (now - start) / 1000.0;
 			double s = 2.0 * vMax * tFlight * tFlight * (3.0 - 2.0 * tFlight / totalTime) / (3.0 * totalTime);
@@ -93,6 +100,30 @@ public class CommandFlyToAbs implements ICommand {
 			PolarCoordinate setCoursePosition = gs.rectangularToPolarCoordinates(setCourseCartesian);
 			interpreter.setSetCoursePosition(setCoursePosition);
 			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+		}
+		
+		if (terminating) {
+			where = interpreter.getCurrentPosition();
+			whereCartesian = gs.polarToRectangularCoordinates(where);
+			double speed = interpreter.getPositionProvider().getSpeedOverGround() * MPS_PER_KMH;
+			totalTime = speed / MAXIMUM_ACCELERATION;
+			distance = speed * totalTime / 2;
+			double mvNorm = motionVector.norm();
+			destinationCartesian = whereCartesian.add(motionVector.multiply(distance/mvNorm));
+			start = now = System.currentTimeMillis();
+			LOG.info(String.format(Locale.US, "Forced termination: totalTime=%.1f speed=%.2f distance=%.1f", totalTime, speed, distance));
+			while (distance > precision && now < start + 1000.0 * totalTime + CYCLE_TIME) {
+				now = System.currentTimeMillis();
+				double tFlight = (now - start) / 1000.0;
+				double s = speed * tFlight - MAXIMUM_ACCELERATION * tFlight * tFlight / 2;
+				CartesianCoordinate differenceVector = motionVector.multiply(s/mvNorm);
+				CartesianCoordinate setCourseCartesian = whereCartesian.add(differenceVector);
+				PolarCoordinate setCoursePosition = coordinate = gs.rectangularToPolarCoordinates(setCourseCartesian);
+				interpreter.setSetCoursePosition(setCoursePosition);
+				LOG.info(String.format(Locale.US, "FT: tFlight=%.1f s=%.2f speed=%.1f", tFlight, s, interpreter.getPositionProvider().getSpeedOverGround() * MPS_PER_KMH));
+				try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+			}
+			
 		}
 
 		PolarCoordinate currentPosition = interpreter.getCurrentPosition();
@@ -104,7 +135,7 @@ public class CommandFlyToAbs implements ICommand {
 		
 		interpreter.setSetCoursePosition(coordinate);
 //		long overtimeStart = now = System.currentTimeMillis();
-		while (running && distance > precision /* && (now - overtimeStart < 20000 || distance > 10) */) {
+		while (running && !terminating && distance > precision /* && (now - overtimeStart < 20000 || distance > 10) */) {
 //			now = System.currentTimeMillis();
 			currentPosition = interpreter.getCurrentPosition();
 			currentPositionCartesian = gs.polarToRectangularCoordinates(currentPosition);
@@ -113,7 +144,7 @@ public class CommandFlyToAbs implements ICommand {
 		}
 		
 		try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
-		if (running)
+		if (running && !terminating)
 			LOG.info("Destination " + coordinate + " reached.");
 		else
 			LOG.info("Command terminated at position " + interpreter.getCurrentPosition() + ", distance is " + distance + "m.");
@@ -122,7 +153,7 @@ public class CommandFlyToAbs implements ICommand {
 	}
 
 	public void terminate() {
-		running = false;
+		terminating = true;
 		LOG.info("Forced termination");
 	}
 
@@ -134,5 +165,11 @@ public class CommandFlyToAbs implements ICommand {
 		LOG.info("Termination completed.");
 	}
 	
-	
+	@Override
+	public String toString() {
+		// fly to(47.82202216,13.04082111,20.00)abs precision 1m 3mps
+		return String.format(Locale.US, "fly to(%.8f,%.8f,%.2f)abs precision %.1fm %.1fmps", 
+			coordinate.getLatitude(), coordinate.getLongitude(), coordinate.getAltitude(), precision, velocity
+		);
+	}
 }
