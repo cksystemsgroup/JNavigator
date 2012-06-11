@@ -20,8 +20,6 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-
-
 public class CommandGoManual implements ICommand {
 
 	public void execute(IInterpreter interpreter) {
@@ -34,5 +32,10 @@ public class CommandGoManual implements ICommand {
 
 	public void waitForTermination() {
 		// intentionally empty
+	}
+	
+	@Override
+	public String toString() {
+		return "go manual";
 	}
 }

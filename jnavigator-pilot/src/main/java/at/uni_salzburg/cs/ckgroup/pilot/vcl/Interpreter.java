@@ -246,6 +246,8 @@ public class Interpreter extends Thread implements IInterpreter {
 		if (velocity != null)
 			b.append(String.format(Locale.US, "Velocity: %.1f\n", velocity));
 		
+		b.append(String.format(Locale.US, "Idle: %s\n", Boolean.toString(idle)));
+		
 		return b.toString();
 	}
 	

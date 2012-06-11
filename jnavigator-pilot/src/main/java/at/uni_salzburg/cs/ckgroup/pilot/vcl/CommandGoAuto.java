@@ -34,4 +34,8 @@ public class CommandGoAuto implements ICommand {
 		// intentionally empty
 	}
 	
+	@Override
+	public String toString() {
+		return "go auto";
+	}
 }

@@ -142,6 +142,9 @@ public class AdminService extends DefaultService {
 			File courseFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_COURSE_FILE));
 			saveJsonCourse(request.getInputStream(), courseFile);
 			servletConfig.getAviator().loadVclScript(new FileInputStream(courseFile));
+			if (!servletConfig.getAviator().isVclExecutionActive()) {
+				servletConfig.getAviator().start();
+			}
 			nextPage = request.getContextPath() + "/course.tpl";
 			
 		} else if (ACTION_START_COURSE.equals(action)) {
