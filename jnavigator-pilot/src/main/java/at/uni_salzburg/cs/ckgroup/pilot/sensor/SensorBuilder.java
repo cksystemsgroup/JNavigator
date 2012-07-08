@@ -66,6 +66,8 @@ public class SensorBuilder {
 					sensor = new RandomSensor(props);
 				} else if (uri.startsWith("x11:") && type.equals("snapshot")) {
 					sensor = new X11Snapshot(props);
+				} else if (uri.startsWith("osm:") && type.equals("snapshot")) {
+					sensor = new OpenStreetMapSnapshot(props, vehicleBuilder);
 				} else if (uri.startsWith("file:") && type.equals("video4linux")) {
 					sensor = new X11FrameGrabber(props);
 				} else {

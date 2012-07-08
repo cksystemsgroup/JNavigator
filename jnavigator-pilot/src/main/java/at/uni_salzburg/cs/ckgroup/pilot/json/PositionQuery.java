@@ -31,6 +31,10 @@ import at.uni_salzburg.cs.ckgroup.pilot.IServletConfig;
 public class PositionQuery implements IJsonQuery {
 
 	public String execute(IServletConfig config) {
+		
+		if (config.getVehicleBuilder().getPositionProvider() == null) {
+			return "";
+		}
 
 		PolarCoordinate pos = config.getVehicleBuilder().getPositionProvider().getCurrentPosition();
 		Double courseOverGround = config.getVehicleBuilder().getPositionProvider().getCourseOverGround();
