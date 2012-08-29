@@ -109,6 +109,10 @@ public class VehicleBuilder implements IVehicleBuilder {
 	
 //	private IClock clock;
 	
+	public VehicleBuilder(Properties props) {
+		// intentionally empty
+	}
+	
 	/**
 	 * Load a vehicle configuration from an <code>InputStream</code> and build it.
 	 * 
@@ -303,6 +307,7 @@ public class VehicleBuilder implements IVehicleBuilder {
 	/**
 	 * @param workDir the directory to be used for temporary files.
 	 */
+	@Override
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
 	}
@@ -310,6 +315,7 @@ public class VehicleBuilder implements IVehicleBuilder {
 	/**
 	 * @param setCourseSupplier the set-course supplier.
 	 */
+	@Override
 	public void setSetCourseSupplier(ISetCourseSupplier setCourseSupplier) {
 		this.setCourseSupplier = setCourseSupplier;
 //		if (autoPilot != null)

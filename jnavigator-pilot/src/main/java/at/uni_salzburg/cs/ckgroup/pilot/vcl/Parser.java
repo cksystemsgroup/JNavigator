@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class Parser {
 	
 	private List<Boolean> errors = new ArrayList<Boolean>();
 	private List<String> source = new ArrayList<String>();
-	private List<ICommand> script = new ArrayList<ICommand>();
+	private List<ICommand> script = new CopyOnWriteArrayList<ICommand>(); // new ArrayList<ICommand>();
 	private boolean scriptOk = false;
 	
 	@SuppressWarnings("serial")

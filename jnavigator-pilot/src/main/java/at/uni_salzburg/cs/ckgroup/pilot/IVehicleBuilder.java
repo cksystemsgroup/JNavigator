@@ -2,7 +2,7 @@
  * @(#) IVehicleBuilder.java
  *
  * This code is part of the JNavigator project.
- * Copyright (c) 2011  Clemens Krainer
+ * Copyright (c) 2012  Clemens Krainer
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,11 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot;
 
+import java.io.File;
 import java.io.IOException;
 
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
+import at.uni_salzburg.cs.ckgroup.course.ISetCourseSupplier;
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 
 public interface IVehicleBuilder {
@@ -47,4 +49,15 @@ public interface IVehicleBuilder {
 	 * Destroy the currently configured vehicle.
 	 */
 	public void destroy();
+	
+	/**
+	 * @param workDir the directory to be used for temporary files.
+	 */
+	void setWorkDir(File workDir);
+	
+	/**
+	 * @param setCourseSupplier the set-course supplier.
+	 */
+	void setSetCourseSupplier(ISetCourseSupplier setCourseSupplier);
+	
 }

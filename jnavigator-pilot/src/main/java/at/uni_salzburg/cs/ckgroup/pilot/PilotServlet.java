@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
+import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
+import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 
 
 @SuppressWarnings("serial")
@@ -43,11 +45,12 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 	Logger LOG = Logger.getLogger(PilotServlet.class);
 	
 	private static final String PROP_PATH_NAME = "jnavigator-pilot.properties";
+	private static final String PROP_VEHICLE_BUILDER_PREFIX = "vehicle.builder.";
 
 	private ServletConfig servletConfig;
 	private Properties props = new Properties ();
 	private Aviator aviator = new Aviator();
-	private VehicleBuilder vehicleBuilder = new VehicleBuilder();
+	private IVehicleBuilder vehicleBuilder;
 	private Configuration configuration = new Configuration();
 	
 	private ServiceEntry[] services = {
@@ -74,7 +77,9 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 		
 		try {
 			props.load(propStream);
-					
+			
+			vehicleBuilder = (IVehicleBuilder) ObjectFactory.getInstance ().instantiateObject (PROP_VEHICLE_BUILDER_PREFIX, IVehicleBuilder.class, props);
+			
 			servletConfig.getServletContext().setAttribute("aviator", aviator);
 			servletConfig.getServletContext().setAttribute("vehicleBuilder", vehicleBuilder);
 			servletConfig.getServletContext().setAttribute("configuration", configuration);
@@ -103,6 +108,8 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 			}
 		
 		} catch (IOException e) {
+			throw new ServletException (e);
+		} catch (InstantiationException e) {
 			throw new ServletException (e);
 		}
 

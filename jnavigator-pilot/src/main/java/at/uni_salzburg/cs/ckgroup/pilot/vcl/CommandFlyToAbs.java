@@ -36,11 +36,11 @@ public class CommandFlyToAbs implements ICommand {
 	
 	public static final double MINIIMUM_VELOCITY = 0.2;
 	
-	public static final double MAXIMUM_VELOCITY = 6.0;
+	public static final double MAXIMUM_VELOCITY = 7.5;
 	
-	public static final double MAXIMUM_ACCELERATION = 1.5;
+	public static final double MAXIMUM_ACCELERATION = 2;
 	
-	public static final long CYCLE_TIME = 500;
+	public static final long CYCLE_TIME = 50;
 
 	private static final double MPS_PER_KMH = 1 / 3.6;
 	
@@ -72,6 +72,7 @@ public class CommandFlyToAbs implements ICommand {
 	public void execute(IInterpreter interpreter) {
 		long start = System.currentTimeMillis();
 		long now = start;
+		long startTime = start;
 		IGeodeticSystem gs = interpreter.getGeodeticSystem();
 
 		PolarCoordinate where = interpreter.getCurrentPosition();
@@ -79,6 +80,7 @@ public class CommandFlyToAbs implements ICommand {
 		CartesianCoordinate destinationCartesian = gs.polarToRectangularCoordinates(coordinate);
 		CartesianCoordinate motionVector = destinationCartesian.subtract (whereCartesian);
 		double distance = motionVector.norm();
+		double trajectoryLength = distance;
 		
 		double totalTime = distance / velocity;
 		double vMax = 1.5 * velocity;
@@ -143,11 +145,17 @@ public class CommandFlyToAbs implements ICommand {
 			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
 		}
 		
-		try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
-		if (running && !terminating)
+		if (distance > precision) {
+			try { Thread.sleep(CYCLE_TIME); } catch (InterruptedException e) { }
+		}
+		if (running && !terminating) {
 			LOG.info("Destination " + coordinate + " reached.");
-		else
+			long duration = System.currentTimeMillis() - startTime;
+			double vReal = 1000.0 * trajectoryLength / duration;
+			LOG.error(String.format(Locale.US, "Flight statistics: dist=%.2f, vAvg=%.2f, t=%.2f, vReal=%.2f, tReal=%.2f", trajectoryLength, vMax/1.5, 1.5*trajectoryLength/vMax, vReal, duration/1000.0));
+		} else {
 			LOG.info("Command terminated at position " + interpreter.getCurrentPosition() + ", distance is " + distance + "m.");
+		}
 		
 		running = false;
 	}
