@@ -77,6 +77,7 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 		
 		try {
 			props.load(propStream);
+			propStream.close();
 			
 			vehicleBuilder = (IVehicleBuilder) ObjectFactory.getInstance ().instantiateObject (PROP_VEHICLE_BUILDER_PREFIX, IVehicleBuilder.class, props);
 			
@@ -94,7 +95,9 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 
 			File confFile = new File (contexTempDir, props.getProperty(AdminService.PROP_CONFIG_FILE));
 			if (confFile.exists()) {
-				configuration.loadConfig(new FileInputStream(confFile));
+				FileInputStream inStream = new FileInputStream(confFile);
+				configuration.loadConfig(inStream);
+				inStream.close();
 				LOG.info("Loading existing configuration from " + confFile);
 			}
 			vehicleBuilder.setSetCourseSupplier(aviator);
@@ -103,7 +106,9 @@ public class PilotServlet extends HttpServlet implements IServletConfig {
 		
 			File courseFile = new File (contexTempDir, props.getProperty(AdminService.PROP_COURSE_FILE));
 			if (courseFile.exists()) {
-				aviator.loadVclScript(new FileInputStream(courseFile));
+				FileInputStream inStream = new FileInputStream(courseFile);
+				aviator.loadVclScript(inStream);
+				inStream.close();
 				LOG.info("Loading existing course from " + courseFile);
 			}
 		

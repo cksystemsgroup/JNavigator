@@ -119,7 +119,9 @@ public class AdminService extends DefaultService {
 				saveFile (uploadedFile, confFile);
 				nextPage = request.getContextPath() + "/config.tpl";
 				Configuration cfg = servletConfig.getConfiguration();
-				cfg.loadConfig(new FileInputStream(confFile));
+				FileInputStream inStream = new FileInputStream(confFile);
+				cfg.loadConfig(inStream);
+				inStream.close();
 				servletConfig.getVehicleBuilder().setConfig(cfg);
 				LOG.info("Configuration uploaded.");
 			} else {
@@ -132,7 +134,9 @@ public class AdminService extends DefaultService {
 			if (uploadedFile != null) {
 				saveFile (uploadedFile, courseFile);
 				nextPage = request.getContextPath() + "/course.tpl";
-				servletConfig.getAviator().loadVclScript(new FileInputStream(courseFile));
+				FileInputStream inStream = new FileInputStream(courseFile);
+				servletConfig.getAviator().loadVclScript(inStream);
+				inStream.close();
 				LOG.info("Course uploaded.");
 			} else {
 				emit422(request, response);
@@ -141,7 +145,9 @@ public class AdminService extends DefaultService {
 		} else if (ACTION_COURSE_UPLOAD.equals(action) && jsonMode) {
 			File courseFile = new File (contexTempDir, servletConfig.getProperties().getProperty(PROP_COURSE_FILE));
 			saveJsonCourse(request.getInputStream(), courseFile);
-			servletConfig.getAviator().loadVclScript(new FileInputStream(courseFile));
+			FileInputStream inStream = new FileInputStream(courseFile);
+			servletConfig.getAviator().loadVclScript(inStream);
+			inStream.close();
 			if (!servletConfig.getAviator().isVclExecutionActive()) {
 				servletConfig.getAviator().start();
 			}

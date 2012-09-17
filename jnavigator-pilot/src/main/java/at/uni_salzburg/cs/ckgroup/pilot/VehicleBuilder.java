@@ -152,13 +152,17 @@ public class VehicleBuilder implements IVehicleBuilder {
 			props = new Properties();
 			LOG.info("Starting MockJAviator using " + plantConfig.getAbsolutePath());
 			
-			props.load(new FileInputStream(plantConfig));
+			FileInputStream inStream = new FileInputStream(plantConfig);
+			props.load(inStream);
+			inStream.close();
 			mockJAviator = new MockJAviator(props);
 			
 			if (props.getProperty(PROP_SIMULATE_GPS_RECEIVER, "true").equals("true")) {
 				LOG.info("Activating GPS receiver simulator using " + locSysConfig.getAbsolutePath());
 				props = new Properties();
-				props.load(new FileInputStream(locSysConfig));
+				inStream = new FileInputStream(locSysConfig);
+				props.load(inStream);
+				inStream.close();
 				grsa = new GpsReceiverSimulatorAdapter(props);
 				grsa.start();
 				mockJAviator.addDataTransferObjectListener(grsa, SimulationData.class);
@@ -167,7 +171,9 @@ public class VehicleBuilder implements IVehicleBuilder {
 			if (props.getProperty(PROP_SIMULATE_UBISENSE_RECEIVER, "false").equals("true")) {
 				LOG.info("Activating Ubisense receiver simulator using " + locSysConfig.getAbsolutePath());
 				props = new Properties();
-				props.load(new FileInputStream(locSysConfig));
+				inStream = new FileInputStream(locSysConfig);
+				props.load(inStream);
+				inStream.close();
 				lmsa = new LocationMessageSimulatorAdapter(props);
 				lmsa.start();
 				mockJAviator.addDataTransferObjectListener(lmsa, SimulationData.class);
@@ -182,7 +188,9 @@ public class VehicleBuilder implements IVehicleBuilder {
 		if (conf.isControllerSimulated()) {
 			LOG.info("Starting controller using " + ctrlConfig.getAbsolutePath());
 			props = new Properties();
-			props.load(new FileInputStream(ctrlConfig));
+			FileInputStream inStream = new FileInputStream(ctrlConfig);
+			props.load(inStream);
+			inStream.close();
 			props.setProperty(PROP_JCONTROL_PREFIX+JControl.PROP_SET_COURSE_FOLDER,workDir.getAbsolutePath());
 			
 			cycleTime = Long.parseLong (props.getProperty(PROP_JCONTROL_CYCLE_TIME, "20"));
@@ -217,7 +225,9 @@ public class VehicleBuilder implements IVehicleBuilder {
 		
 		{
 			props = new Properties();
-			props.load(new FileInputStream(pilotConfig));
+			FileInputStream inStream = new FileInputStream(pilotConfig);
+			props.load(inStream);
+			inStream.close();
 			LOG.info("Starting AutoPilot using " + pilotConfig.getAbsolutePath());
 			
 			if (dispatcher == null)
@@ -277,9 +287,9 @@ public class VehicleBuilder implements IVehicleBuilder {
 	 * @param propFormat the template format to render the required properties file.
 	 * @param type the configuration type.
 	 * @param destinationFolder the base folder to put the configuration files in.
-	 * @throws FileNotFoundException thrown in case of I/O errors.
+	 * @throws IOException 
 	 */
-	private File renderConfigFile (String templateFormat, String propFormat, String type, File destinationFolder) throws FileNotFoundException {
+	private File renderConfigFile (String templateFormat, String propFormat, String type, File destinationFolder) throws IOException {
 		
 		String template = String.format(templateFormat, type);
 		InputStream templateStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(template);
@@ -300,7 +310,7 @@ public class VehicleBuilder implements IVehicleBuilder {
 		ve.evaluate(context, out, "VehicleBuilder.renderConfigFile()", reader);
 		LOG.info("Creating configuration file " + destination.getName() + " by using template " + template);
 		out.close();
-		
+		templateStream.close();
 		return destination;
 	}
 

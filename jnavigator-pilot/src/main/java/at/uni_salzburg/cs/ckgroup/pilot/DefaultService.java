@@ -102,7 +102,9 @@ public class DefaultService implements IService
 			PrintWriter out = response.getWriter();
 			emitVelocityRenderedFile (config, out, reader, request.getContextPath(), servicePath);
 		} else {
-			emitFile (response.getOutputStream(), new FileInputStream(realPath));
+			FileInputStream inStream = new FileInputStream(realPath);
+			emitFile (response.getOutputStream(), inStream);
+			inStream.close();
 		}
 	}
 
