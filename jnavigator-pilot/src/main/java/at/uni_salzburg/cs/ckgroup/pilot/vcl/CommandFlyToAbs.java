@@ -36,7 +36,7 @@ public class CommandFlyToAbs implements ICommand {
 	
 	public static final double MINIIMUM_VELOCITY = 0.2;
 	
-	public static final double MAXIMUM_VELOCITY = 7.5;
+	public static final double MAXIMUM_VELOCITY = 15;
 	
 	public static final double MAXIMUM_ACCELERATION = 2;
 	
