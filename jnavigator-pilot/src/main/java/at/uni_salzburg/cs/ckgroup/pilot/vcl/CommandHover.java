@@ -29,6 +29,8 @@ public class CommandHover implements ICommand {
 	
 	private static final Logger LOG = Logger.getLogger(CommandHover.class);
 	
+	private static final long TIME_SLICE = 100;
+	
 	private long time;
 	
 	private boolean running = false;
@@ -43,12 +45,11 @@ public class CommandHover implements ICommand {
 
 	public void execute(IInterpreter interpreter) {
 		LOG.info("Hovering for " + (long)(time/1000) + "s.");
-		long timeSlice = 500;
 		running = true;
 		long waitingTime = time;
 		while (running && waitingTime > 0) {
-			try { Thread.sleep(timeSlice); } catch (InterruptedException e) { }
-			waitingTime -= timeSlice;
+			try { Thread.sleep(TIME_SLICE); } catch (InterruptedException e) { }
+			waitingTime -= TIME_SLICE;
 		}
 		running = false;
 	}
@@ -61,7 +62,7 @@ public class CommandHover implements ICommand {
 	public void waitForTermination() {
 		LOG.info("Waiting for termination.");
 		while (running) {
-			try { Thread.sleep(500); } catch (InterruptedException e) { }
+			try { Thread.sleep(TIME_SLICE); } catch (InterruptedException e) { }
 		}
 		LOG.info("Termination completed.");
 	}
