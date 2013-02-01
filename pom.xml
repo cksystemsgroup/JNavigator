@@ -61,8 +61,8 @@
 	</modules>
 
 	<scm>
-		<connection>scm:svn:http://zoot.site/jnavigator/svn-jnavigator/trunk</connection>
-		<developerConnection>scm:svn:http://zoot.site/jnavigator/svn-jnavigator/trunk</developerConnection>
+		<connection>scm:git:https://github.com/cksystemsgroup/JNavigator.git</connection>
+		<developerConnection>scm:git:https://github.com/cksystemsgroup/JNavigator.git</developerConnection>
 	</scm>
 
 	<dependencyManagement>
