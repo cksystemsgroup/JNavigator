@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-        <parent>
-                <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                <artifactId>jnavigator</artifactId>
-                <version>1.3.2-SNAPSHOT</version>
-                <relativePath>../pom.xml</relativePath>
-        </parent>
+	<parent>
+		<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+		<artifactId>jnavigator</artifactId>
+		<version>1.3.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
 	<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
 	<artifactId>javiator-controlterminal</artifactId>
@@ -31,25 +32,25 @@
 
 	<build>
 		<plugins>
-                        <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-assembly-plugin</artifactId>
-                                <executions>
-                                        <execution>
-                                                <id>make-tgz</id>
-                                                <phase>package</phase>
-                                                <goals>
-                                                        <goal>attached</goal>
-                                                </goals>
-                                                <configuration>
-                                                        <descriptors>
-                                                                <descriptor>src/main/assembly/unix.xml</descriptor>
-                                                                <descriptor>src/main/assembly/windows.xml</descriptor>
-                                                        </descriptors>
-                                                </configuration>
-                                        </execution>
-                                </executions>
-                        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-tgz</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/unix.xml</descriptor>
+								<descriptor>src/main/assembly/windows.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -76,59 +77,52 @@
 			<type>so</type>
 			<scope>runtime</scope>
 		</dependency>
-                <dependency>
-                        <groupId>com.starfireresearch</groupId>
-                        <artifactId>starfireExt</artifactId>
-                        <version>2.20</version>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>j3dcore</artifactId>
-                        <version>1.6.0-pre1-1011070159</version>
+		<dependency>
+			<groupId>com.starfireresearch</groupId>
+			<artifactId>starfireExt</artifactId>
+			<version>2.20</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.java3d</groupId>
+			<artifactId>j3dcore</artifactId>
+			<version>1.6.0-pre1-1011070159</version>
 			<scope>provided</scope>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>j3dutils</artifactId>
-                        <version>1.6.0-pre1-1011070159</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.java3d</groupId>
+			<artifactId>j3dutils</artifactId>
+			<version>1.6.0-pre1-1011070159</version>
 			<scope>provided</scope>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>vecmath</artifactId>
-                        <version>1.6.0-pre1-1011070159</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.java3d</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>1.6.0-pre1-1011070159</version>
 			<scope>provided</scope>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>libj3dcore-ogl</artifactId>
-                        <version>1.6.0-pre1-1011070159</version>
-                        <type>so</type>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.java3d</groupId>
+			<artifactId>libj3dcore-ogl</artifactId>
+			<version>1.6.0-pre1-1011070159</version>
+			<type>so</type>
 			<scope>provided</scope>
 			<classifier>x64</classifier>
-                </dependency>
-<!--
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>libj3dcore-ogl-cg</artifactId>
-                        <version>1.6.0-pre1-1011070159</version>
-                        <type>so</type>
-			<scope>provided</scope>
-                </dependency>
--->
-                <dependency>
-                	<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
-                	<artifactId>javiator-util</artifactId>
-                	<version>${project.parent.version}</version>
-                	<type>jar</type>
-                	<scope>compile</scope>
-                </dependency>
-                <dependency>
-                	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                	<artifactId>jnavigator-ui</artifactId>
-                	<version>${project.parent.version}</version>
-                	<type>jar</type>
-                	<scope>compile</scope>
-                </dependency>
+		</dependency>
+		<!-- <dependency> <groupId>com.sun.java3d</groupId> <artifactId>libj3dcore-ogl-cg</artifactId> <version>1.6.0-pre1-1011070159</version> 
+			<type>so</type> <scope>provided</scope> </dependency> -->
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
+			<artifactId>javiator-util</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<artifactId>jnavigator-ui</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-        <parent>
-                <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                <artifactId>jnavigator</artifactId>
-                <version>1.3.2-SNAPSHOT</version>
-                <relativePath>../pom.xml</relativePath>
-        </parent>
+	<parent>
+		<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+		<artifactId>jnavigator</artifactId>
+		<version>1.3.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
 	<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
 	<artifactId>javiator-mockjaviator</artifactId>
@@ -15,45 +16,44 @@
 	<description>MockJAviator</description>
 	<inceptionYear>2007</inceptionYear>
 
-        <properties>
-                <bcel-version>5.1</bcel-version>
-                <commons-codec-version>1.3</commons-codec-version>
-                <exotasks-version>1.0.18</exotasks-version>
-                <java-version>1.5</java-version>
-                <junit-version>3.8.1</junit-version>
-                <rxtx-version>2.1.7</rxtx-version>
-                <starfireExt-version>2.20</starfireExt-version>
-                <tuningForkTraceGeneration-version>20071212</tuningForkTraceGeneration-version>
-        </properties>
+	<properties>
+		<bcel-version>5.1</bcel-version>
+		<commons-codec-version>1.3</commons-codec-version>
+		<exotasks-version>1.0.18</exotasks-version>
+		<java-version>1.5</java-version>
+		<junit-version>3.8.1</junit-version>
+		<rxtx-version>2.1.7</rxtx-version>
+		<starfireExt-version>2.20</starfireExt-version>
+		<tuningForkTraceGeneration-version>20071212</tuningForkTraceGeneration-version>
+	</properties>
 
 	<build>
 		<plugins>
-                        <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-assembly-plugin</artifactId>
-                                <executions>
-                                        <execution>
-                                                <id>make-tgz</id>
-                                                <phase>package</phase>
-                                                <goals>
-                                                        <goal>attached</goal>
-                                                </goals>
-                                                <configuration>
-                                                        <descriptors>
-                                                                <descriptor>src/main/assembly/unix.xml</descriptor>
-                                                                <descriptor>src/main/assembly/windows.xml</descriptor>
-                                                        </descriptors>
-                                                </configuration>
-                                        </execution>
-                                </executions>
-                        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-tgz</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/unix.xml</descriptor>
+								<descriptor>src/main/assembly/windows.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -88,19 +88,18 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.13</version>
 		</dependency>
-                <dependency>
-                        <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                        <artifactId>jnavigator-util</artifactId>
-                        <version>${project.parent.version}</version>
-                        <type>jar</type>
-                        <scope>compile</scope>
-                </dependency>
-                <dependency>
-                        <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                        <artifactId>jnavigator-communication</artifactId>
-                        <version>${project.parent.version}</version>
-                </dependency>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<artifactId>jnavigator-util</artifactId>
+			<version>${project.parent.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+			<artifactId>jnavigator-communication</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 </project>

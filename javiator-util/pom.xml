@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-        <parent>
-                <groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
-                <artifactId>jnavigator</artifactId>
-                <version>1.3.2-SNAPSHOT</version>
-                <relativePath>../pom.xml</relativePath>
-        </parent>
+	<parent>
+		<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
+		<artifactId>jnavigator</artifactId>
+		<version>1.3.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
 	<groupId>at.uni-salzburg.cs.ckgroup.javiator</groupId>
 	<artifactId>javiator-util</artifactId>
@@ -33,7 +34,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -46,39 +46,12 @@
 			<artifactId>joystick</artifactId>
 			<version>${joystick-version}</version>
 		</dependency>
-<!--
-                <dependency>
-                        <groupId>com.starfireresearch</groupId>
-                        <artifactId>starfireExt</artifactId>
-                        <version>2.20</version>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>j3dcore</artifactId>
-                        <version>1_6_0-pre1</version>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>j3dutils</artifactId>
-                        <version>1_6_0-pre1</version>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>vecmath</artifactId>
-                        <version>1_6_0-pre1</version>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>libj3dcore-ogl</artifactId>
-                        <version>1_6_0-pre1</version>
-                        <type>so</type>
-                </dependency>
-                <dependency>
-                        <groupId>com.sun.java3d</groupId>
-                        <artifactId>libj3dcore-ogl-cg</artifactId>
-                        <version>1_6_0-pre1</version>
-                        <type>so</type>
-                </dependency>
--->
+		<!-- <dependency> <groupId>com.starfireresearch</groupId> <artifactId>starfireExt</artifactId> <version>2.20</version> 
+			</dependency> <dependency> <groupId>com.sun.java3d</groupId> <artifactId>j3dcore</artifactId> <version>1_6_0-pre1</version> 
+			</dependency> <dependency> <groupId>com.sun.java3d</groupId> <artifactId>j3dutils</artifactId> <version>1_6_0-pre1</version> 
+			</dependency> <dependency> <groupId>com.sun.java3d</groupId> <artifactId>vecmath</artifactId> <version>1_6_0-pre1</version> 
+			</dependency> <dependency> <groupId>com.sun.java3d</groupId> <artifactId>libj3dcore-ogl</artifactId> <version>1_6_0-pre1</version> 
+			<type>so</type> </dependency> <dependency> <groupId>com.sun.java3d</groupId> <artifactId>libj3dcore-ogl-cg</artifactId> <version>1_6_0-pre1</version> 
+			<type>so</type> </dependency> -->
 	</dependencies>
 </project>
