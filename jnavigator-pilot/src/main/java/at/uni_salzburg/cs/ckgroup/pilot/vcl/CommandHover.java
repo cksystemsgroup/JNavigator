@@ -22,12 +22,13 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class CommandHover implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandHover.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandHover.class);
 	
 	private static final long TIME_SLICE = 100;
 	

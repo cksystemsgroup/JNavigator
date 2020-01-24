@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg %mdc %n" />
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<File>log4j_jcontrol.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>log4j_jcontrol-%i.log</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>30</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>10MB</MaxFileSize>
+		</triggeringPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${LOG_PATTERN}</pattern>
+		</layout>
+	</appender>
+	<root level="info">
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

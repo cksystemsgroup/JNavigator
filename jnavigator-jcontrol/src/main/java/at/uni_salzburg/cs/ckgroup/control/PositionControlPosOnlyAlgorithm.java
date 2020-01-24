@@ -57,10 +57,10 @@ public class PositionControlPosOnlyAlgorithm implements IPositionControlAlgorith
 	 */
 	public static final String PROP_JAVIATOR_IDENTIFICATION = "javiator.identification";
 	
-	/**
-	 * Is set to true when in debug mode.
-	 */
-	private boolean debugMode;
+//	/**
+//	 * Is set to true when in debug mode.
+//	 */
+//	private boolean debugMode;
 	
 	/**
 	 * PI divided by 180.
@@ -94,7 +94,7 @@ public class PositionControlPosOnlyAlgorithm implements IPositionControlAlgorith
 	 * @throws InstantiationException thrown in case of problems when creating the controller objects.
 	 */
 	public PositionControlPosOnlyAlgorithm (Properties props) throws InstantiationException {
-		debugMode = "true".equalsIgnoreCase(props.getProperty(PROP_DEBUG_MODE, "false"));
+		// debugMode = "true".equalsIgnoreCase(props.getProperty(PROP_DEBUG_MODE, "false"));
 		xController = (IController) ObjectFactory.getInstance().instantiateObject(PROP_POSITION_CONTROLLER_PREFIX, IController.class, props);
 		yController = (IController) ObjectFactory.getInstance().instantiateObject(PROP_POSITION_CONTROLLER_PREFIX, IController.class, props);
 	}

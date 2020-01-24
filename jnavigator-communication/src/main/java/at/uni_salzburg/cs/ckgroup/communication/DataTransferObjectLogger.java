@@ -20,7 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -34,7 +35,7 @@ public class DataTransferObjectLogger implements IDataTransferObjectListener {
 	/**
 	 * This variable contains the instance of the logger.
 	 */
-	private static final Logger LOG = Logger.getLogger (DataTransferObjectLogger.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger (DataTransferObjectLogger.class.getName());
 	
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener#recieve(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject)

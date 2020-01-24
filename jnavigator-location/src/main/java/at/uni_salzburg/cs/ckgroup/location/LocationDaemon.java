@@ -31,7 +31,7 @@ public class LocationDaemon extends Thread implements ILocationMessageProvider
 	/**
 	 * This variable contains all location message listeners. 
 	 */
-	private Vector locationMessageListeners = new Vector ();
+	private Vector<ILocationMessageListener> locationMessageListeners = new Vector<>();
 	
 	/**
 	 * The running indicator of this thread. The set/reset by the methods run() and terminate(), respectively.

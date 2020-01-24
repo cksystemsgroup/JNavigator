@@ -43,7 +43,7 @@ public class GpsDaemon extends Thread implements RtcmSc104MessageListener, Nmea0
 	/**
 	 * This variable contains all NMEA message listeners. 
 	 */
-	private Vector nmeaMessageListeners = new Vector ();
+	private Vector<Nmea0183MessageListener> nmeaMessageListeners = new Vector<>();
 	
 	/**
 	 * The running indicator of this thread. The set/reset by the methods run()

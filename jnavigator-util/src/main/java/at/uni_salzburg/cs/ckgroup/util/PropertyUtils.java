@@ -53,7 +53,7 @@ public class PropertyUtils
 			throw new FileNotFoundException (propertyPath);
 		p.load (propsFileStream);
 		
-		Enumeration e = System.getProperties ().keys();
+		Enumeration<Object> e = System.getProperties ().keys();
 		while (e.hasMoreElements()) {
 			String key = (String) e.nextElement();
 			String value = System.getProperty (key);
@@ -73,7 +73,7 @@ public class PropertyUtils
 
         Properties p = new Properties ();
 
-        Enumeration e = properties.keys();
+        Enumeration<Object> e = properties.keys();
         while (e.hasMoreElements()) {
                 String key = (String) e.nextElement();
                 if (key.startsWith(prefix)) {
@@ -97,7 +97,7 @@ public class PropertyUtils
     	
         Properties p = new Properties ();
 
-        Enumeration e = properties.keys();
+        Enumeration<Object> e = properties.keys();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
             String value = properties.getProperty(key);

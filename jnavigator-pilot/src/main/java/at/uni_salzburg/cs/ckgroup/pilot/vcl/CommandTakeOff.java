@@ -23,14 +23,15 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 import java.io.IOException;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 
 public class CommandTakeOff implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandTakeOff.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandTakeOff.class);
 	
 	public static final double MAXIMUM_TAKEOFF_VELOCITY = 0.5;
 	

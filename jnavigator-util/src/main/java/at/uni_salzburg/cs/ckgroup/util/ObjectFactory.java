@@ -69,7 +69,7 @@ public class ObjectFactory
 	 * @return the newly instantiated object
 	 * @throws InstantiationException thrown on errors
 	 */
-	public Object instantiateObject (String prefix, Class classType, Properties properties) throws InstantiationException {
+	public Object instantiateObject (String prefix, Class<?> classType, Properties properties) throws InstantiationException {
 	
 		Properties props = properties;
 		
@@ -86,7 +86,7 @@ public class ObjectFactory
 				
 //		System.out.println ("className=" + className);
 		
-        Class objectClass;
+        Class<?> objectClass;
         Object provider = null;
         
         try
@@ -96,10 +96,10 @@ public class ObjectFactory
 //			if (!objectClass.isInstance (classType))
 //				throw new InstantiationException ("Class " + className + " is not an instance of " + classType.getName ());
         	
-        	Class partypes[] = new Class[1];
+        	Class<?> partypes[] = new Class[1];
             partypes[0] = Properties.class;
 
-            Constructor ctor = objectClass.getConstructor (partypes);
+            Constructor<?> ctor = objectClass.getConstructor (partypes);
             Object arglist[] = new Object[1];
             arglist[0] = props;
             provider = ctor.newInstance (arglist);

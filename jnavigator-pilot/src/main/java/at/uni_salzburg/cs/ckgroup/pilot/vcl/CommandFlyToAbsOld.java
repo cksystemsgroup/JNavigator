@@ -20,7 +20,8 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
@@ -28,7 +29,7 @@ import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class CommandFlyToAbsOld implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandFlyToAbsOld.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandFlyToAbsOld.class);
 	
 	public static final double MINIMUM_PRECISION = 0.1;
 	

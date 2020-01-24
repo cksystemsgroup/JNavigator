@@ -27,13 +27,14 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
 public class X11Snapshot extends AbstractSensor {
 	
-	Logger LOG = Logger.getLogger(X11Snapshot.class);
+    public final static Logger LOG = LoggerFactory.getLogger(X11Snapshot.class);
 	
 	private static final String ERR_INVALID_SCHEME = "Invalid scheme '%s', handling 'x11' displays only.";
 	private static final String ERR_WORKDIR_NOT_EXISTENT = "Work directory '%s' does not exist!";

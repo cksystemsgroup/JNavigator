@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
@@ -55,7 +56,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 
 public class AutoPilot implements IDataTransferObjectListener, ISender, IAutoPilot {
 	
-	Logger LOG = Logger.getLogger(AutoPilot.class);
+    public final static Logger LOG = LoggerFactory.getLogger(AutoPilot.class);
 	
 	/**
 	 * The property key prefix for the position controller.

@@ -22,14 +22,15 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 
 public class CommandLand implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandLand.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandLand.class);
 	
 	public static final double MAXIMUM_LAND_ACCELERATION = 0.3;
 	

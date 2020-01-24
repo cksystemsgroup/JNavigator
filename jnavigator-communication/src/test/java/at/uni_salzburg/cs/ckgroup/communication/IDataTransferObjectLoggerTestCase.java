@@ -20,14 +20,16 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication;
 
-import junit.framework.TestCase;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.ErrorHandler;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import org.slf4j.Logger;
+
+import junit.framework.TestCase;
 
 /**
  * This class verifies the implementation of the <code>IDataTransferObjectLoggerLogger</code> class.
@@ -35,19 +37,32 @@ import org.apache.log4j.spi.LoggingEvent;
  * @author Clemens Krainer
  */
 public class IDataTransferObjectLoggerTestCase extends TestCase {
-	
+
+    private static Logger logger;
+
 	byte[] s1;
 	byte[] s2;
 	byte[] s3;
+
 	MockDataTransferObjectOne one;
 	MockDataTransferObjectTwo two;
 	MockDataTransferObjectThree three;
-	MyLogAppender appender;
-	
+
 	{
-		// perform the static initialisations.
-		appender = new MyLogAppender ();
-		Logger.getRootLogger().addAppender (appender);
+	    try {
+            Field loggerField = DataTransferObjectLogger.class.getDeclaredField("LOG");
+            loggerField.setAccessible(true);
+    
+            Field modifiers = Field.class.getDeclaredField("modifiers");
+            modifiers.setAccessible(true);
+            modifiers.setInt(loggerField, loggerField.getModifiers() & ~Modifier.FINAL);
+    
+            logger = mock(Logger.class);
+            loggerField.set(null, logger);
+	    }
+	    catch (Exception e) {
+	        fail("Can not initialize logger!");
+        }
 	}
 
 	/* (non-Javadoc)
@@ -67,119 +82,19 @@ public class IDataTransferObjectLoggerTestCase extends TestCase {
 	 * Create a new <code>IDataTransferObjectLoggerLogger</code> and log messages to it. Verify
 	 * that the <code>IDataTransferObjectLoggerLogger</code> logs the message to Log4J correctly.
 	 */
-	public void testCase01 () {
+	public void testCase01 () throws Exception {
+	    
 		DataTransferObjectLogger log = new DataTransferObjectLogger ();
-		try { Thread.sleep(200); } catch (Exception e) {;}
+		
 		log.receive (one);
-		try { Thread.sleep(500); } catch (Exception e) {;}
-		Thread.yield();
-		assertEquals ("Message one", one.toString(), appender.message);
+		verify(logger).debug(one.toString());
+		
 		log.receive (two);
-		try { Thread.sleep(200); } catch (Exception e) {;}
-		Thread.yield();
-		assertEquals ("Message two", two.toString(), appender.message);
+		verify(logger).debug(two.toString());
+		
 		log.receive (three);
-		try { Thread.sleep(200); } catch (Exception e) {;}
-		Thread.yield();
-		assertEquals ("Message three", three.toString(), appender.message);
-	}
-	
-	/**
-	 * This class implements a fake log appender to be used in this unit test.  
-	 * 
-	 * @author Clemens Krainer
-	 */
-	private class MyLogAppender implements Appender {
+		verify(logger).debug(three.toString());
 		
-		/**
-		 * The last logged message.
-		 */
-		public String message;
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#addFilter(org.apache.log4j.spi.Filter)
-		 */
-		public void addFilter(Filter newFilter) {
-			System.err.println ("addFilter(): " + newFilter.toString());
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#clearFilters()
-		 */
-		public void clearFilters() {
-			System.err.println ("clearFilters()");
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#close()
-		 */
-		public void close() {
-			System.err.println ("close()");
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#doAppend(org.apache.log4j.spi.LoggingEvent)
-		 */
-		public void doAppend(LoggingEvent event) {
-			System.err.println ("doAppend(): " +event.timeStamp+", "+ event.getMessage());
-			message = event.getMessage().toString();
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#getErrorHandler()
-		 */
-		public ErrorHandler getErrorHandler() {
-			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#getFilter()
-		 */
-		public Filter getFilter() {
-			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#getLayout()
-		 */
-		public Layout getLayout() {
-			return null;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#getName()
-		 */
-		public String getName() {
-			return MyLogAppender.class.getName();
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#requiresLayout()
-		 */
-		public boolean requiresLayout() {
-			return false;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#setErrorHandler(org.apache.log4j.spi.ErrorHandler)
-		 */
-		public void setErrorHandler(ErrorHandler errorHandler) {
-			System.err.println ("setErrorHandler():");
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#setLayout(org.apache.log4j.Layout)
-		 */
-		public void setLayout(Layout layout) {
-			System.err.println ("setLayout():" + layout.toString());
-		}
-
-		/* (non-Javadoc)
-		 * @see org.apache.log4j.Appender#setName(java.lang.String)
-		 */
-		public void setName(String name) {
-			System.err.println ("setName(): " + name);
-		}
-		
+		verifyNoMoreInteractions(logger);
 	}
 }

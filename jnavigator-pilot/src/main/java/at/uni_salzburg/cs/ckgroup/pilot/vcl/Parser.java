@@ -28,11 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Parser {
 	
-	private static final Logger LOG = Logger.getLogger(Parser.class);
+    public final static Logger LOG = LoggerFactory.getLogger(Parser.class);
 	
 	private List<Boolean> errors = new ArrayList<Boolean>();
 	private List<String> source = new ArrayList<String>();

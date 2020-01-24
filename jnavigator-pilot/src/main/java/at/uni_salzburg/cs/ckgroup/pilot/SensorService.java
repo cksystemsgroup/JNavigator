@@ -27,7 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.pilot.json.ConfigQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.SensorQuery;
@@ -37,7 +38,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.sensor.AbstractSensor;
 
 public class SensorService extends DefaultService {
 	
-	Logger LOG = Logger.getLogger(SensorService.class);
+    public final static Logger LOG = LoggerFactory.getLogger(SensorService.class);
 	
 
 	public SensorService (IServletConfig servletConfig) {

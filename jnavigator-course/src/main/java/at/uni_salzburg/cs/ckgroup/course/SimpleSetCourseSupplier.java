@@ -150,8 +150,8 @@ public class SimpleSetCourseSupplier implements ISetCourseSupplier
 	{		
 		LineNumberReader reader = new LineNumberReader (new InputStreamReader (courseData));
 		String line;
-		Vector states = new Vector ();
-		Vector timeSpans = new Vector ();
+		Vector<VehicleStatus> states = new Vector<>();
+		Vector<Long> timeSpans = new Vector<>();
 		
 		while ((line = reader.readLine()) != null) {
 			
@@ -174,7 +174,7 @@ public class SimpleSetCourseSupplier implements ISetCourseSupplier
 				throw new ConfigurationException ("Invalid orientation in line " + reader.getLineNumber () + " only values between 0 and 360 degrees are allowed!");
 
 			states.add (new VehicleStatus (position, 0, 0, 0, orientation));
-			timeSpans.add (new Long(duration));
+			timeSpans.add (Long.valueOf(duration));
 		} 
 		
 		if (states.size () == 0)

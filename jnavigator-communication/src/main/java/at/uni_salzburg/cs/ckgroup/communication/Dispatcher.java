@@ -37,33 +37,33 @@ public class Dispatcher implements IDataTransferObjectProvider {
 	 * This variable maps a class derivative of an <code>IDataTransferObject</code> to a
 	 * vector of listeners.
 	 */
-	private HashMap dtoTypeMap = new HashMap ();
+	private HashMap<Class<?>,Vector<IDataTransferObjectListener>> dtoTypeMap = new HashMap<> ();
 	
 	/**
 	 * This variable maps a listener to a vector of registered
 	 * <code>IDataTransferObject</code> classes.
 	 */
-	private HashMap listenerMap = new HashMap ();
+	private HashMap<IDataTransferObjectListener, Vector<Class<?>>> listenerMap = new HashMap<> ();
 	
 	/* (non-Javadoc)
 	 * @see at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectProvider#addIDataTransferObjectListener(at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener, java.lang.Class)
 	 */
-	public void addDataTransferObjectListener (IDataTransferObjectListener listener, Class dtoType) {
+	public void addDataTransferObjectListener (IDataTransferObjectListener listener, Class<?> dtoType) {
 		
-		Vector typeListeners;
-		Vector classes = (Vector) listenerMap.get (listener);
+		Vector<IDataTransferObjectListener> typeListeners;
+		Vector<Class<?>> classes = listenerMap.get (listener);
 		
 		if (classes != null && classes.contains (IDataTransferObject.class))
 			return;
 			
 		if (classes == null) {
-			classes = new Vector ();
+			classes = new Vector<> ();
 			listenerMap.put (listener, classes);
 		}
 		
 		if (dtoType == IDataTransferObject.class) {
 			for (int k=0; k < classes.size(); k++) {
-				typeListeners = (Vector) dtoTypeMap.get (classes.get (k));
+				typeListeners = dtoTypeMap.get (classes.get (k));
 				typeListeners.remove (listener);		
 			}
 			classes.clear ();
@@ -71,10 +71,10 @@ public class Dispatcher implements IDataTransferObjectProvider {
 
 		classes.add (dtoType);
 
-		typeListeners = (Vector) dtoTypeMap.get (dtoType);
+		typeListeners = dtoTypeMap.get (dtoType);
 
 		if (typeListeners == null) {
-			typeListeners = new Vector ();
+			typeListeners = new Vector<> ();
 			dtoTypeMap.put (dtoType, typeListeners);
 		}
 		
@@ -87,12 +87,12 @@ public class Dispatcher implements IDataTransferObjectProvider {
 	 */
 	public void removeIDataTransferObjectListener (IDataTransferObjectListener listener) {
 		
-		Vector classes = (Vector) listenerMap.get (listener);
+		Vector<Class<?>> classes = listenerMap.get (listener);
 		if (classes == null)
 			return;
 		
 		for (int k=0; k < classes.size (); k++) {
-			Vector listeners = (Vector) dtoTypeMap.get (classes.get (k));
+			Vector<IDataTransferObjectListener> listeners = dtoTypeMap.get (classes.get (k));
 			listeners.remove (listener);
 		}
 		
@@ -112,7 +112,7 @@ public class Dispatcher implements IDataTransferObjectProvider {
 		
 		IDataTransferObjectListener s = sender instanceof IDataTransferObjectListener ? (IDataTransferObjectListener) sender : null;
 
-		Vector listeners = (Vector) dtoTypeMap.get (dto.getClass());
+		Vector<IDataTransferObjectListener> listeners = dtoTypeMap.get (dto.getClass());
 		if (listeners != null) {
 			for (int k=0; k < listeners.size(); k++) {
 				IDataTransferObjectListener listener = (IDataTransferObjectListener) listeners.get (k);
@@ -121,7 +121,7 @@ public class Dispatcher implements IDataTransferObjectProvider {
 			}
 		}
 
-		listeners = (Vector) dtoTypeMap.get (IDataTransferObject.class);
+		listeners = dtoTypeMap.get (IDataTransferObject.class);
 		if (listeners != null) {
 			for (int k=0; k < listeners.size(); k++) {
 				IDataTransferObjectListener listener = (IDataTransferObjectListener) listeners.get (k);

@@ -1,16 +1,11 @@
 package at.uni_salzburg.cs.ckgroup.communication;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.util.Arrays;
 import java.util.Properties;
 
-import junit.framework.TestCase;
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.io.UdpSocketServer;
+import junit.framework.TestCase;
 
 public class UdpServerTestCase extends TestCase {
 	

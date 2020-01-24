@@ -3,7 +3,8 @@ package javiator.simulation;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.Dispatcher;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
@@ -27,7 +28,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  */
 public class MockJAviator extends Thread implements IDataTransferObjectListener, IDataTransferObjectProvider
 {
-	private static final Logger LOG = Logger.getLogger(MockJAviator.class);
+    public final static Logger LOG = LoggerFactory.getLogger(MockJAviator.class);
 	
 	public static final String PROP_SEND_JAVIATOR_DATA = "mock-javiator.send.javiator-data";
 	public static final String PROP_SEND_SENSOR_DATA = "mock-javiator.send.sensor-data";

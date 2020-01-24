@@ -30,11 +30,12 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AutoPilotFrame extends Frame implements ISetCourseList
 {
-	Logger LOG = Logger.getLogger(AutoPilotFrame.class);
+    public final static Logger LOG = LoggerFactory.getLogger(AutoPilotFrame.class);
 	
 	private static final long serialVersionUID = -4688973371884329398L;
 

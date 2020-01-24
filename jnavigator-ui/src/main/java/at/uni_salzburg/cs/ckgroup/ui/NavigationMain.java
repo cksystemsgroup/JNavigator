@@ -23,6 +23,7 @@ package at.uni_salzburg.cs.ckgroup.ui;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 
@@ -45,7 +46,7 @@ import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
  * 
  * @author Clemens Krainer
  */
-public class NavigationMain
+public class NavigationMain implements Serializable
 {
 	private static final long serialVersionUID = -5797102379894455879L;
 	

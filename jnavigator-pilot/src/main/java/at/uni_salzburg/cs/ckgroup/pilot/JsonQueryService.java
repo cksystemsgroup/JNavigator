@@ -29,7 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.pilot.json.IJsonQuery;
 import at.uni_salzburg.cs.ckgroup.pilot.json.PositionQuery;
@@ -40,7 +41,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.json.WaypointsQuery;
 
 public class JsonQueryService extends DefaultService {
 	
-	Logger LOG = Logger.getLogger(JsonQueryService.class);
+    public final static Logger LOG = LoggerFactory.getLogger(JsonQueryService.class);
 	
 	@SuppressWarnings("serial")
 	private final static Map<String,IJsonQuery> actions = new HashMap<String, IJsonQuery>() {{

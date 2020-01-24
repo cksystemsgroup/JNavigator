@@ -32,7 +32,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
@@ -42,7 +43,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 @SuppressWarnings("serial")
 public class PilotServlet extends HttpServlet implements IServletConfig {
 	
-	Logger LOG = Logger.getLogger(PilotServlet.class);
+    public final static Logger LOG = LoggerFactory.getLogger(PilotServlet.class);
 	
 	private static final String PROP_PATH_NAME = "jnavigator-pilot.properties";
 	private static final String PROP_VEHICLE_BUILDER_PREFIX = "vehicle.builder.";

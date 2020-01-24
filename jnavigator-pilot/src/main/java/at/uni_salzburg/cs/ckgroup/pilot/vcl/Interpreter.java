@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
 import at.uni_salzburg.cs.ckgroup.course.IPositionProvider;
@@ -34,7 +35,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.config.IConfiguration;
 
 public class Interpreter extends Thread implements IInterpreter {
 	
-	Logger LOG = Logger.getLogger(Interpreter.class);
+    public final static Logger LOG = LoggerFactory.getLogger(Interpreter.class);
 	
 	private int programCounter;
 	

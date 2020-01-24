@@ -39,12 +39,12 @@ import at.uni_salzburg.cs.ckgroup.nmea.Nmea0183MessageListener;
  */
 public class Nmea0183MessageForwarder implements Nmea0183MessageListener
 {
-	private Vector altitudeViews = new Vector ();
-	private Vector timeViews = new Vector ();
-	private Vector courseViews = new Vector ();
-	private Vector speedViews = new Vector ();
-	private Vector coordinateViews = new Vector ();
-	private Vector satelliteViews = new Vector ();
+	private Vector<IAltitudeView> altitudeViews = new Vector<>();
+	private Vector<ITimeView> timeViews = new Vector<>();
+	private Vector<ICourseView> courseViews = new Vector<>();
+	private Vector<ISpeedView> speedViews = new Vector<>();
+	private Vector<ICoordinateView> coordinateViews = new Vector<>();
+	private Vector<ISatelliteView> satelliteViews = new Vector<>();
 
 	private Calendar calendar;
 	private Date currentDate;
@@ -68,22 +68,22 @@ public class Nmea0183MessageForwarder implements Nmea0183MessageListener
 	public void addView (INavigatorView view)
 	{
 		if (view instanceof IAltitudeView)
-			altitudeViews.add (view);
+			altitudeViews.add ((IAltitudeView)view);
 		
 		if (view instanceof ITimeView)
-			timeViews.add (view);
+			timeViews.add ((ITimeView)view);
 		
 		if (view instanceof ICourseView)
-			courseViews.add (view);
+			courseViews.add ((ICourseView)view);
 		
 		if (view instanceof ISpeedView)
-			speedViews.add (view);
+			speedViews.add ((ISpeedView)view);
 		
 		if (view instanceof ICoordinateView)
-			coordinateViews.add (view);
+			coordinateViews.add ((ICoordinateView)view);
 		
 		if (view instanceof ISatelliteView)
-			satelliteViews.add (view);
+			satelliteViews.add ((ISatelliteView)view);
 	}
 
 	/* (non-Javadoc)

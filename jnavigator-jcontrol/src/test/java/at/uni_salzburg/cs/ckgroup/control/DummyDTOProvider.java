@@ -32,12 +32,12 @@ public class DummyDTOProvider implements IDataTransferObjectProvider {
 	
 	public IDataTransferObjectListener listener;
 	public ISender sender;
-	public Vector dtos = new Vector ();
-	public Class dtoType;
+	public Vector<IDataTransferObject> dtos = new Vector<> ();
+	public Class<?> dtoType;
 	public boolean simulateIOException = false;
 	
 	public void addDataTransferObjectListener(
-			IDataTransferObjectListener listener, Class dtoType) {
+			IDataTransferObjectListener listener, Class<?> dtoType) {
 
 		this.listener = listener;
 		this.dtoType = dtoType;

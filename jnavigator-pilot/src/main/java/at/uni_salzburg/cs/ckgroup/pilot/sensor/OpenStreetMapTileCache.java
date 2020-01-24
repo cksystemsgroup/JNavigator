@@ -29,14 +29,14 @@ import java.util.Properties;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenStreetMapTileCache {
 	
-	private final static Logger LOG = Logger.getLogger(OpenStreetMapTileCache.class);
+	private final static Logger LOG = LoggerFactory.getLogger(OpenStreetMapTileCache.class);
 	
 	private final static String PROP_TILE_CACHE_DIR = "osm.tile.cache.dir";
 	
@@ -84,7 +84,7 @@ public class OpenStreetMapTileCache {
 	
 	public static void downloadFile(String url, File file) throws IOException {
 
-		HttpClient httpclient = new DefaultHttpClient();
+	    DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(url);
 		HttpResponse response;
 
@@ -102,6 +102,7 @@ public class OpenStreetMapTileCache {
 		}
 		
 		outStream.close();
+		httpclient.close();
 	}
 
 }

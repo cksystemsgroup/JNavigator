@@ -39,7 +39,7 @@ public interface IDataTransferObjectProvider {
 	 *            the send-able type the listener registers for. Type '0' means
 	 *            a registration for all send-able types.
 	 */
-	public void addDataTransferObjectListener (IDataTransferObjectListener listener, Class dtoType);
+	public void addDataTransferObjectListener (IDataTransferObjectListener listener, Class<?> dtoType);
 
 	/**
 	 * Remove a <code>IDataTransferObjectListener</code> from the list of receivers.

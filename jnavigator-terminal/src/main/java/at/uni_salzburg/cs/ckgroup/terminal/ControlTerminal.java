@@ -51,7 +51,8 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.Dispatcher;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
@@ -85,7 +86,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 
 public class ControlTerminal extends Frame implements IAutoPilotController, IDataTransferObjectListener, ISender
 {
-	Logger LOG = Logger.getLogger(ControlTerminal.class);
+    public final static Logger LOG = LoggerFactory.getLogger(ControlTerminal.class);
 	
 	public static final String PROP_TERMINAL_ADAPTER_PREFIX = "terminal.adapter.";
 	

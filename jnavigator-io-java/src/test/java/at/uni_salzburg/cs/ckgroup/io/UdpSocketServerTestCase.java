@@ -42,9 +42,8 @@ public class UdpSocketServerTestCase extends TestCase {
 	private Properties clientProps;
 	
 //	private MyWorkerThread currentWorkerThread;
-	
-	private boolean workerShouldRead;
-	private boolean workerShouldCrash;
+//	private boolean workerShouldRead;
+//	private boolean workerShouldCrash;
 	
 	public void setUp () {
 		serverProps = new Properties ();
@@ -55,8 +54,8 @@ public class UdpSocketServerTestCase extends TestCase {
 		clientProps.setProperty("host", "localhost");
 		clientProps.setProperty("port", serverProps.getProperty("server.port"));
 		
-		workerShouldRead = true;
-		workerShouldCrash = false;
+//		workerShouldRead = true;
+//		workerShouldCrash = false;
 	}
 	
 //	public void tearDown () {

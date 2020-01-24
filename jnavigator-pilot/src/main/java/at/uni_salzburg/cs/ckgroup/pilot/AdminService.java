@@ -35,11 +35,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 import at.uni_salzburg.cs.ckgroup.pilot.vcl.CommandFactory;
@@ -48,7 +49,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.vcl.ICommand;
 
 public class AdminService extends DefaultService {
 	
-	Logger LOG = Logger.getLogger(AdminService.class);
+    public final static Logger LOG = LoggerFactory.getLogger(AdminService.class);
 	
 	public final static String CONTEXT_TEMP_DIR = "javax.servlet.context.tempdir";
 	

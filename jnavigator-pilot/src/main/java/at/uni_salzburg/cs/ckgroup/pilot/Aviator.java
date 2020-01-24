@@ -25,7 +25,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
@@ -44,7 +45,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.vcl.Parser;
  */
 public class Aviator implements IAviator, ISetCourseSupplier {
 	
-	Logger LOG = Logger.getLogger(Aviator.class);
+    public final static Logger LOG = LoggerFactory.getLogger(Aviator.class);
 	
 	/**
 	 * The current VCL parser.

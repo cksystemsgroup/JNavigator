@@ -167,16 +167,16 @@ public class LocationSensingTest extends TestCase {
 	        System.out.println ("SocketServerThread: end.");
 		}
 		
-		/**
-		 * Terminate the mail server thread.
-		 */
-		public void terminate () {
-			active = false;
-			try {
-            	serverSocket.close ();
-            } catch (IOException e) {}
-            yield ();
-		}
+        //		/**
+        //		 * Terminate the mail server thread.
+        //		 */
+        //		public void terminate () {
+        //			active = false;
+        //			try {
+        //            	serverSocket.close ();
+        //            } catch (IOException e) {}
+        //            yield ();
+        //		}
     }
 
     /**

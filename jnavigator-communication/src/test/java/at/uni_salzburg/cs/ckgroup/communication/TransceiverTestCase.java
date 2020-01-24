@@ -26,7 +26,6 @@ import java.util.Properties;
 import junit.framework.TestCase;
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.io.IConnection;
-import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
 import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
 
 /**

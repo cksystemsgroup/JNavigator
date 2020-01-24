@@ -31,7 +31,8 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.ConfigurationException;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
@@ -70,7 +71,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  */
 public class JControl extends TimerTask implements ISender, IDataTransferObjectListener {
 	
-	Logger LOG = Logger.getLogger(JControl.class);
+    public final static Logger LOG = LoggerFactory.getLogger(JControl.class);
 	
 	public static final String PROP_ALGORITHM_PREFIX = "algorithm.";
 	

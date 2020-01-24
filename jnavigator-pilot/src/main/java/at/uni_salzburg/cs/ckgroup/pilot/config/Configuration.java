@@ -33,7 +33,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 import at.uni_salzburg.cs.ckgroup.pilot.sensor.SensorBuilder;
@@ -41,7 +42,7 @@ import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
 public class Configuration implements IConfiguration {
 	
-	Logger LOG = Logger.getLogger(Configuration.class);
+    public final static Logger LOG = LoggerFactory.getLogger(Configuration.class);
 	
 	public static final String PLANT_CONFIG_TEMPLATE_FORMAT = "plant/%s-config.vm";
 	public static final String CONTROLLER_CONFIG_TEMPLATE_FORMAT = "controller/%s-config.vm";

@@ -22,10 +22,11 @@ package at.uni_salzburg.cs.ckgroup.control;
 
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.CommandData;
+import at.uni_salzburg.cs.ckgroup.communication.data.MotorSignals;
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.TrimValues;
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
@@ -41,7 +42,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  */
 public class PositionControlAlgorithm implements IControlAlgorithm {
 	
-	Logger LOG = Logger.getLogger(PositionControlAlgorithm.class);
+    public final static Logger LOG = LoggerFactory.getLogger(PositionControlAlgorithm.class);
 	
 	/**
 	 * The property key prefix for the debug mode.

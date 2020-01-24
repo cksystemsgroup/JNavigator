@@ -9,7 +9,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>at.uni-salzburg.cs.ckgroup.jnavigator</groupId>
 	<artifactId>jnavigator-jcontrol</artifactId>
 	<packaging>jar</packaging>
 
@@ -28,9 +27,12 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.13</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 		</dependency>
 	</dependencies>
 

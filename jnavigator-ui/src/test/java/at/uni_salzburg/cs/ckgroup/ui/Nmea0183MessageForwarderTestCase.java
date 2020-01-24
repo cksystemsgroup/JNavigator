@@ -505,31 +505,31 @@ public class Nmea0183MessageForwarderTestCase extends TestCase {
 	}
 	
 	private class CourseView implements ICourseView {
-		public Date date = null;
+		// public Date date = null;
 		public double course = 0;
 		
 		public void setCourse(Date date, double course) {
-			this.date = date;
+		     // this.date = date;
 			this.course = course;
 		}
 
 		public void invalidate() {
-			date = null;
+		     // date = null;
 			course = 0;
 		}
 	}
 	
 	private class SpeedView implements ISpeedView {
-		public Date date = null;
+		// public Date date = null;
 		public double speed = 0;
 		
 		public void setSpeed(Date date, double speed) {
-			this.date = date;
+			// this.date = date;
 			this.speed = speed;
 		}
 
 		public void invalidate() {
-			date = null;
+			// date = null;
 			speed = 0;
 		}
 	}
@@ -550,29 +550,29 @@ public class Nmea0183MessageForwarderTestCase extends TestCase {
 	}
 	
 	private class SatelliteView implements ISatelliteView {
-		public Date date = null;
-		public int satellitesInView = 0;
-		public int satelliteId = 0;
-		public int elevation = 0;
-		public int azimut = 0;
-		public int snr = 0;
+//		public Date date = null;
+//		public int satellitesInView = 0;
+//		public int satelliteId = 0;
+//		public int elevation = 0;
+//		public int azimut = 0;
+//		public int snr = 0;
 		
 		public void setSatellite(Date date, int satellitesInView, 	int satelliteId, int elevation, int azimut, int snr) {
-			this.date = date;
-			this.satellitesInView = satellitesInView;
-			this.satelliteId = satelliteId;
-			this.elevation = elevation;
-			this.azimut = azimut;
-			this.snr = snr;
+//			this.date = date;
+//			this.satellitesInView = satellitesInView;
+//			this.satelliteId = satelliteId;
+//			this.elevation = elevation;
+//			this.azimut = azimut;
+//			this.snr = snr;
 		}
 
 		public void invalidate() {
-			date = null;
-			satellitesInView = 0;
-			satelliteId = 0;
-			elevation = 0;
-			azimut = 0;
-			snr = 0;
+//			date = null;
+//			satellitesInView = 0;
+//			satelliteId = 0;
+//			elevation = 0;
+//			azimut = 0;
+//			snr = 0;
 		}
 	}
 }

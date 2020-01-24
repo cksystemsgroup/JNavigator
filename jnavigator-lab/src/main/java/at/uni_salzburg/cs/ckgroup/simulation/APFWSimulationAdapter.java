@@ -322,28 +322,28 @@ public class APFWSimulationAdapter extends Thread implements IConnection, IRemot
 	 */
 	protected void handle_ahrs_state (long time, byte[] data, APFWState state) throws IOException {
 		/* Body frame linear accelerations */
-		state.ax    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,   0, 8)));
-		state.ay    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,   8, 8)));
-		state.az    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  16, 8)));
+//		state.ax    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,   0, 8)));
+//		state.ay    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,   8, 8)));
+//		state.az    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  16, 8)));
 		/* Body frame rotational rates */
-		state.p     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  24, 8)));
-		state.r     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  32, 8)));
-		state.q     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  40, 8)));
+//		state.p     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  24, 8)));
+//		state.r     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  32, 8)));
+//		state.q     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  40, 8)));
 		/* Position relative to the ground */
 		state.x     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  48, 8)));
 		state.y     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  56, 8)));
 		state.z     = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  64, 8)));
 		/* Euler angles relative to the ground */
-		state.phi   = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  72, 8)));
-		state.theta = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  80, 8)));
+//		state.phi   = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  72, 8)));
+//		state.theta = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  80, 8)));
 		state.psi   = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  88, 8)));
 		/* Velocity over the ground */
-		state.vx    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  96, 8)));
-		state.vy    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 104, 8)));
-		state.vz    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 112, 8)));
+//		state.vx    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data,  96, 8)));
+//		state.vy    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 104, 8)));
+//		state.vz    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 112, 8)));
 		/* Moments on the rotor mass */
-		state.mx    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 120, 8)));
-		state.my    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 128, 8)));
+//		state.mx    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 120, 8)));
+//		state.my    = ByteArrayUtils.bytes2double (ByteArrayUtils.reverse (ByteArrayUtils.partition (data, 128, 8)));
 		
 //		System.out.println (
 //				"time=" + time +
@@ -608,28 +608,28 @@ public class APFWSimulationAdapter extends Thread implements IConnection, IRemot
 	 */
 	private class APFWState {
         /* Body frame linear accelerations */
-        double          ax;
-        double          ay;
-        double          az;
+//        double          ax;
+//        double          ay;
+//        double          az;
         /* Body frame rotational rates */
-        double          p;
-        double          r;
-        double          q;
+//        double          p;
+//        double          r;
+//        double          q;
         /* Position relative to the ground */
         double          x;
         double          y;
         double          z;
         /* Euler angles relative to the ground */
-        double          phi;
-        double          theta;
+//        double          phi;
+//        double          theta;
         double          psi;
         /* Velocity over the ground */
-        double          vx;
-        double          vy;
-        double          vz;
+//        double          vx;
+//        double          vy;
+//        double          vz;
         /* Moments on the rotor mass */
-        double          mx;
-        double          my;
+//        double          mx;
+//        double          my;
 	}
 
 	/**

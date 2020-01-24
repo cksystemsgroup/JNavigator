@@ -35,7 +35,7 @@ public class RtcmSc104Scanner extends Thread implements RtcmSc104MessageProvider
 	/**
 	 * This variable contains all RTCM SC-104 message listeners. 
 	 */
-	private Vector listeners = new Vector ();
+	private Vector<RtcmSc104MessageListener> listeners = new Vector<>();
 	
 	/**
 	 * The InputStream the scanner tries to receive RTCM SC-104 messages 

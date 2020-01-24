@@ -54,9 +54,9 @@ public class SetCourse {
 	{		
 		LineNumberReader reader = new LineNumberReader (new InputStreamReader (courseData));
 		String line;
-		Vector states = new Vector ();
-		Vector orientations = new Vector ();
-		Vector timeSpans = new Vector ();
+		Vector<PolarCoordinate> states = new Vector<>();
+		Vector<Double> orientations = new Vector<>();
+		Vector<Long> timeSpans = new Vector<>();
 		
 		while ((line = reader.readLine()) != null) {
 			
@@ -85,8 +85,8 @@ public class SetCourse {
 				throw new ConfigurationException ("Invalid orientation in line " + reader.getLineNumber () + " only values between 0 and 360 degrees are allowed!");
 
 			states.add (position);
-			orientations.add (new Double(orientation));
-			timeSpans.add (new Long(duration));
+			orientations.add (Double.valueOf(orientation));
+			timeSpans.add (Long.valueOf(duration));
 		} 
 		
 		if (states.size () == 0)

@@ -22,7 +22,8 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
@@ -30,7 +31,7 @@ import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class CommandFlyToAbs implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandFlyToAbs.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandFlyToAbs.class);
 	
 	public static final double MINIMUM_PRECISION = 0.1;
 	

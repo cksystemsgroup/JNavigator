@@ -371,7 +371,7 @@ public class GpsReceiverSimulator extends TimerTask implements IConnection
 	public void loadSimulationData (InputStream simulationData) throws IOException {
 		BufferedReader reader = new BufferedReader (new InputStreamReader (simulationData));
 		String line;
-		Vector lines = new Vector ();
+		Vector<String> lines = new Vector<>();
 		
 		while ((line = reader.readLine()) != null) {
 			

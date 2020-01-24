@@ -20,12 +20,13 @@
  */
 package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class CommandWaitForGo implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandWaitForGo.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandWaitForGo.class);
 	
 	boolean running = false;
 	boolean forcedTermination = false;

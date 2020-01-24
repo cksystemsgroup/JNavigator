@@ -314,13 +314,11 @@ public class PacketTestCase extends TestCase {
 				-118, -119, -120, -121, -122, -123, -124, -125, -126, -127
 		};
 		try {
-			Packet p = new Packet (type, payload);
+			new Packet (type, payload);
 			fail ();
 		} catch (IOException e) {
 			assertEquals ("Message too long. Only lengths up to 255 bytes are supported. Requested lenght is 256.", e.getMessage());
-//			e.printStackTrace();
 		}
-		
 		
 	}
 }

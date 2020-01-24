@@ -23,7 +23,8 @@ package javiator.simulation;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.data.SensorData;
 import at.uni_salzburg.cs.ckgroup.communication.data.SimulationData;
@@ -32,7 +33,7 @@ import at.uni_salzburg.cs.ckgroup.util.PropertyUtils;
 
 public class MockJAviatorMain {
 	
-	private static final Logger LOG = Logger.getLogger(MockJAviatorMain.class);
+    public final static Logger LOG = LoggerFactory.getLogger(MockJAviatorMain.class);
 	
 	public static final String PROP_SIMULATE_GPS_RECEIVER = "simulate.gps";
 	public static final String PROP_SIMULATE_UBISENSE_RECEIVER = "simulate.ubisense";

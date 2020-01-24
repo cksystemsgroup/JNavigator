@@ -26,7 +26,8 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Timer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
@@ -71,7 +72,7 @@ import at.uni_salzburg.cs.ckgroup.simulation.GpsReceiverSimulator;
  */
 public class GpsReceiverSimulatorAdapter extends Thread implements IDataTransferObjectListener, IPositionProvider
 {	
-	private static final Logger LOG = Logger.getLogger(GpsReceiverSimulatorAdapter.class.getName());
+    public final static Logger LOG = LoggerFactory.getLogger(GpsReceiverSimulatorAdapter.class.getName());
 	
 	/**
 	 * Name for the property that contains the file name for the GPS receiver

@@ -295,7 +295,7 @@ public class SimplePilotTestCase extends TestCase
 		/**
 		 * The set course positions as a <code>Vector</code>
 		 */
-		private Vector	positions = new Vector ();
+		private Vector<PolarCoordinate>	positions = new Vector<>();
 
 		/**
 		 * The current index of the next position to deliver.

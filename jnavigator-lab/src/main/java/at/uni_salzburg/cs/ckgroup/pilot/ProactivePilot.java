@@ -137,14 +137,14 @@ public class ProactivePilot implements IPilot, IFlightParameterProvider
 	 * time of the last command. This variable contains the main acceleration
 	 * commands.
 	 */
-	private Vector accelerationCommands1 = new Vector ();
+	private Vector<AccelerationCommand> accelerationCommands1 = new Vector<>();
 
 	/**
 	 * The pilot executes this acceleration commands until it reaches the end
 	 * time of the last command. This variable contains additional acceleration
 	 * commands.
 	 */
-	private Vector accelerationCommands2 = new Vector ();
+	private Vector<AccelerationCommand> accelerationCommands2 = new Vector<>();
 
 	/**
 	 * This variable contains the end time of the currently executed control

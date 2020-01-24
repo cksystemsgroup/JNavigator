@@ -23,7 +23,8 @@ package at.uni_salzburg.cs.ckgroup.pilot.vcl;
 import java.net.URI;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.CartesianCoordinate;
 import at.uni_salzburg.cs.ckgroup.course.IGeodeticSystem;
@@ -32,7 +33,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.PositionProxy;
 
 public class CommandFollowDistance implements ICommand {
 	
-	private static final Logger LOG = Logger.getLogger(CommandFollowDistance.class);
+    public final static Logger LOG = LoggerFactory.getLogger(CommandFollowDistance.class);
 	
 	public static final String SENSOR_NAME_POSITION = "position";
 

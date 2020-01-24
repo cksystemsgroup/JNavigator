@@ -12,7 +12,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.junit.Ignore;
-import org.junit.Test;
 
 @Ignore
 public class OpenStreetMapCameraTestCase {

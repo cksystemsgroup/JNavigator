@@ -28,7 +28,8 @@ import java.net.SocketException;
 import java.util.Properties;
 import java.util.Timer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectListener;
@@ -43,7 +44,7 @@ import at.uni_salzburg.cs.ckgroup.io.TcpSocketServer;
 
 public class LocationMessageSimulatorAdapter extends Thread implements IDataTransferObjectListener, IPositionProvider
 {
-	private static final Logger LOG = Logger.getLogger(LocationMessageSimulatorAdapter.class.getName());
+    public final static Logger LOG = LoggerFactory.getLogger(LocationMessageSimulatorAdapter.class.getName());
 	
 	/**
 	 * Name for the property that contains the file name for the GPS receiver
@@ -118,11 +119,11 @@ public class LocationMessageSimulatorAdapter extends Thread implements IDataTran
 	 */
 	private CartesianCoordinate referencePosition;
 	
-	/**
-	 * The orientation of the reference coordinate system, i.e. the orientation
-	 * of its X-axis in degrees. 0=North.
-	 */
-	private double referenceOrientation;
+//	/**
+//	 * The orientation of the reference coordinate system, i.e. the orientation
+//	 * of its X-axis in degrees. 0=North.
+//	 */
+//	private double referenceOrientation;
 	
 	/**
 	 * The currently used geodetic system. 
@@ -159,7 +160,7 @@ public class LocationMessageSimulatorAdapter extends Thread implements IDataTran
         double referenceZ = Double.parseDouble (props.getProperty (PROP_REFERENCE_Z,"0"));
         referencePosition = new CartesianCoordinate(referenceX, referenceY, referenceZ);
         
-        referenceOrientation = Double.parseDouble (props.getProperty (PROP_REFERENCE_ORIENTATION, "0"));
+//        referenceOrientation = Double.parseDouble (props.getProperty (PROP_REFERENCE_ORIENTATION, "0"));
         
 		locationMessageSimulator = new LocationMessageSimulator(props);
 		locationMessageSimulator.setPositionProvider(this);

@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 import at.uni_salzburg.cs.ckgroup.pilot.IAutoPilot;
@@ -33,7 +34,7 @@ import at.uni_salzburg.cs.ckgroup.pilot.config.ConfigurationException;
 
 public class OpenStreetMapSnapshot extends AbstractSensor {
 
-	Logger LOG = Logger.getLogger(OpenStreetMapSnapshot.class);
+    public final static Logger LOG = LoggerFactory.getLogger(OpenStreetMapSnapshot.class);
 	
 	OpenStreetMapCamera camera;
 

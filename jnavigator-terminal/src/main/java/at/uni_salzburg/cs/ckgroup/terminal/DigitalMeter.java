@@ -258,15 +258,15 @@ public class DigitalMeter extends Panel
         {
             colorDefault  = Color.DARK_GRAY;
             colorOffsets  = Color.GRAY;
-            colorWarning  = Color.LIGHT_GRAY;
-            colorAlerting = Color.GRAY;
+//            colorWarning  = Color.LIGHT_GRAY;
+//            colorAlerting = Color.GRAY;
         }
         else
         {
             colorDefault  = Color.BLACK;
             colorOffsets  = Color.BLUE;
-            colorWarning  = Color.ORANGE;
-            colorAlerting = Color.RED;
+//            colorWarning  = Color.ORANGE;
+//            colorAlerting = Color.RED;
         }
 
         update( );
@@ -339,8 +339,8 @@ public class DigitalMeter extends Panel
 
     private Color           colorDefault  = null;
     private Color           colorOffsets  = null;
-    private Color           colorWarning  = null;
-    private Color           colorAlerting = null;
+//    private Color           colorWarning  = null;
+//    private Color           colorAlerting = null;
 
     private MotorSignals    motorSignals  = null;
     private MotorOffsets    motorOffsets  = null;
@@ -374,8 +374,8 @@ public class DigitalMeter extends Panel
 
         colorDefault  = Color.BLACK;
         colorOffsets  = Color.BLUE;
-        colorWarning  = Color.ORANGE;
-        colorAlerting = Color.RED;
+//        colorWarning  = Color.ORANGE;
+//        colorAlerting = Color.RED;
 
         motorSignals  = new MotorSignals( );
         motorOffsets  = new MotorOffsets( );

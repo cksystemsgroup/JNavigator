@@ -21,20 +21,20 @@
 package at.uni_salzburg.cs.ckgroup.pilot;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.course.PolarCoordinate;
 
 public class PositionProxy {
 	
-	Logger LOG = Logger.getLogger(PositionProxy.class);
+    public final static Logger LOG = LoggerFactory.getLogger(PositionProxy.class);
 
 	private String pilotPositionUrl;
 	
@@ -54,7 +54,7 @@ public class PositionProxy {
 	}
 	
 	public void fetchCurrentPosition() {
-		HttpClient httpclient = new DefaultHttpClient();
+	    DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(pilotPositionUrl);
 		HttpResponse response;
 
@@ -70,6 +70,7 @@ public class PositionProxy {
 		} catch (Exception e) {
 			LOG.error("Can not access " + pilotPositionUrl ,e);
 		}
+		httpclient.close();
 			
 		JSONParser parser = new JSONParser();
 		try {

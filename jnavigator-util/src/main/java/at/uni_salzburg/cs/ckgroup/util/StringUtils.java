@@ -44,7 +44,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String[] splitOnCharAndTrim (char splitter, String line) {
-		Vector strs = new Vector ();
+		Vector<StringBuffer> strs = new Vector<>();
 		
 		StringBuffer buf = new StringBuffer ();
 		for (int k=0; k < line.length(); ++k) {

@@ -22,7 +22,6 @@ package at.uni_salzburg.cs.ckgroup.pilot;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,13 +30,10 @@ import java.io.Reader;
 import java.util.Properties;
 import java.util.Timer;
 
-import javiator.simulation.GpsReceiverSimulatorAdapter;
-import javiator.simulation.LocationMessageSimulatorAdapter;
-import javiator.simulation.MockJAviator;
-
-import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.uni_salzburg.cs.ckgroup.communication.Dispatcher;
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObjectForwarder;
@@ -51,10 +47,13 @@ import at.uni_salzburg.cs.ckgroup.pilot.config.Configuration;
 import at.uni_salzburg.cs.ckgroup.util.IClock;
 import at.uni_salzburg.cs.ckgroup.util.InstantiationException;
 import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
+import javiator.simulation.GpsReceiverSimulatorAdapter;
+import javiator.simulation.LocationMessageSimulatorAdapter;
+import javiator.simulation.MockJAviator;
 
 public class VehicleBuilder implements IVehicleBuilder {
 	
-	Logger LOG = Logger.getLogger(VehicleBuilder.class);
+    public final static Logger LOG = LoggerFactory.getLogger(VehicleBuilder.class);
 	
 	public static final String PROPERTY_FILE_FORMAT = "%s.properties";
 	public static final String PROP_SIMULATE_GPS_RECEIVER = "simulate.gps";

@@ -20,6 +20,7 @@
  */
 package at.uni_salzburg.cs.ckgroup.filter;
 
+import java.io.Serializable;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -32,7 +33,7 @@ import at.uni_salzburg.cs.ckgroup.util.ObjectFactory;
  * @author Clemens Krainer
  *
  */
-public class FilterChain implements IFilter
+public class FilterChain implements IFilter, Serializable
 {
 	private static final long serialVersionUID = 838575198040913651L;
 
@@ -50,7 +51,7 @@ public class FilterChain implements IFilter
 	/**
 	 * This Vector stores the filter chain.
 	 */
-	private Vector filterChain = new Vector ();
+	private Vector<IFilter> filterChain = new Vector<>();
 	
 	/**
 	 * Construct a filter chain.
