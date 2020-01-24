@@ -21,7 +21,6 @@
 package at.uni_salzburg.cs.ckgroup.ui;
 
 import java.awt.Robot;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -32,7 +31,6 @@ import javax.swing.SwingUtilities;
 import junit.framework.TestCase;
 import swingunit.extensions.ExtendedRobotEventFactory;
 import swingunit.framework.EventPlayer;
-import swingunit.framework.ExecuteException;
 import swingunit.framework.FinderMethodSet;
 import swingunit.framework.Scenario;
 import swingunit.framework.TestUtility;
@@ -94,10 +92,12 @@ public class ClockTestCase extends TestCase {
 		robot = null;
 	}
 
-	public void testCaseEmptyDisplay () throws ExecuteException, IOException {
+	public void testCaseEmptyDisplay () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
-		player.run(robot, "EMPTY_DISPLAY");
+		application.getClockFrame().clock.repaint();
 		application.getClockFrame().clock.setDateTime (null);
+		Thread.sleep(600);
+		player.run(robot, "EMPTY_DISPLAY");
 		
 		assertTrue  (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-empty.png",          capturedImageFolder+"clock-empty.png", 4, 26, 180, 180));
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-19850325011327.png", capturedImageFolder+"clock-empty.png", 4, 26, 180, 180));
@@ -105,13 +105,12 @@ public class ClockTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-20091231235959.png", capturedImageFolder+"clock-empty.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseClock19850325011327 () throws ExecuteException, IOException {
+	public void testCaseClock19850325011327 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
-
 		calendar.set (1985, 3, 25, 1, 13, 27);
 		calendar.set(Calendar.MILLISECOND, 0);
 		application.getClockFrame().clock.setDateTime (calendar.getTime ());
-		try { Thread.sleep(1000); } catch (InterruptedException e) {;}
+		Thread.sleep(600);
 		player.run(robot, "CLOCK_19850325011327");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-empty.png",          capturedImageFolder+"clock-19850325011327.png", 4, 26, 180, 180));
@@ -120,13 +119,12 @@ public class ClockTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-20091231235959.png", capturedImageFolder+"clock-19850325011327.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseClock20000101000000 () throws ExecuteException, IOException {
+	public void testCaseClock20000101000000 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
-
 		calendar.set (2000, 0, 1, 0, 0, 0);
 		calendar.set(Calendar.MILLISECOND, 123);
 		application.getClockFrame().clock.setDateTime (calendar.getTime ());
-		try { Thread.sleep(1000); } catch (InterruptedException e) {;}
+		Thread.sleep(600);
 		player.run(robot, "CLOCK_20000101000000");
 		
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-empty.png",          capturedImageFolder+"clock-20000101000000.png", 4, 26, 180, 180));
@@ -135,13 +133,12 @@ public class ClockTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-20091231235959.png", capturedImageFolder+"clock-20000101000000.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseClock20091231235959 () throws ExecuteException, IOException {
+	public void testCaseClock20091231235959 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
-
 		calendar.set (2009, 11, 31, 23, 59, 59);
 		calendar.set(Calendar.MILLISECOND, 962);
 		application.getClockFrame().clock.setDateTime (calendar.getTime ());
-		try { Thread.sleep(1000); } catch (InterruptedException e) {;}
+		Thread.sleep(600);
 		player.run(robot, "CLOCK_20091231235959");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"clock-empty.png",          capturedImageFolder+"clock-20091231235959.png", 4, 26, 180, 180));

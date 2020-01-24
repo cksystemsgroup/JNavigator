@@ -21,7 +21,6 @@
 package at.uni_salzburg.cs.ckgroup.ui;
 
 import java.awt.Robot;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.SwingUtilities;
@@ -29,7 +28,6 @@ import javax.swing.SwingUtilities;
 import junit.framework.TestCase;
 import swingunit.extensions.ExtendedRobotEventFactory;
 import swingunit.framework.EventPlayer;
-import swingunit.framework.ExecuteException;
 import swingunit.framework.FinderMethodSet;
 import swingunit.framework.Scenario;
 import swingunit.framework.TestUtility;
@@ -87,8 +85,10 @@ public class CompassTestCase extends TestCase {
 		robot = null;
 	}
 
-	public void testCaseEmptyDisplay () throws ExecuteException, IOException {
+	public void testCaseEmptyDisplay () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
+		application.getCompassFrame().compass.repaint();
+		Thread.sleep(600L);
 		player.run(robot, "EMPTY_DISPLAY");
 
 		assertTrue  (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-empty.png", capturedImageFolder+"compass-empty.png", 4, 26, 180, 180));
@@ -97,9 +97,10 @@ public class CompassTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-355.png",   capturedImageFolder+"compass-empty.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseSpeedotudeZero () throws ExecuteException, IOException {
+	public void testCaseSpeedotudeZero () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getCompassFrame().compass.setCourse (null, 0);
+		Thread.sleep(600L);
 		player.run(robot, "ORIENTATION_N");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-empty.png", capturedImageFolder+"compass-n.png", 4, 26, 180, 180));
@@ -108,9 +109,10 @@ public class CompassTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-355.png",   capturedImageFolder+"compass-n.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseCompass078 () throws ExecuteException, IOException {
+	public void testCaseCompass078 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getCompassFrame().compass.setCourse (null, 78);
+		Thread.sleep(600L);
 		player.run(robot, "ORIENTATION_078");
 		
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-empty.png", capturedImageFolder+"compass-078.png", 4, 26, 180, 180));
@@ -119,9 +121,10 @@ public class CompassTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-355.png",   capturedImageFolder+"compass-078.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseCompass355 () throws ExecuteException, IOException {
+	public void testCaseCompass355 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getCompassFrame().compass.setCourse (null, 355);
+		Thread.sleep(600L);
 		player.run(robot, "ORIENTATION_355");
 		
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"compass-empty.png", capturedImageFolder+"compass-355.png", 4, 26, 180, 180));

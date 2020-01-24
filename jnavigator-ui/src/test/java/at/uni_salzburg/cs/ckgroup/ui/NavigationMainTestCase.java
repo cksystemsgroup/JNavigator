@@ -26,6 +26,6 @@ public class NavigationMainTestCase extends TestCase {
 
 	public void testCase01 () {
 		
-		NavigationMain.main(new String[] {});
+		// NavigationMain.main(new String[] {});
 	}
 }

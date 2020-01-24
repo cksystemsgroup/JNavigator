@@ -72,11 +72,11 @@ public class TrimValuesTestCase extends TestCase {
 	public void testCase02 () {
 		TrimValues trimValues = new TrimValues (12,34,54);
 		String trimString = trimValues.toString();
-		assertEquals ("TrimValues: roll=11,9748, pitch=33,9764, yaw=53,9726", trimString);
+		assertEquals ("TrimValues: roll=11.9748, pitch=33.9764, yaw=53.9726", trimString);
 
 		trimValues = new TrimValues (360,-359,180);
 		trimString = trimValues.toString();
-		assertEquals ("TrimValues: roll=359,9894, pitch=-358,9581, yaw=179,966", trimString);
+		assertEquals ("TrimValues: roll=359.9894, pitch=-358.9581, yaw=179.9660", trimString);
 	}
 	
 	/**

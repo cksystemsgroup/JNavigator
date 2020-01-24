@@ -320,6 +320,7 @@ public class AposNtripCasterMock
 	                		++charCounter;
                 		}
                 	}
+                	data.close();
                 	
                 	client_out.flush ();
                 	client_out.close ();

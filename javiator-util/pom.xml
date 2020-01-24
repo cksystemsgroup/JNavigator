@@ -20,7 +20,7 @@
 		<bcel-version>5.1</bcel-version>
 		<commons-codec-version>1.3</commons-codec-version>
 		<exotasks-version>1.0.18</exotasks-version>
-		<java-version>1.5</java-version>
+		<java-version>1.8</java-version>
 		<!-- javiator3d-version>1.0</javiator3d-version -->
 		<!-- jnavigator-version>1.2-SNAPSHOT</jnavigator-version -->
 		<joystick-version>20061023</joystick-version>

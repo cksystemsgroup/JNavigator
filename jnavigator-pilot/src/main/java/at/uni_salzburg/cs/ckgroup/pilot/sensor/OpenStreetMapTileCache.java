@@ -100,6 +100,8 @@ public class OpenStreetMapTileCache {
 				outStream.write(tmp, 0, l);
 			}
 		}
+		
+		outStream.close();
 	}
 
 }

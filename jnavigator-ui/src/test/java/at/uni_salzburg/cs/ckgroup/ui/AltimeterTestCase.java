@@ -21,7 +21,6 @@
 package at.uni_salzburg.cs.ckgroup.ui;
 
 import java.awt.Robot;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.SwingUtilities;
@@ -29,7 +28,6 @@ import javax.swing.SwingUtilities;
 import junit.framework.TestCase;
 import swingunit.extensions.ExtendedRobotEventFactory;
 import swingunit.framework.EventPlayer;
-import swingunit.framework.ExecuteException;
 import swingunit.framework.FinderMethodSet;
 import swingunit.framework.Scenario;
 import swingunit.framework.TestUtility;
@@ -87,8 +85,11 @@ public class AltimeterTestCase extends TestCase {
 		robot = null;
 	}
 
-	public void testCaseEmptyDisplay () throws ExecuteException, IOException {
+	public void testCaseEmptyDisplay () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
+		assertNotNull(application.getAltimeterFrame());
+		application.getAltimeterFrame().altimeter.repaint();
+		Thread.sleep(600L);
 		player.run(robot, "EMPTY_DISPLAY");
 
 		assertTrue  (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-empty.png", capturedImageFolder+"altimeter-empty.png", 4, 26, 180, 180));
@@ -97,9 +98,10 @@ public class AltimeterTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-485.png",   capturedImageFolder+"altimeter-empty.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseAltitudeZero () throws ExecuteException, IOException {
+	public void testCaseAltitudeZero () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getAltimeterFrame().altimeter.setAltitude (null, 0);
+		Thread.sleep(600L);
 		player.run(robot, "ALTITUDE_ZERO");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-empty.png", capturedImageFolder+"altimeter-zero.png", 4, 26, 180, 180));
@@ -108,20 +110,22 @@ public class AltimeterTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-485.png",   capturedImageFolder+"altimeter-zero.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseAltitude100 () throws ExecuteException, IOException {
+	public void testCaseAltitude100 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getAltimeterFrame().altimeter.setAltitude (null, 100);
+		Thread.sleep(600L);
 		player.run(robot, "ALTITUDE_100");
-		
+
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-empty.png", capturedImageFolder+"altimeter-100.png", 4, 26, 180, 180));
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-zero.png",  capturedImageFolder+"altimeter-100.png", 4, 26, 180, 180));
 		assertTrue  (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-100.png",   capturedImageFolder+"altimeter-100.png", 4, 26, 180, 180));
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-485.png",   capturedImageFolder+"altimeter-100.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseAltitude485 () throws ExecuteException, IOException {
+	public void testCaseAltitude485 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getAltimeterFrame().altimeter.setAltitude (null, 485);
+		Thread.sleep(600L);
 		player.run(robot, "ALTITUDE_485");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"altimeter-empty.png", capturedImageFolder+"altimeter-485.png", 4, 26, 180, 180));

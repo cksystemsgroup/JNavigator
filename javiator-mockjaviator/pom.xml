@@ -20,7 +20,7 @@
 		<bcel-version>5.1</bcel-version>
 		<commons-codec-version>1.3</commons-codec-version>
 		<exotasks-version>1.0.18</exotasks-version>
-		<java-version>1.5</java-version>
+		<java-version>1.8</java-version>
 		<junit-version>3.8.1</junit-version>
 		<rxtx-version>2.1.7</rxtx-version>
 		<starfireExt-version>2.20</starfireExt-version>

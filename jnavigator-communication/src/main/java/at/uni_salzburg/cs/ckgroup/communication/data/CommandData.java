@@ -20,9 +20,6 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication.data;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 
 
@@ -152,15 +149,17 @@ public class CommandData implements IDataTransferObject {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString () {
-		DecimalFormat df = new DecimalFormat ("#0.####");
-		DecimalFormatSymbols dfSymbols = df.getDecimalFormatSymbols();
-		dfSymbols.setDecimalSeparator('.');
-		dfSymbols.setGroupingSeparator(',');
-		StringBuffer buf = new StringBuffer ();
-		buf.append("CommandData: roll=").append(df.format(getRoll ()));
-		buf.append(", pitch=").append(df.format(getPitch ()));
-		buf.append(", yaw=").append(df.format(getYaw ()));
-		buf.append(", height above ground=").append(df.format(getHeightOverGround ()));
-		return buf.toString();
+//		DecimalFormat df = new DecimalFormat ("#0.####");
+//		DecimalFormatSymbols dfSymbols = df.getDecimalFormatSymbols();
+//		dfSymbols.setDecimalSeparator('.');
+//		dfSymbols.setGroupingSeparator(',');
+//		StringBuffer buf = new StringBuffer ();
+//		buf.append("CommandData: roll=").append(df.format(getRoll ()));
+//		buf.append(", pitch=").append(df.format(getPitch ()));
+//		buf.append(", yaw=").append(df.format(getYaw ()));
+//		buf.append(", height above ground=").append(df.format(getHeightOverGround ()));
+//		return buf.toString();
+	    return String.format("CommandData: roll=%.4f, pitch=%.4f, yaw=%.4f, height above ground=%.0f",
+	        getRoll(), getPitch(), getYaw(), getHeightOverGround());
 	}
 }

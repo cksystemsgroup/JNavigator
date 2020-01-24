@@ -20,8 +20,6 @@
  */
 package at.uni_salzburg.cs.ckgroup.communication.data;
 
-import java.text.DecimalFormat;
-
 import at.uni_salzburg.cs.ckgroup.communication.IDataTransferObject;
 
 
@@ -124,11 +122,6 @@ public class TrimValues implements IDataTransferObject {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString () {
-		DecimalFormat df = new DecimalFormat ("#0.####");
-		StringBuffer buf = new StringBuffer ();
-		buf.append("TrimValues: roll=").append(df.format(getRoll ()));
-		buf.append(", pitch=").append(df.format(getPitch ()));
-		buf.append(", yaw=").append(df.format(getYaw ()));
-		return buf.toString();
+		return String.format("TrimValues: roll=%.4f, pitch=%.4f, yaw=%.4f", getRoll(), getPitch(), getYaw());
 	}
 }

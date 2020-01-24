@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import junit.framework.TestCase;
 import swingunit.extensions.ExtendedRobotEventFactory;
 import swingunit.framework.EventPlayer;
-import swingunit.framework.ExecuteException;
 import swingunit.framework.FinderMethodSet;
 import swingunit.framework.Scenario;
 import swingunit.framework.TestUtility;
@@ -86,8 +85,10 @@ public class SpeedometerTestCase extends TestCase {
 		robot = null;
 	}
 	
-	public void testCaseEmptyDisplay () throws ExecuteException {
+	public void testCaseEmptyDisplay () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
+		application.getSpeedometerFrame().speedometer.repaint();
+		Thread.sleep(600L);
 		player.run(robot, "EMPTY_DISPLAY");
 
 		assertTrue  (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-empty.png", capturedImageFolder+"speedometer-empty.png", 4, 26, 180, 180));
@@ -96,9 +97,10 @@ public class SpeedometerTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-89.png",    capturedImageFolder+"speedometer-empty.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseSpeedZero () throws ExecuteException {
+	public void testCaseSpeedZero () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getSpeedometerFrame().speedometer.setSpeed (null, 0);
+		Thread.sleep(600L);
 		player.run(robot, "SPEED_ZERO");
 
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-empty.png", capturedImageFolder+"speedometer-zero.png", 4, 26, 180, 180));
@@ -107,9 +109,10 @@ public class SpeedometerTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-89.png",    capturedImageFolder+"speedometer-zero.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseSpeed12 () throws ExecuteException {
+	public void testCaseSpeed12 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getSpeedometerFrame().speedometer.setSpeed (null, 12);
+		Thread.sleep(600L);
 		player.run(robot, "SPEED_12");
 		
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-empty.png", capturedImageFolder+"speedometer-12.png", 4, 26, 180, 180));
@@ -118,9 +121,10 @@ public class SpeedometerTestCase extends TestCase {
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-89.png",    capturedImageFolder+"speedometer-12.png", 4, 26, 180, 180));
 	}
 	
-	public void testCaseSpeed89 () throws ExecuteException {
+	public void testCaseSpeed89 () throws Exception {
 		EventPlayer player = new EventPlayer(scenario);
 		application.getSpeedometerFrame().speedometer.setSpeed (null, 89);
+		Thread.sleep(600L);
 		player.run(robot, "SPEED_89");
 		
 		assertFalse (ImageUtils.imagesAreEqual (referenceImageFolder+"speedometer-empty.png", capturedImageFolder+"speedometer-89.png", 4, 26, 180, 180));
