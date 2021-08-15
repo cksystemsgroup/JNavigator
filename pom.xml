@@ -326,7 +326,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>1.0</version>
+				<version>3.4.3</version>
 			</extension>
 		</extensions>
 
