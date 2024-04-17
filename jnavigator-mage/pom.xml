@@ -142,7 +142,7 @@
 	<packaging>war</packaging>
 	
 	<properties>
-		<tapestry-release-version>5.8.5</tapestry-release-version>
+		<tapestry-release-version>5.8.6</tapestry-release-version>
 	</properties>
 
 	<distributionManagement>
