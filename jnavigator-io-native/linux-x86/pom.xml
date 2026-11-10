@@ -79,7 +79,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>native-maven-plugin</artifactId>
-				<version>1.2.0</version>
+				<version>1.2.1</version>
 				<extensions>true</extensions>
 				<configuration>
 					<javahOS>linux</javahOS>
